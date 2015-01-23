@@ -17,7 +17,10 @@
     
     //Viewの表示フラグ YES = 表示 NO = 非表示
     BOOL _isVisible;
+    
 }
+
+
 
 @end
 
@@ -123,7 +126,6 @@
         }
         [userDefault synchronize];
 
-        
         
         // UserDefaultに保存（コンソールで確認するため）
         NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];

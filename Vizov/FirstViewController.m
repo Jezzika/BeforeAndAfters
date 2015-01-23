@@ -7,6 +7,7 @@
 //
 
 #import "FirstViewController.h"
+#import "NewPageViewController.h"
 
 @interface FirstViewController ()<UITableViewDataSource>
 
@@ -30,20 +31,39 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Table Viewの行数を返す
-    return 5;
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    return [ary count];
+    //return 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *tvcell = [tableView dequeueReusableCellWithIdentifier: @"cid"];
-    if (tvcell == nil) {
-        tvcell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                        reuseIdentifier: @"cid"];
+//    UITableViewCell *tvcell = [tableView dequeueReusableCellWithIdentifier: @"cid"];
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    
+    //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
+    static NSString *CellIdentifier = @"ListView";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    // Table Viewの各行の情報を、UITableViewCellのオブジェクトとして返す
-    tvcell.textLabel.text = [[NSString alloc] initWithFormat:@"%ld行目のセル", indexPath.row + 1];
-    return tvcell;
-}
+    
+    
+    //セルに ar を番号順に突っ込む
+    cell.textLabel.text = [NSString stringWithFormat:@"%@",[ary objectAtIndex:indexPath.row]];
+    NSLog (@"%@",cell);
+    return cell;
+
+//    if (tvcell == nil) {
+//        tvcell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+//                                        reuseIdentifier: @"cid"];
+//    }
+//    
+//    // Table Viewの各行の情報を、UITableViewCellのオブジェクトとして返す
+//    tvcell.textLabel.text = [[NSString alloc] initWithFormat:@"%ld行目のセル", indexPath.row + 1];
+//    return tvcell;
 
 /*
 #pragma mark - Navigation
@@ -54,5 +74,7 @@
     // Pass the selected object to the new view controller.
 }
 */
+}
 
 @end
+
