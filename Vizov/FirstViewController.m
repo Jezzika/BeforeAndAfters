@@ -21,6 +21,13 @@
     
     // Table ViewのデータソースにView Controller自身を設定する
     self.listTableView.dataSource = self;
+    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    
+    NSInteger *count = [ary count];
+    self.nowEventCount.text = [NSString stringWithFormat:@"%d ", count];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,7 +48,7 @@
 {
 //    UITableViewCell *tvcell = [tableView dequeueReusableCellWithIdentifier: @"cid"];
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    NSMutableArray *ary = [[userDefault objectForKey:@"challenges" ]valueForKeyPath:@"title"];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"ListView";
@@ -50,9 +57,14 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    UILabel *label1 =(UILabel *)[cell viewWithTag:1];
+    label1.text = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+
     
-    //セルに ar を番号順に突っ込む
+    //セルに ary を番号順に突っ込む
     cell.textLabel.text = [NSString stringWithFormat:@"%@",[ary objectAtIndex:indexPath.row]];
+
+    
     NSLog (@"%@",cell);
     return cell;
 

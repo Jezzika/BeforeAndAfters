@@ -11,5 +11,7 @@
 @interface PersonalPageViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UILabel *settedTitle;
+@property (strong, nonatomic) IBOutlet UILabel *realTime;
+@property (strong, nonatomic) IBOutlet UILabel *realTime2;
 
 @end

@@ -11,4 +11,6 @@
 @interface FirstViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;
 
+@property (strong, nonatomic) IBOutlet UILabel *nowEventCount;
+
 @end

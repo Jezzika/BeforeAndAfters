@@ -18,13 +18,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSString *viewtitle = [userDefault objectForKey:@"myTitle"];
-    NSString *viewdetail = [userDefault objectForKey:@"myDetail"];
+    
+    //UserDefaultの個別データ表示
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableArray *ary1 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"title"];
+    NSString *lastTitle = [ary1 lastObject];
+    
+    NSMutableArray *ary2 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"detail"];
+    NSString *lastDeail = [ary2 lastObject];
     
     
-    self.settedTitle.text = viewtitle;
-    NSLog(@"%@",viewdetail);
+    self.settedTitle.text = lastTitle;
+    NSLog(@"%@",lastDeail);
+    
+    //現在時刻の表示
+    NSDate *datetime = [NSDate date];
+    
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    fmt.dateFormat = @"yyyy/MM/dd";
+    NSString *resultDate = [fmt stringFromDate:datetime];  //表示するため文字列に変換する
+    self.realTime.text = resultDate;
+    
+    fmt.dateFormat = @"HH:mm:ss";
+    NSString *resultTime = [fmt stringFromDate:datetime];
+    self.realTime2.text = resultTime;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

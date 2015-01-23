@@ -46,6 +46,12 @@
     self.setTableView.dataSource = self;
     self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
     
+    
+
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
     //〜時間設定〜
     
     //btnオブジェクトの生成
@@ -61,8 +67,8 @@
     //オレンジ色のビューオブジェクトに紐付いたテキストフィールドを生成
     [self createdDatePicker];
     
-    
 
+    
 }
 
 
