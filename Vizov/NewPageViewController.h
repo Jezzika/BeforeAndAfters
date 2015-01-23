@@ -10,6 +10,7 @@
 
 @interface NewPageViewController : UIViewController
 
+
 @property (weak, nonatomic) IBOutlet UITextField *makeNewTitle;
 @property (weak, nonatomic) IBOutlet UITextField *makeNewDetail;
 @property (weak, nonatomic) IBOutlet UIImageView *beforeImageView;
@@ -17,6 +18,8 @@
 @property (assign, nonatomic) NSArray *CellNames;
 
 @property (strong, nonatomic) IBOutlet UITableView *setTableView;
+
+
 
 
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55119D4A1A70A15E00A1C988 /* PersonalPageViewController.m */; };
+		55119D4D1A715B5300A1C988 /* challengesList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55119D4C1A715B5300A1C988 /* challengesList.plist */; };
 		552287321A68ADD7006E119D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287311A68ADD7006E119D /* main.m */; };
 		552287351A68ADD7006E119D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287341A68ADD7006E119D /* AppDelegate.m */; };
 		552287381A68ADD7006E119D /* Vizov.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 552287361A68ADD7006E119D /* Vizov.xcdatamodeld */; };
@@ -30,6 +32,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		55119D491A70A15E00A1C988 /* PersonalPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalPageViewController.h; sourceTree = "<group>"; };
+		55119D4A1A70A15E00A1C988 /* PersonalPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalPageViewController.m; sourceTree = "<group>"; };
+		55119D4C1A715B5300A1C988 /* challengesList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = challengesList.plist; sourceTree = "<group>"; };
 		5522872C1A68ADD7006E119D /* Vizov.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vizov.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		552287301A68ADD7006E119D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		552287311A68ADD7006E119D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -95,6 +100,8 @@
 				552287591A68B431006E119D /* FirstViewController.m */,
 				5522875B1A68BBA1006E119D /* NewPageViewController.h */,
 				5522875C1A68BBA1006E119D /* NewPageViewController.m */,
+				55119D491A70A15E00A1C988 /* PersonalPageViewController.h */,
+				55119D4A1A70A15E00A1C988 /* PersonalPageViewController.m */,
 				5522873C1A68ADD7006E119D /* Main.storyboard */,
 				5522875E1A694679006E119D /* CameraViewController.h */,
 				5522875F1A694679006E119D /* CameraViewController.m */,
@@ -109,6 +116,7 @@
 		5522872F1A68ADD7006E119D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				55119D4C1A715B5300A1C988 /* challengesList.plist */,
 				552287301A68ADD7006E119D /* Info.plist */,
 				552287311A68ADD7006E119D /* main.m */,
 			);
@@ -212,6 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55119D4D1A715B5300A1C988 /* challengesList.plist in Resources */,
 				5522873E1A68ADD7006E119D /* Main.storyboard in Resources */,
 				552287431A68ADD7006E119D /* LaunchScreen.xib in Resources */,
 				552287401A68ADD7006E119D /* Images.xcassets in Resources */,
@@ -233,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */,
+				55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */,
 				552287351A68ADD7006E119D /* AppDelegate.m in Sources */,
 				552287321A68ADD7006E119D /* main.m in Sources */,
 				552287601A694679006E119D /* CameraViewController.m in Sources */,
