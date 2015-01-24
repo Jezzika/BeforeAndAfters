@@ -9,7 +9,7 @@
 #import "NewPageViewController.h"
 
 
-@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource>
+@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate>
 {
     UIButton *_myButton;
     UIView *_myView;
@@ -19,8 +19,6 @@
     BOOL _isVisible;
     
 }
-
-
 
 @end
 
@@ -107,38 +105,9 @@
              destructiveButtonTitle:nil
              otherButtonTitles:@"Photo Library", @"Camera", @"Saved Photos", nil];
     
+    
     // アクションシートを表示する
     [sheet showInView:self.view];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([[segue identifier] isEqualToString:@"NowSegue"]) {
-        // 入力したいデータを取り出し
-        NSString *title = self.makeNewTitle.text;
-        NSString *detail = self.makeNewDetail.text;
-        
-        // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"title": title, @"detail": detail};
-
-        // 現状で保存されているデータ一覧を取得
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *array = [userDefault objectForKey:@"challenges"];
-        if ([array count] > 0) {
-            [array addObject:dic];
-            [userDefault setObject:array forKey:@"challenges"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [userDefault setObject:array forKey:@"challenges"];
-        }
-        [userDefault synchronize];
-
-        
-        // UserDefaultに保存（コンソールで確認するため）
-        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
-        NSLog(@"%@", ary);
-
-    }
 }
 
 
@@ -172,14 +141,14 @@
     }
     
     // イメージピッカーを作る
-    UIImagePickerController*    imagePicker;
+    UIImagePickerController *imagePicker;
     imagePicker = [[UIImagePickerController alloc] init];
     imagePicker.sourceType = sourceType;
     imagePicker.allowsEditing = YES;
     imagePicker.delegate = self;
     
     // イメージピッカーを表示する
-    [self presentModalViewController:imagePicker animated:YES];
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController*)picker
@@ -187,32 +156,89 @@
                   editingInfo:(NSDictionary*)editingInfo
 {
     //ImagePickerのデリケードメソッド (画像取得時)
-        // グラフィックスコンテキストを作る
-        CGSize  size = { 240, 240 };
-        UIGraphicsBeginImageContext(size);
+    
+    
+//        // グラフィックスコンテキストを作る
+//        CGSize  size = { 240, 240 };
+//        UIGraphicsBeginImageContext(size);
+//        
+//        // 画像を縮小して描画する
+//        CGRect  rect;
+//        rect.origin = CGPointZero;
+//        rect.size = size;
+//        [image drawInRect:rect];
+//        
+//        // 描画した画像を取得する
+//        UIImage *shrinkedImage;
+//        shrinkedImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        
+//        // 画像を表示する
+//        self.beforeImageView.image = shrinkedImage;
+//    
+//        // イメージピッカーを隠す
+//        [self dismissModalViewControllerAnimated:YES];
+    
+        CGFloat width = 150;    // リサイズ後幅のサイズ
+        CGFloat height = 150;   // リサイズ後高さのサイズ
+        CGRect rect = CGRectMake(0, 0, width, height);
         
-        // 画像を縮小して描画する
-        CGRect  rect;
-        rect.origin = CGPointZero;
-        rect.size = size;
-        [image drawInRect:rect];
+        // 読み込んだ画像のサイズ取得
+        CGFloat tmp_w = image.size.width;
+        CGFloat tmp_h = image.size.height;
         
-        // 描画した画像を取得する
-        UIImage*    shrinkedImage;
-        shrinkedImage = UIGraphicsGetImageFromCurrentImageContext();
+        // 選択した画像が正方形じゃなかった場合、隙間が生まれないようにリサイズする
+        // 縦長の画像
+        if (tmp_w < tmp_h) {
+            float per   = width / tmp_w;
+            width       = tmp_w * per;
+            height      = tmp_h * per;
+            
+            rect = CGRectMake(0, -height/2 +rect.size.width/2, rect.size.width, rect.size.height);
+        }
+        // 横長の画像
+        else if (tmp_w > tmp_h) {
+            float per   = height / tmp_h;
+            width       = tmp_w * per;
+            height      = tmp_h * per;
+            
+            rect = CGRectMake(-width/2 +rect.size.height/2, 0, rect.size.width, rect.size.height);
+        }
+        
+        // 画像の比率を保ちながらリサイズ
+        UIGraphicsBeginImageContext(CGSizeMake(width, height));
+        [image drawInRect:CGRectMake(0, 0, width, height)];
+        UIImage *img_1 = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        // 画像を表示する
-        _beforeImageView.image = shrinkedImage;
+        // 150x150サイズでトリミング
+        UIGraphicsBeginImageContext(rect.size);
+        [img_1 drawAtPoint:rect.origin];
+        UIImage *img_2 = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
         
-        // イメージピッカーを隠す
-        [self dismissModalViewControllerAnimated:YES];
+        
+        // 読み込んだ画像ファイルをバイナリデータで保存
+        NSData *imgData = [NSData dataWithData:UIImagePNGRepresentation(img_2)];
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:imgData forKey:@"picture"];
+        [defaults synchronize];
+    
+    
+        // 画像を表示する
+        self.beforeImageView.image = img_2;
+        NSLog (@"%@",imgData);
+    
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
     // イメージピッカーを隠す
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -251,7 +277,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setValue:[NSString stringWithFormat:@"%d", indexPath.row] forKey:@"num"];
+    [ud setValue:[NSString stringWithFormat:@"%ld", (long)indexPath.row] forKey:@"num"];
     
     //[self performSegueWithIdentifier:@"rowNumber" sender:self];
     if (indexPath.row == 0){
@@ -300,8 +326,6 @@
     
     [_myView addSubview:_myButton];
     
-    // 重なり順を最前面に
-    [_myView bringSubviewToFront:_myButton];
 }
 
 //オレンジ色のビューオブジェクトを生成するメソッド
@@ -317,9 +341,6 @@
     [_myView setBackgroundColor:[UIColor colorWithRed:1.0 green:0.54901 blue:0 alpha:1]];
     
     [self.view addSubview:_myView];
-    
-    // 重なり順を最前面に
-    //[self.view bringSubviewToFront:_myView];
     
 }
 
@@ -391,6 +412,39 @@
     _myView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
     _myDatePicker.frame = CGRectMake(0, 0, 50, 50);
     _isVisible = NO;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([[segue identifier] isEqualToString:@"NowSegue"]) {
+        // 入力したいデータを取り出し
+        NSString *title = self.makeNewTitle.text;
+        NSString *detail = self.makeNewDetail.text;
+        UIImage *img =  self.beforeImageView.image;
+        // UIImage→NSData変換
+        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
+        
+        // 入力したいデータを辞書型にまとめる
+        NSDictionary *dic = @{@"title": title, @"detail": detail, @"picture": picture};
+        
+        // 現状で保存されているデータ一覧を取得
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *array = [userDefault objectForKey:@"challenges"];
+        if ([array count] > 0) {
+            [array addObject:dic];
+            [userDefault setObject:array forKey:@"challenges"];
+        } else {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+            [userDefault setObject:array forKey:@"challenges"];
+        }
+        [userDefault synchronize];
+        
+        
+        // UserDefaultに保存（コンソールで確認するため）
+        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
+        NSLog(@"%@", ary);
+        
+    }
 }
 
 

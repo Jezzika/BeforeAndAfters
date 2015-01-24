@@ -28,8 +28,15 @@
     NSMutableArray *ary2 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"detail"];
     NSString *lastDeail = [ary2 lastObject];
     
+    NSMutableArray *ary3 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"picture"];
+    NSData *lastPicturedata = [ary3 lastObject];
+    // NSData→UIImage変換
+    UIImage *lastPicture = [UIImage imageWithData:lastPicturedata];
+    
     
     self.settedTitle.text = lastTitle;
+    self.settedBeforePicture.image = lastPicture;
+    NSLog(@"%@",lastPicturedata);
     NSLog(@"%@",lastDeail);
     
     //現在時刻の表示
