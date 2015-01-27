@@ -19,6 +19,7 @@
 		5522875A1A68B431006E119D /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287591A68B431006E119D /* FirstViewController.m */; };
 		5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875C1A68BBA1006E119D /* NewPageViewController.m */; };
 		552287601A694679006E119D /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875F1A694679006E119D /* CameraViewController.m */; };
+		55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA695F1A7738240078424E /* FirstTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		5522875C1A68BBA1006E119D /* NewPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewPageViewController.m; sourceTree = "<group>"; };
 		5522875E1A694679006E119D /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		5522875F1A694679006E119D /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		55EA695E1A7738240078424E /* FirstTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewCell.h; sourceTree = "<group>"; };
+		55EA695F1A7738240078424E /* FirstTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +102,8 @@
 				552287341A68ADD7006E119D /* AppDelegate.m */,
 				552287581A68B431006E119D /* FirstViewController.h */,
 				552287591A68B431006E119D /* FirstViewController.m */,
+				55EA695E1A7738240078424E /* FirstTableViewCell.h */,
+				55EA695F1A7738240078424E /* FirstTableViewCell.m */,
 				5522875B1A68BBA1006E119D /* NewPageViewController.h */,
 				5522875C1A68BBA1006E119D /* NewPageViewController.m */,
 				55119D491A70A15E00A1C988 /* PersonalPageViewController.h */,
@@ -242,6 +247,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */,
 				5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */,
 				55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */,
 				552287351A68ADD7006E119D /* AppDelegate.m in Sources */,

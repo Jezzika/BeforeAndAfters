@@ -28,7 +28,7 @@
 (UITabBarController*)tabBarController
 didSelectViewController:
 (UIViewController*)CameraviewController{
-    
+
     NSInteger sourceType = UIImagePickerControllerSourceTypeCamera;
     
     // 使用可能かどうかチェックする
@@ -41,6 +41,9 @@ didSelectViewController:
     imagePicker.sourceType = sourceType;
     imagePicker.allowsEditing = YES;
     imagePicker.delegate = self;
+    
+
+    
     
     // イメージピッカーを表示する
     [self presentViewController:imagePicker animated:YES completion:nil];

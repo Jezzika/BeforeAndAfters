@@ -9,10 +9,10 @@
 #import "FirstViewController.h"
 #import "NewPageViewController.h"
 #import "PersonalPageViewController.h"
+#import "FirstTableViewCell.h"
 
 @interface FirstViewController ()<UITableViewDataSource>
 
-@property (nonatomic) NSString * cell2;
 @property (nonatomic) NSArray * tableArray;
 
 
@@ -31,17 +31,19 @@
     NSArray *ary= [userDefault objectForKey:@"challenges"];
     
     //配列をfor文でまわす
-    int myCount = 0;
+    int myCountNow = 0;
+    
     for (NSString *now in ary) {
         if([[now valueForKey:@"type"] isEqualToString:@"now"]){
-            myCount++;
+            myCountNow++;
         }
         
     }
+    
 
-    NSLog(@"%@",ary);
 
-    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCount];
+
+    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCountNow];
     
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
@@ -69,24 +71,20 @@
 
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    NSDictionary *homeEventLabel = ary[indexPath.row];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"ListView";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    FirstTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[FirstTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    UILabel *label1 =(UILabel *)[cell viewWithTag:1];
-    label1.text = [NSString stringWithFormat:@"%ld",indexPath.row];
+    // カスタムセルにデータを渡して表示処理を委譲
+    [cell setData:homeEventLabel];
 
     
-    //セルに ary を番号順に突っ込む
-    cell.textLabel.text = [NSString stringWithFormat:@"%@",[[ary objectAtIndex:indexPath.row]valueForKeyPath:@"title"]];
-    
-    
-    //cellの番号をcell2にいれる（segueメソッド用）
-    self.cell2 = label1.text;
+
     
     self.tableArray = ary;
     

@@ -101,7 +101,7 @@
              delegate:self
              cancelButtonTitle:@"Cancel"
              destructiveButtonTitle:nil
-             otherButtonTitles:@"Photo Library", @"Camera", @"Saved Photos", nil];
+             otherButtonTitles:@"Photo Library", @"Camera", /*@"Saved Photos",*/ nil];
     
     
     // アクションシートを表示する
@@ -127,10 +127,10 @@
             sourceType = UIImagePickerControllerSourceTypeCamera;
             break;
         }
-        case 2: {
-            sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-            break;
-        }
+//        case 2: {
+//            sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+//            break;
+//        }
     }
     
     // 使用可能かどうかチェックする
@@ -305,8 +305,6 @@
     
     //ボタンの文字色指定
     [_myButton setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
-    
-    //    [_myButton setBackgroundColor:[UIColor redColor]];
 
     
     //メソッドとの紐付け

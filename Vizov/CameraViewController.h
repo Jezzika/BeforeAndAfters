@@ -12,5 +12,4 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *camera;
 
-
 @end
