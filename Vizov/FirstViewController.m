@@ -8,8 +8,13 @@
 
 #import "FirstViewController.h"
 #import "NewPageViewController.h"
+#import "PersonalPageViewController.h"
 
 @interface FirstViewController ()<UITableViewDataSource>
+
+@property (nonatomic) NSString * cell2;
+@property (nonatomic) NSArray * tableArray;
+
 
 @end
 
@@ -23,10 +28,25 @@
     self.listTableView.dataSource = self;
     
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    NSArray *ary= [userDefault objectForKey:@"challenges"];
     
-    NSInteger *count = [ary count];
-    self.nowEventCount.text = [NSString stringWithFormat:@"%d ", count];
+    //配列をfor文でまわす
+    int myCount = 0;
+    for (NSString *now in ary) {
+        if([[now valueForKey:@"type"] isEqualToString:@"now"]){
+            myCount++;
+        }
+        
+    }
+
+    NSLog(@"%@",ary);
+
+    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCount];
+    
+    self.listTableView.delegate = self;
+    self.listTableView.dataSource = self;
+    self.listTableView.allowsSelection = YES;
+    
     
 }
 
@@ -46,9 +66,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    UITableViewCell *tvcell = [tableView dequeueReusableCellWithIdentifier: @"cid"];
+
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [[userDefault objectForKey:@"challenges" ]valueForKeyPath:@"title"];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"ListView";
@@ -58,18 +78,22 @@
     }
     
     UILabel *label1 =(UILabel *)[cell viewWithTag:1];
-    label1.text = [NSString stringWithFormat:@"%ld",(long)indexPath.row];
+    label1.text = [NSString stringWithFormat:@"%ld",indexPath.row];
 
     
     //セルに ary を番号順に突っ込む
-    cell.textLabel.text = [NSString stringWithFormat:@"%@",[ary objectAtIndex:indexPath.row]];
-
+    cell.textLabel.text = [NSString stringWithFormat:@"%@",[[ary objectAtIndex:indexPath.row]valueForKeyPath:@"title"]];
     
-    NSLog (@"%@",cell);
+    
+    //cellの番号をcell2にいれる（segueメソッド用）
+    self.cell2 = label1.text;
+    
+    self.tableArray = ary;
+    
     return cell;
 
 //    if (tvcell == nil) {
-//        tvcell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+//        tvcell = [[UITable    ViewCell alloc] initWithStyle:UITableViewCellStyleDefault
 //                                        reuseIdentifier: @"cid"];
 //    }
 //    
@@ -86,6 +110,30 @@
     // Pass the selected object to the new view controller.
 }
 */
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([[segue identifier] isEqualToString:@"toPersonalPage"]){
+        NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
+        NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
+        NSArray *selectedArray = self.tableArray[indexPath.row];
+
+        //データを書き込む
+        [myDefault setObject:selectedArray forKey:@"selectedAry"];
+        [myDefault synchronize];
+        NSLog(@"%@",selectedArray);
+        
+        // 遷移先画面に一覧から来たというフラグを渡す
+        PersonalPageViewController *personalView = [segue destinationViewController];
+        personalView.fromFirstView = YES;
+    }
 }
 
 @end

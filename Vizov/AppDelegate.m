@@ -18,6 +18,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+//    //UserDefaultのデータを消したい時に使う
+//    NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
+//    [userDef removeObjectForKey:@"challenges"];
+//    [userDef removeObjectForKey:@"maxId"];
+//    
     return YES;
 }
 

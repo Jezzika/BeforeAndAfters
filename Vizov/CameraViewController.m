@@ -8,7 +8,7 @@
 
 #import "CameraViewController.h"
 
-@interface CameraViewController ()
+@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @end
 
@@ -22,6 +22,30 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)tabBarController:
+(UITabBarController*)tabBarController
+didSelectViewController:
+(UIViewController*)CameraviewController{
+    
+    NSInteger sourceType = UIImagePickerControllerSourceTypeCamera;
+    
+    // 使用可能かどうかチェックする
+    if (![UIImagePickerController isSourceTypeAvailable:sourceType]) {
+        return;
+    }
+    // イメージピッカーを作る
+    UIImagePickerController *imagePicker;
+    imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = sourceType;
+    imagePicker.allowsEditing = YES;
+    imagePicker.delegate = self;
+    
+    // イメージピッカーを表示する
+    [self presentViewController:imagePicker animated:YES completion:nil];
+
+    
 }
 
 /*

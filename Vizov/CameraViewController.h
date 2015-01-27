@@ -10,6 +10,7 @@
 
 @interface CameraViewController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UIImageView *camera;
 
 
 @end

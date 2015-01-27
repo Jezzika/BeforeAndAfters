@@ -7,6 +7,7 @@
 //
 
 #import "NewPageViewController.h"
+#import "PersonalPageViewController.h"
 
 
 @interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate>
@@ -44,7 +45,6 @@
     self.setTableView.dataSource = self;
     self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
     
-    
 
 }
 
@@ -52,20 +52,18 @@
     
     //〜時間設定〜
     
-    //btnオブジェクトの生成
-    [self createdBtn];
-    
-    
     //オレンジ色のビューオブジェクトを生成
     [self createdView];
-    
-    //最初は非表示なのでNO
-    _isVisible = NO;
     
     //オレンジ色のビューオブジェクトに紐付いたテキストフィールドを生成
     [self createdDatePicker];
     
-
+    //btnオブジェクトの生成
+    [self createdBtn];
+    
+    //最初は非表示なのでNO
+    _isVisible = NO;
+    
     
 }
 
@@ -157,28 +155,6 @@
 {
     //ImagePickerのデリケードメソッド (画像取得時)
     
-    
-//        // グラフィックスコンテキストを作る
-//        CGSize  size = { 240, 240 };
-//        UIGraphicsBeginImageContext(size);
-//        
-//        // 画像を縮小して描画する
-//        CGRect  rect;
-//        rect.origin = CGPointZero;
-//        rect.size = size;
-//        [image drawInRect:rect];
-//        
-//        // 描画した画像を取得する
-//        UIImage *shrinkedImage;
-//        shrinkedImage = UIGraphicsGetImageFromCurrentImageContext();
-//        UIGraphicsEndImageContext();
-//        
-//        // 画像を表示する
-//        self.beforeImageView.image = shrinkedImage;
-//    
-//        // イメージピッカーを隠す
-//        [self dismissModalViewControllerAnimated:YES];
-    
         CGFloat width = 150;    // リサイズ後幅のサイズ
         CGFloat height = 150;   // リサイズ後高さのサイズ
         CGRect rect = CGRectMake(0, 0, width, height);
@@ -242,7 +218,7 @@
 }
 
 
-//〜ここから、設定画面に〜
+//〜ここから、TableView部分の設定画面に〜
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -276,8 +252,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setValue:[NSString stringWithFormat:@"%ld", (long)indexPath.row] forKey:@"num"];
     
     //[self performSegueWithIdentifier:@"rowNumber" sender:self];
     if (indexPath.row == 0){
@@ -285,8 +259,8 @@
         [UIView beginAnimations:@"animateViewrOn" context:nil];
         [UIView setAnimationDuration:0.3];
         
-        if(!_isVisible){
-            _myButton.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+        if(_isVisible == NO){
+            _myButton.frame = CGRectMake(0, 0, 40, 20);
             _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
             _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
             _isVisible = YES;
@@ -300,7 +274,20 @@
         [UIView commitAnimations];
         
     } else if(indexPath.row == 1) {
-        nil;
+        [UIView beginAnimations:@"animateViewrOn" context:nil];
+        [UIView setAnimationDuration:0.3];
+        
+        if(_isVisible == NO){
+            _myButton.frame = CGRectMake(0, 0, 40, 20);
+            _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
+            _isVisible = YES;
+        }else{
+            
+            //自作メソッドの使用
+            [self downObjects];
+            
+        }
+
     }
 }
 
@@ -312,20 +299,21 @@
     
     //ボタンオブジェクトを生成
     
-    _myButton = [[UIButton alloc] initWithFrame:CGRectMake(300, 0, 40, 20)];
+    _myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
     
-    [_myButton setTitle:@"設定終了" forState:UIControlStateNormal];
+    [_myButton setTitle:@"back" forState:UIControlStateNormal];
     
     //ボタンの文字色指定
     [_myButton setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
     
-    [_myButton setBackgroundColor:[UIColor redColor]];
+    //    [_myButton setBackgroundColor:[UIColor redColor]];
+
     
     //メソッドとの紐付け
     [_myButton addTarget:self action:@selector(tapBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     [_myView addSubview:_myButton];
-    
+
 }
 
 //オレンジ色のビューオブジェクトを生成するメソッド
@@ -347,20 +335,42 @@
 //オレンジ色のビューに紐付いたデートピッカーオブジェクトを作成するめそっど
 -(void)createdDatePicker{
     
-    //デートピッカーオブジェクトを生成
-    _myDatePicker = [[UIDatePicker alloc] init];
+//    
+//    //場所を決定
+//    _myDatePicker.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
+//    _myDatePicker.alpha = 1.0;
+//    
+//    // デートピッカーの色を設定
+//    //[_myDatePicker setBackgroundColor:[UIColor blueColor]];
+
+
+    //_myDatePickerオブジェクトを作成
+    UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+    _myDatePicker = picker;
     
-    //場所を決定
-    _myDatePicker.frame = CGRectMake(0, 0, self.view.bounds.size.width, 10);
-    _myDatePicker.alpha = 1.0;
+    _myDatePicker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _myDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
     
-    // デートピッカーの色を設定
-    [_myDatePicker setBackgroundColor:[UIColor blueColor]];
+    //１０分間隔に設定
+//    _myDatePicker.minuteInterval = 10;
     
+    //_myDatePickerのサイズを選択
+    CGSize size = [_myDatePicker sizeThatFits:CGSizeZero];
+    _myDatePicker.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
+    
+    //現在時刻の２４時間表記
+    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"currentLocale"];
+    _myDatePicker.locale = locale;
+//    [locale release];
     
     //_myViewに追加してあげる
+    NSIndexPath *IndexPath = self.setTableView.indexPathForSelectedRow;
+    if(IndexPath.row == 0){
     [_myView addSubview:_myDatePicker];
-    
+    } else {
+        nil;
+    }
+//    [picker release];
     
 }
 
@@ -372,7 +382,7 @@
     [UIView setAnimationDuration:0.3];
     
     if(!_isVisible){
-        _myButton.frame = CGRectMake(280, self.view.bounds.size.height-310, 40, 20);
+        _myButton.frame = CGRectMake(0, 0, 40, 20);
         _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
         _myDatePicker.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
         _isVisible = YES;
@@ -416,18 +426,35 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"NowSegue"]) {
+        
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        
         // 入力したいデータを取り出し
         NSString *title = self.makeNewTitle.text;
         NSString *detail = self.makeNewDetail.text;
         UIImage *img =  self.beforeImageView.image;
-        // UIImage→NSData変換
+        
+        //入力したいデータ　（データ番号）
+        int num = (int)[userDefault integerForKey:@"maxId"];
+        if (num == nil){
+            num = 1;
+            [userDefault setInteger:num forKey:@"maxId"];
+        } else {
+            num ++;
+            [userDefault setInteger:num forKey:@"maxId"];
+        }
+    
+        // UIImage → NSData変換
         NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
         
+        //タイプのデータ
+        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"title": title, @"detail": detail, @"picture": picture};
-        
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type};
+
         // 現状で保存されているデータ一覧を取得
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+
         NSMutableArray *array = [userDefault objectForKey:@"challenges"];
         if ([array count] > 0) {
             [array addObject:dic];
@@ -437,6 +464,11 @@
             [userDefault setObject:array forKey:@"challenges"];
         }
         [userDefault synchronize];
+        
+        //遷移画面に一覧から来たというフラグを渡す
+        PersonalPageViewController *personalView = [segue destinationViewController]; //遷移先のコントローラーをセット
+        personalView.fromNewPageView = YES;
+        
         
         
         // UserDefaultに保存（コンソールで確認するため）
