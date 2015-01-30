@@ -19,7 +19,9 @@
 		5522875A1A68B431006E119D /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287591A68B431006E119D /* FirstViewController.m */; };
 		5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875C1A68BBA1006E119D /* NewPageViewController.m */; };
 		552287601A694679006E119D /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875F1A694679006E119D /* CameraViewController.m */; };
+		553F82101A79C065006E7740 /* PersonalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F820F1A79C065006E7740 /* PersonalTableViewCell.m */; };
 		55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA695F1A7738240078424E /* FirstTableViewCell.m */; };
+		55EA69691A779FC50078424E /* MyEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA69681A779FC50078424E /* MyEventsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +57,12 @@
 		5522875C1A68BBA1006E119D /* NewPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewPageViewController.m; sourceTree = "<group>"; };
 		5522875E1A694679006E119D /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
 		5522875F1A694679006E119D /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		553F820E1A79C065006E7740 /* PersonalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalTableViewCell.h; sourceTree = "<group>"; };
+		553F820F1A79C065006E7740 /* PersonalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalTableViewCell.m; sourceTree = "<group>"; };
 		55EA695E1A7738240078424E /* FirstTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewCell.h; sourceTree = "<group>"; };
 		55EA695F1A7738240078424E /* FirstTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewCell.m; sourceTree = "<group>"; };
+		55EA69671A779FC50078424E /* MyEventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEventsTableViewController.h; sourceTree = "<group>"; };
+		55EA69681A779FC50078424E /* MyEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEventsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +114,13 @@
 				5522875C1A68BBA1006E119D /* NewPageViewController.m */,
 				55119D491A70A15E00A1C988 /* PersonalPageViewController.h */,
 				55119D4A1A70A15E00A1C988 /* PersonalPageViewController.m */,
+				553F820E1A79C065006E7740 /* PersonalTableViewCell.h */,
+				553F820F1A79C065006E7740 /* PersonalTableViewCell.m */,
 				55119D541A7699C500A1C988 /* ListTableViewController.h */,
 				55119D551A7699C500A1C988 /* ListTableViewController.m */,
 				5522873C1A68ADD7006E119D /* Main.storyboard */,
+				55EA69671A779FC50078424E /* MyEventsTableViewController.h */,
+				55EA69681A779FC50078424E /* MyEventsTableViewController.m */,
 				5522875E1A694679006E119D /* CameraViewController.h */,
 				5522875F1A694679006E119D /* CameraViewController.m */,
 				5522873F1A68ADD7006E119D /* Images.xcassets */,
@@ -247,6 +257,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55EA69691A779FC50078424E /* MyEventsTableViewController.m in Sources */,
+				553F82101A79C065006E7740 /* PersonalTableViewCell.m in Sources */,
 				55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */,
 				5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */,
 				55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */,

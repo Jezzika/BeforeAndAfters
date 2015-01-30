@@ -14,6 +14,7 @@
 @interface FirstViewController ()<UITableViewDataSource>
 
 @property (nonatomic) NSArray * tableArray;
+@property (nonatomic) NSMutableArray * timerAscArray;
 
 
 @end
@@ -71,6 +72,15 @@
 
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+//    int timer = [ary valueForKey:@"timer"];
+//    
+//    // ソート条件を定義
+//    NSSortDescriptor *timerSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:timer ascending:YES];
+//    
+//    // 上記のソート条件を適用
+//    self.timerAscArray = (NSMutableArray *)[ary sortedArrayUsingDescriptors:@[timerSortDescriptor]];
+    
+    
     NSDictionary *homeEventLabel = ary[indexPath.row];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。

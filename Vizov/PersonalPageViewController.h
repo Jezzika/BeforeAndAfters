@@ -12,10 +12,17 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *settedTitle;
 @property (strong, nonatomic) IBOutlet UIImageView *settedBeforePicture;
+@property (strong, nonatomic) IBOutlet UILabel *settedTimer;
+@property (strong, nonatomic) IBOutlet UITextView *settedDetail;
+
 @property (strong, nonatomic) IBOutlet UILabel *realTime;
 @property (strong, nonatomic) IBOutlet UILabel *realTime2;
 
+@property (strong, nonatomic) IBOutlet UITableView *listDetailTable;
+
 @property (nonatomic) BOOL fromFirstView;
 @property (nonatomic) BOOL fromNewPageView;
+
+@property (strong, nonatomic) IBOutlet UIButton *toListEventButton;
 
 @end

@@ -22,7 +22,8 @@
 
 - (void)setData:(NSDictionary *)homeEventLabel{
     if([[homeEventLabel valueForKey:@"type"] isEqualToString:@"now"]){
-        self.challengeStatus.text = @"カウント";
+        NSString *timer = [homeEventLabel valueForKey:@"timer"];
+        self.challengeStatus.text = timer;
     } else {
         self.challengeStatus.text = @"予約";
     }

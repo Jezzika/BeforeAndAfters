@@ -1,20 +1,18 @@
 //
-//  ListTableViewController.m
+//  MyEventsTableViewController.m
 //  Vizov
 //
-//  Created by MiriKunisada on 1/26/15.
+//  Created by MiriKunisada on 1/27/15.
 //  Copyright (c) 2015 Miri Kunisada. All rights reserved.
 //
 
-#import "ListTableViewController.h"
+#import "MyEventsTableViewController.h"
 
-@interface ListTableViewController ()
-
-@property(nonatomic) NSMutableArray *now;
+@interface MyEventsTableViewController ()
 
 @end
 
-@implementation ListTableViewController
+@implementation MyEventsTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -25,19 +23,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    NSUserDefaults *usrdef = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [usrdef objectForKey:@"challenges"];
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSData *data = [userDefault objectForKey:@"takenPicture"];
     
+    NSLog(@"%@",data);
     
-    for(NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"type"]isEqualToString:@"now"]){
-            [self.now addObject:dic];
-            return;
-        } else {
-            break;
-        }
-        
-    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,91 +38,14 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
     // Return the number of sections.
-    return 1;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    // セクションタイトルの文字列変数を宣言
-    NSString *title;
-
-    
-    // 表示しているセクションのタイトルを
-    switch (section) {
-        case 1:
-            title = @"NOW";
-            break;
-//        case 2:
-//            title = @"YET";
-//            break;
-//        case 3:
-//            title = @"SUCCESS";
-//        case 4:
-//            title = @"FAILURE";
-        default:
-            break;
-    }
-    
-    return title;
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    NSInteger rows;
-    
-    switch (section) {
-        case 1:
-            rows = [self.now count];
-            break;
-//        case 2:
-//            rows = [self.vegetable count];
-//            break;
-//        case 3:
-//            rows = [self.vegetable count];
-//            break;
-//        case 4:
-//            rows = [self.vegetable count];
-//            break;
-            
-        default:
-            break;
-    }
-    
-    return rows;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
-    NSString *itemName;
-    switch (indexPath.section) {
-        case 1:
-            itemName = self.now[indexPath.row];
-            break;
-//        case 2:
-//            itemName = self.vegetable[indexPath.row];
-//            break;
-//        case 3:
-//            itemName = self.vegetable[indexPath.row];
-//            break;
-//        case 4:
-//            itemName = self.vegetable[indexPath.row];
-//            break;
-        default:
-            break;
-    }
-    
-    cell.textLabel.text = itemName;
-    
-    return cell;
-}
-
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+    return 0;
 }
 
 /*

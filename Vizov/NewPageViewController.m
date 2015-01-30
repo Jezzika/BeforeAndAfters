@@ -301,7 +301,7 @@
     
     _myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
     
-    [_myButton setTitle:@"back" forState:UIControlStateNormal];
+    [_myButton setTitle:@"SET" forState:UIControlStateNormal];
     
     //ボタンの文字色指定
     [_myButton setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
@@ -311,7 +311,7 @@
     [_myButton addTarget:self action:@selector(tapBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     [_myView addSubview:_myButton];
-
+    
 }
 
 //オレンジ色のビューオブジェクトを生成するメソッド
@@ -347,7 +347,10 @@
     _myDatePicker = picker;
     
     _myDatePicker.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _myDatePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    _myDatePicker.datePickerMode = UIDatePickerModeDate;
+    
+    //datepickerの値で今日より前の日を選択できないようにする。
+    _myDatePicker.minimumDate = [NSDate date];
     
     //１０分間隔に設定
 //    _myDatePicker.minuteInterval = 10;
@@ -357,9 +360,10 @@
     _myDatePicker.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
     
     //現在時刻の２４時間表記
-    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"currentLocale"];
-    _myDatePicker.locale = locale;
-//    [locale release];
+//    NSLocale *locale = [[NSLocale     alloc] initWithLocaleIdentifier:@"currentLocale"];
+//    [locale setDateFormat:@"yyyy/MM/dd"];
+////    _myDatePicker.locale = locale;
+////    [locale release];
     
     //_myViewに追加してあげる
     NSIndexPath *IndexPath = self.setTableView.indexPathForSelectedRow;
@@ -368,9 +372,17 @@
     } else {
         nil;
     }
+    
 //    [picker release];
     
 }
+
+- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    
+    
+    
+}
+
 
 //tapされた時に反応するメソッド
 -(void)tapBtn:(UIButton *)myButton{
@@ -420,6 +432,30 @@
     _myView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
     _myDatePicker.frame = CGRectMake(0, 0, 50, 50);
     _isVisible = NO;
+    
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    
+    //日付のフォーマット指定
+    df.dateFormat = @"yyyy/MM/dd";
+    
+    NSDate *today = [NSDate date];
+    // 日付(NSDate) => 文字列(NSString)に変換
+    NSString *strNow = [df stringFromDate:today];
+    
+    //ラベルに日付を表示
+    NSString *settedDate = [df stringFromDate:_myDatePicker.date];
+    NSDate *setDate = [df dateFromString:settedDate];
+    NSDate *currentDate= [df dateFromString:strNow];
+    // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
+    NSTimeInterval  since = [setDate timeIntervalSinceDate:currentDate];
+    int mySince = (int) since/(24*60*60);
+    if (mySince > 0){
+    
+    self.countdownLabel.text = [NSString stringWithFormat: @"%d", mySince];
+    } else {
+
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -447,9 +483,12 @@
         
         //タイプのデータ
         NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        
+        //カウントダウン日時のデータ
+        NSString *countDown = self.countdownLabel.text;
 
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type};
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown};
 
         // 現状で保存されているデータ一覧を取得
 
@@ -473,6 +512,53 @@
         NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
         NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
         NSLog(@"%@", ary);
+        
+    } else if ([[segue identifier] isEqualToString:@"LaterSegue"]){
+        
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        
+        // 入力したいデータを取り出し
+        NSString *title = self.makeNewTitle.text;
+        NSString *detail = self.makeNewDetail.text;
+        UIImage *img =  self.beforeImageView.image;
+        
+        //入力したいデータ　（データ番号）
+        int num = (int)[userDefault integerForKey:@"maxId"];
+        if (num == nil){
+            num = 1;
+            [userDefault setInteger:num forKey:@"maxId"];
+        } else {
+            num ++;
+            [userDefault setInteger:num forKey:@"maxId"];
+        }
+        
+        // UIImage → NSData変換
+        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
+        
+        //タイプのデータ
+        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        
+        //カウントダウン日時のデータ
+        NSString *countDown = self.countdownLabel.text;
+        
+        // 入力したいデータを辞書型にまとめる
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown};
+        
+        // 現状で保存されているデータ一覧を取得
+        
+        NSMutableArray *array = [userDefault objectForKey:@"challenges"];
+        if ([array count] > 0) {
+            [array addObject:dic];
+            [userDefault setObject:array forKey:@"challenges"];
+        } else {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+            [userDefault setObject:array forKey:@"challenges"];
+        }
+        [userDefault synchronize];
+        
+        //遷移画面に一覧から来たというフラグを渡す
+        PersonalPageViewController *personalView = [segue destinationViewController]; //遷移先のコントローラーをセット
+        personalView.fromNewPageView = YES;
         
     }
 }

@@ -7,8 +7,11 @@
 //
 
 #import "PersonalPageViewController.h"
+#import "PersonalTableViewCell.h"
 
-@interface PersonalPageViewController ()
+@interface PersonalPageViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic) NSArray * tableArray;
 
 @property (nonatomic) NSTimer *timer;
 
@@ -29,6 +32,7 @@
     NSString *detail;
     NSData *pictData;
     UIImage *picture;
+    NSString *timer;
     
     //UserDefaultの個別データ表示(新規作成ページから）
     NSMutableArray *ary1;
@@ -40,6 +44,8 @@
     UIImage *lastPicture;
     NSMutableArray *ary4;
     NSString *lastType;
+    NSMutableArray *ary5;
+    NSString *lastTimer;
     
     
     
@@ -53,9 +59,12 @@
         // NSData→UIImage変換
         picture = [UIImage imageWithData:pictData];
         
+        timer = [[usrDefault objectForKey:@"selectedAry"] valueForKey:@"timer"];
+        
         self.settedTitle.text = title;
         self.settedBeforePicture.image = picture;
-        NSLog(@"%@",title);
+        self.settedTimer.text = timer;
+        self.settedDetail.text = detail;
         
     } else if (self.fromNewPageView) {
 
@@ -71,12 +80,17 @@
         // NSData→UIImage変換
         lastPicture = [UIImage imageWithData:lastPicturedata];
         
-        ary4 =[[usrDefault objectForKey:@"chakkenges"] valueForKeyPath:@"type"];
+        ary4 =[[usrDefault objectForKey:@"challenges"] valueForKeyPath:@"type"];
         lastType = [ary4 lastObject];
+        
+        ary5 =[[usrDefault objectForKey:@"challenges"] valueForKeyPath:@"timer"];
+        lastTimer = [ary5 lastObject];
+        
         
         self.settedTitle.text = lastTitle;
         self.settedBeforePicture.image = lastPicture;
-        NSLog(@"%@",lastType);
+        self.settedTimer.text = lastTimer;
+        self.settedDetail.text = lastDetail;
         
     }
 
@@ -90,6 +104,10 @@
                                            selector:@selector(onTimer:)
                                            userInfo:nil
                                             repeats:YES];
+    
+    self.listDetailTable.delegate = self;
+    self.listDetailTable.dataSource = self;
+    self.listDetailTable.allowsSelection = YES;
     
 }
 
@@ -119,21 +137,54 @@
 
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Table Viewの行数を返す
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    return [ary count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
 
 
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"selectedAry"];
+//    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    NSArray *dailyEventLabel = ary;
+    
+    //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
+    static NSString *CellIdentifier = @"DailyList";
+    PersonalTableViewCell *cell = [self.listDetailTable dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[PersonalTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+
+
+    
+    // カスタムセルにデータを渡して表示処理を委譲
+    [cell setData:dailyEventLabel];
+    
+    
+    self.tableArray = ary;
+    
+    
+    return cell;
+}
+    
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
