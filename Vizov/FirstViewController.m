@@ -9,13 +9,14 @@
 #import "FirstViewController.h"
 #import "NewPageViewController.h"
 #import "PersonalPageViewController.h"
+#import "ListTableViewController.h"
 #import "FirstTableViewCell.h"
 
 @interface FirstViewController ()<UITableViewDataSource>
 
 @property (nonatomic) NSArray * tableArray;
 @property (nonatomic) NSMutableArray * timerAscArray;
-
+@property (nonatomic) NSMutableArray *challenges;
 
 @end
 
@@ -33,23 +34,30 @@
     
     //配列をfor文でまわす
     int myCountNow = 0;
+    int myCountSuccess = 0;
     
-    for (NSString *now in ary) {
-        if([[now valueForKey:@"type"] isEqualToString:@"now"]){
+    for (NSString *dic in ary) {
+        if([[dic valueForKey:@"type"] isEqualToString:@"now"]){
             myCountNow++;
         }
-        
     }
     
-
-
+    for (NSString *dic in ary) {
+        if ([[dic valueForKey:@"type"] isEqualToString:@"success"]){
+        myCountSuccess++;
+     }
+    }
 
     self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCountNow];
+    
+    //UIButtonの文字を変える！
+    NSString *successButton = [NSString stringWithFormat:@"%d", myCountSuccess];
+    [self.successEventCountButton setTitle:successButton forState:UIControlStateNormal];
+    self.successEventCountButton.titleLabel.text = successButton;
     
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
     self.listTableView.allowsSelection = YES;
-    
     
 }
 
@@ -63,25 +71,22 @@
     // Table Viewの行数を返す
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-    return [ary count];
-    //return 5;
+
+    
+    NSMutableArray *challenges = [NSMutableArray new];
+    for (NSDictionary *dic in ary) {
+        if ([[dic valueForKey:@"type"] isEqualToString:@"now"] || [[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
+            [challenges addObject:dic];
+        }
+    }
+    self.challenges = challenges;
+    
+    return [challenges count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-//    int timer = [ary valueForKey:@"timer"];
-//    
-//    // ソート条件を定義
-//    NSSortDescriptor *timerSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:timer ascending:YES];
-//    
-//    // 上記のソート条件を適用
-//    self.timerAscArray = (NSMutableArray *)[ary sortedArrayUsingDescriptors:@[timerSortDescriptor]];
-    
-    
-    NSDictionary *homeEventLabel = ary[indexPath.row];
+    NSDictionary *homeEventLabel = self.challenges[indexPath.row];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"ListView";
@@ -93,21 +98,7 @@
     // カスタムセルにデータを渡して表示処理を委譲
     [cell setData:homeEventLabel];
 
-    
-
-    
-    self.tableArray = ary;
-    
     return cell;
-
-//    if (tvcell == nil) {
-//        tvcell = [[UITable    ViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-//                                        reuseIdentifier: @"cid"];
-//    }
-//    
-//    // Table Viewの各行の情報を、UITableViewCellのオブジェクトとして返す
-//    tvcell.textLabel.text = [[NSString alloc] initWithFormat:@"%ld行目のセル", indexPath.row + 1];
-//    return tvcell;
 
 /*
 #pragma mark - Navigation
@@ -131,16 +122,36 @@
     if ([[segue identifier] isEqualToString:@"toPersonalPage"]){
         NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
         NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
-        NSArray *selectedArray = self.tableArray[indexPath.row];
+        NSArray *selectedArray = self.challenges[indexPath.row];
 
         //データを書き込む
         [myDefault setObject:selectedArray forKey:@"selectedAry"];
         [myDefault synchronize];
-        NSLog(@"%@",selectedArray);
+        NSLog(@"個数　%@",selectedArray);
         
         // 遷移先画面に一覧から来たというフラグを渡す
         PersonalPageViewController *personalView = [segue destinationViewController];
         personalView.fromFirstView = YES;
+    }
+    
+    if ([[segue identifier] isEqualToString:@"successSegue"]){
+        NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary= [myDefault objectForKey:@"challenges"];
+        
+        for (NSDictionary *dic in ary) {
+            if([[dic valueForKey:@"type"] isEqualToString:@"success"]){
+                NSMutableArray *nowAry = [[NSMutableArray alloc] initWithObjects:dic, nil];
+                [myDefault setObject:nowAry forKey:@"selectedSuccessAry"];
+            }
+            
+        //データを書き込む
+        [myDefault synchronize];
+        
+        // 遷移先画面に一覧から来たというフラグを渡す
+        ListTableViewController *listTableView = [segue destinationViewController];
+        listTableView.fromFirstView = YES;
+
+        }
     }
 }
 

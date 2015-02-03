@@ -11,7 +11,7 @@
 
 @interface PersonalPageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property (nonatomic) NSArray * tableArray;
+@property (nonatomic) NSDictionary * tableDict;
 
 @property (nonatomic) NSTimer *timer;
 
@@ -147,19 +147,21 @@
 {
     // Table Viewの行数を返す
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-    return [ary count];
+    NSMutableArray *ary = [userDefault objectForKey:@"selectedAry"];
+    NSString *timer = [ary valueForKey:@"timer"];
+    int num = [timer intValue];
+    int number = num + 1;
+    int i = 1;
+    while (i < number) {
+        i++;
+    }
+    NSLog(@"%d",i);
+    return i;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
 
-
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"selectedAry"];
-//    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-    NSArray *dailyEventLabel = ary;
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"DailyList";
@@ -167,14 +169,26 @@
     if (cell == nil) {
         cell = [[PersonalTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userDefault objectForKey:@"selectedAry"];
+    NSString *timer = [dict valueForKey:@"timer"];
+    int num = [timer intValue];
+    
+    NSMutableArray *tableAry = [NSMutableArray array];
+    int i=0;
+    for (i=1; i<num+1; i++) {
+        [tableAry addObject:[NSString stringWithFormat:@"%d",i]];
+    }
+    
+
 
 
     
     // カスタムセルにデータを渡して表示処理を委譲
-    [cell setData:dailyEventLabel];
+    [cell setData:tableAry];
     
-    
-    self.tableArray = ary;
+    self.tableDict = tableAry;
     
     
     return cell;

@@ -19,7 +19,9 @@
     //Viewの表示フラグ YES = 表示 NO = 非表示
     BOOL _isVisible;
     
+
 }
+@property (nonatomic) NSString *setFinalDate;
 
 @end
 
@@ -44,6 +46,8 @@
     self.setTableView.delegate = self;
     self.setTableView.dataSource = self;
     self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
+    
+    
     
 
 }
@@ -447,6 +451,7 @@
     NSString *settedDate = [df stringFromDate:_myDatePicker.date];
     NSDate *setDate = [df dateFromString:settedDate];
     NSDate *currentDate= [df dateFromString:strNow];
+    
     // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
     NSTimeInterval  since = [setDate timeIntervalSinceDate:currentDate];
     int mySince = (int) since/(24*60*60);
@@ -454,8 +459,11 @@
     
     self.countdownLabel.text = [NSString stringWithFormat: @"%d", mySince];
     } else {
-
     }
+    
+    //セットされた日付を取得
+    self.setFinalDate = settedDate;
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -484,11 +492,14 @@
         //タイプのデータ
         NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
         
-        //カウントダウン日時のデータ
+        //カウントダウン日数のデータ
         NSString *countDown = self.countdownLabel.text;
+        
+        //終了日
+        NSString *finDate = self.setFinalDate;
 
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown};
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate};
 
         // 現状で保存されているデータ一覧を取得
 
@@ -536,13 +547,16 @@
         NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
         
         //タイプのデータ
-        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        NSString *type = @"yet"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
         
-        //カウントダウン日時のデータ
+        //カウントダウン日数のデータ
         NSString *countDown = self.countdownLabel.text;
         
+        //終了日
+        NSString *finDate = self.setFinalDate;
+        
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown};
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate};
         
         // 現状で保存されているデータ一覧を取得
         

@@ -13,5 +13,8 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *nowEventCount;
 
+@property (strong, nonatomic) IBOutlet UIButton *successEventCountButton;
+
+
 
 @end

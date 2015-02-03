@@ -11,7 +11,7 @@
 @interface FirstTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *challengeStatus;
-@property (strong, nonatomic) IBOutlet UILabel *challebgeTitle;
+@property (strong, nonatomic) IBOutlet UILabel *challegeTitle;
 
 - (void)setData:(NSDictionary *)homeEventLabel;
 

@@ -24,16 +24,11 @@
     if([[homeEventLabel valueForKey:@"type"] isEqualToString:@"now"]){
         NSString *timer = [homeEventLabel valueForKey:@"timer"];
         self.challengeStatus.text = timer;
+        self.challegeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
     } else {
         self.challengeStatus.text = @"予約";
+        self.challegeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
     }
-    
-    //セルに ary を番号順に突っ込む  type:yet or now のみを表示
-    
-    if ([[homeEventLabel valueForKey:@"type"] isEqualToString:@"now"] || [[homeEventLabel valueForKey:@"type"] isEqualToString:@"yet"]){
-        self.challebgeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
-    }
-    
     
 }
 

@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ListTableViewController : UITableViewController
+@property (nonatomic) BOOL fromFirstView;
+
+
+@property (strong, nonatomic) IBOutlet UITableView *listTableView;
 
 @end

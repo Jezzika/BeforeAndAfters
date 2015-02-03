@@ -24,20 +24,39 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usrDefault objectForKey:@"selectedSuccessAry"];
     
-    NSUserDefaults *usrdef = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [usrdef objectForKey:@"challenges"];
+    NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
+    NSArray *selectedArray = ary[indexPath.row];
     
     
-    for(NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"type"]isEqualToString:@"now"]){
-            [self.now addObject:dic];
-            return;
-        } else {
-            break;
-        }
+    //UserDefaultの個別データ表示(ホームの一覧リストから）
+    NSArray *title;
+    NSArray *detail;
+    NSData *pictData;
+    UIImage *picture;
+//    NSString *timer;
+    
+    
+    
+    if (self.fromFirstView) {
+        title = [selectedArray valueForKeyPath:@"title"];
+        
+        detail = [selectedArray valueForKeyPath:@"detail"];
+        
+        pictData = [selectedArray valueForKeyPath:@"picture"];
+        
+        // NSData→UIImage変換
+        picture = [UIImage imageWithData:pictData];
+        
+//        timer = [[usrDefault objectForKey:@"selectedSuccessAry"] valueForKey:@"timer"];
         
     }
+    
+
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,39 +71,43 @@
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    // セクションタイトルの文字列変数を宣言
-    NSString *title;
-
-    
-    // 表示しているセクションのタイトルを
-    switch (section) {
-        case 1:
-            title = @"NOW";
-            break;
-//        case 2:
-//            title = @"YET";
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    // セクションタイトルの文字列変数を宣言
+//    NSString *title;
+//
+//    
+//    // 表示しているセクションのタイトルを
+//    switch (section) {
+//        case 1:
+//            title = @"NOW";
 //            break;
-//        case 3:
-//            title = @"SUCCESS";
-//        case 4:
-//            title = @"FAILURE";
-        default:
-            break;
-    }
-    
-    return title;
-}
+////        case 2:
+////            title = @"YET";
+////            break;
+////        case 3:
+////            title = @"SUCCESS";
+////        case 4:
+////            title = @"FAILURE";
+//        default:
+//            break;
+//    }
+//    
+//    return title;
+//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     NSInteger rows;
+    NSUserDefaults *usrDef = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usrDef objectForKey:@"selectedSuccessAry"];
+//    NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
+//    NSArray *selectedArray = ary[indexPath.row];
     
-    switch (section) {
-        case 1:
-            rows = [self.now count];
-            break;
+//    switch ([index.section]) {
+//        case 1:
+            rows = [ary count];
+//            break;
 //        case 2:
 //            rows = [self.vegetable count];
 //            break;
@@ -95,22 +118,26 @@
 //            rows = [self.vegetable count];
 //            break;
             
-        default:
-            break;
-    }
-    
+//        default:
+////            break;
+//    }
+//    
     return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    NSUserDefaults *usrDef = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usrDef objectForKey:@"selectedSuccessAry"];
     
     NSString *itemName;
-    switch (indexPath.section) {
-        case 1:
-            itemName = self.now[indexPath.row];
-            break;
+//    switch (indexPath.section) {
+//        case 1:
+    if (indexPath.section == 0){
+            itemName = [ary valueForKey:@"title"][indexPath.row];
+    }
+//            break;
 //        case 2:
 //            itemName = self.vegetable[indexPath.row];
 //            break;
@@ -120,9 +147,9 @@
 //        case 4:
 //            itemName = self.vegetable[indexPath.row];
 //            break;
-        default:
-            break;
-    }
+//        default:
+//            break;
+//    }
     
     cell.textLabel.text = itemName;
     

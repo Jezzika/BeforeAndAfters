@@ -13,6 +13,7 @@
 
 
 
+
 - (void)setData:(NSDictionary *)dailyEventLabel;
 @property (strong, nonatomic) IBOutlet UILabel *NoteTitle;
 @property (strong, nonatomic) IBOutlet UILabel *DailyNumber;

@@ -7,7 +7,7 @@
 //
 
 #import "PersonalTableViewCell.h"
-
+#import "PersonalPageViewController.h"
 
 
 @implementation PersonalTableViewCell
@@ -24,7 +24,41 @@
 
 
 
-- (void)setData:(NSDictionary *)dailyEventLabel{
+- (void)setData:(NSDictionary *)tableAry{
+    
+    NSLog(@"もしかして%@",tableAry);
+//    
+//    NSIndexPath *indexPath = dailyEventLabel.indexPathForSelectedRow;
+//    NSArray *selectedArray = self.tableArray[indexPath.row];
+    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userDefault objectForKey:@"selectedAry"];
+    NSString *timer = [dict valueForKey:@"timer"];
+       NSLog(@"timer: %@", timer);
+    int num = [timer intValue];
+    
+//    NSMutableArray *tableAry = [NSMutableArray array];
+//    int i=0;
+//    for (i=1; i<num+1; i++) {
+//        [tableAry addObject:[NSString stringWithFormat:@"%d",i]];
+//    }
+    NSInteger myCount = [tableAry count];
+    int i = 0;
+    for (i = 1; i<myCount; i++) {
+        self.DailyNumber.text = [NSString stringWithFormat:@"%d日目",i];
+    }
+
+    
+    NSLog(@"num :%d", num);
+    NSLog(@"配列: %@",tableAry);
+    NSLog(@"配列の数: %ld",tableAry.count);
+
+//    for (NSString *miri in self.tableary) {
+//        NSLog(@"%@",[NSString stringWithFormat:@"%@日目",miri]);
+//    }
+    
+
+    
     
 //    if (dailyEventLabel  == 0){
 //        
