@@ -15,14 +15,18 @@
 
 @implementation AppDelegate
 
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-//    
-//    //UserDefaultのデータを消したい時に使う
-//    NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
-//    [userDef removeObjectForKey:@"challenges"];
-//    [userDef removeObjectForKey:@"maxId"];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    
+    //if (version_greater_than(@"8.0")) {
+    UIUserNotificationType types =  UIUserNotificationTypeBadge|
+    UIUserNotificationTypeSound|
+    UIUserNotificationTypeAlert;
+    
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    
+    [application registerUserNotificationSettings:mySettings];
+    //}
     
     return YES;
 }

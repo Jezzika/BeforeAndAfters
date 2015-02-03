@@ -20,14 +20,14 @@
     // Configure the view for the selected state
 }
 
-- (void)setData:(NSDictionary *)homeEventLabel{
-    if([[homeEventLabel valueForKey:@"type"] isEqualToString:@"now"]){
-        NSString *timer = [homeEventLabel valueForKey:@"timer"];
+- (void)setData:(NSDictionary *)items{
+    if([[items valueForKey:@"type"] isEqualToString:@"now"]){
+        NSString *timer = [items valueForKey:@"timer"];
         self.challengeStatus.text = timer;
-        self.challegeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
+        self.challegeTitle.text = [items valueForKeyPath:@"title"];
     } else {
         self.challengeStatus.text = @"予約";
-        self.challegeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
+        self.challegeTitle.text = [items valueForKeyPath:@"title"];
     }
     
 }

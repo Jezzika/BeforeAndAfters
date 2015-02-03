@@ -19,9 +19,9 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *setTableView;
 
-
 @property (strong, nonatomic) IBOutlet UILabel *countdownLabel;
 
+@property (strong, nonatomic) IBOutlet UILabel *notificationLabel;
 
 
 

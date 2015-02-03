@@ -11,9 +11,8 @@
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;
 
-@property (strong, nonatomic) IBOutlet UILabel *nowEventCount;
-
-@property (strong, nonatomic) IBOutlet UIButton *successEventCountButton;
+@property (strong, nonatomic) IBOutlet UILabel *realTime;
+@property (strong, nonatomic) IBOutlet UILabel *realTime2;
 
 
 

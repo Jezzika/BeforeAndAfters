@@ -16,7 +16,11 @@
 
 @property (nonatomic) NSArray * tableArray;
 @property (nonatomic) NSMutableArray * timerAscArray;
-@property (nonatomic) NSMutableArray *challenges;
+@property (nonatomic) NSMutableArray *challengesNow;
+@property (nonatomic) NSMutableArray *challengesLater;
+
+@property (nonatomic) NSTimer *timer;
+
 
 @end
 
@@ -46,14 +50,22 @@
         if ([[dic valueForKey:@"type"] isEqualToString:@"success"]){
         myCountSuccess++;
      }
+        
+        //現在時刻の表示
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
+                                                      target:self
+                                                    selector:@selector(onTimer:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
     }
-
-    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCountNow];
+    
+    //    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCountNow];
     
     //UIButtonの文字を変える！
-    NSString *successButton = [NSString stringWithFormat:@"%d", myCountSuccess];
-    [self.successEventCountButton setTitle:successButton forState:UIControlStateNormal];
-    self.successEventCountButton.titleLabel.text = successButton;
+    //    NSString *successButton = [NSString stringWithFormat:@"%d", myCountSuccess];
+    //    [self.successEventCountButton setTitle:successButton forState:UIControlStateNormal];
+    //    self.successEventCountButton.titleLabel.text = successButton;
     
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
@@ -61,9 +73,63 @@
     
 }
 
+-(void)onTimer:(NSTimer*)timer {
+        NSDate* now = [NSDate date];//現在時刻取得
+        
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        
+        NSDateComponents *dateCamponents = [calendar components:NSCalendarUnitYear |
+                                            NSCalendarUnitMonth  |
+                                            NSCalendarUnitDay    |
+                                            NSCalendarUnitHour   |
+                                            NSCalendarUnitMinute |
+                                            NSCalendarUnitSecond
+                                                       fromDate:now];
+        
+        self.realTime.text = [NSString stringWithFormat:@"%ld/ %02ld/ %02ld",
+                              (long)dateCamponents.year,
+                              (long)dateCamponents.month,
+                              (long)dateCamponents.day];
+        
+        self.realTime2.text = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",
+                               (long)dateCamponents.hour,
+                               (long)dateCamponents.minute,
+                               (long)          dateCamponents.second];
+        
+        
+    }
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 2;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    // セクションタイトルの文字列変数を宣言
+    NSString *title;
+    
+    // 表示しているセクションのタイトルを
+    switch (section) {
+        case 0:
+            title = @"NOW";
+            break;
+        case 1:
+            title = @"RESERVED";
+            break;
+        default:
+            break;
+    }
+    
+    return title;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -71,22 +137,47 @@
     // Table Viewの行数を返す
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-
     
-    NSMutableArray *challenges = [NSMutableArray new];
+    
+//    NSMutableArray *challenges = [NSMutableArray new];
+//    for (NSDictionary *dic in ary) {
+//        if ([[dic valueForKey:@"type"] isEqualToString:@"now"] || [[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
+//            [challenges addObject:dic];
+//        }
+//    }
+    
+    NSMutableArray *challengesNow = [NSMutableArray new];
+    NSMutableArray *challengesLater = [NSMutableArray new];
     for (NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"type"] isEqualToString:@"now"] || [[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
-            [challenges addObject:dic];
+        if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
+            [challengesNow addObject:dic];
+        } else if ([[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
+            [challengesLater addObject:dic];
         }
     }
-    self.challenges = challenges;
     
-    return [challenges count];
+    NSInteger rows;
+    
+    switch (section) {
+        case 0:
+            rows = [challengesNow count];
+            break;
+        case 1:
+            rows = [challengesLater count];
+            break;
+        default:
+            break;
+    }
+    
+    self.challengesNow = challengesNow;
+    self.challengesLater = challengesLater;
+    
+    return rows;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *homeEventLabel = self.challenges[indexPath.row];
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"ListView";
@@ -95,35 +186,55 @@
         cell = [[FirstTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    NSDictionary *items;
+    switch (indexPath.section) {
+        case 0:
+            items = self.challengesNow[indexPath.row];
+            break;
+        case 1:
+            items = self.challengesLater[indexPath.row];
+            break;
+        default:
+            break;
+    }
+
+    
     // カスタムセルにデータを渡して表示処理を委譲
-    [cell setData:homeEventLabel];
-
+    [cell setData:items];
+    
     return cell;
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    /*
+     #pragma mark - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+     // Get the new view controller using [segue destinationViewController].
+     // Pass the selected object to the new view controller.
+     }
+     */
 }
-*/
-}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return the number of sections.
-    return 1;
+    [self performSegueWithIdentifier:@"toPersonalPage" sender:indexPath];
 }
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"toPersonalPage"]){
         NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
-        NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
-        NSArray *selectedArray = self.challenges[indexPath.row];
+//        NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
 
+        NSInteger section = [sender section];
+        NSInteger row = [sender row];
+        NSArray *selectedArray;
+        if (section == 0) {
+            selectedArray = self.challengesNow[row];
+        } else if (section == 1) {
+            selectedArray = self.challengesLater[row];
+        }
+        
         //データを書き込む
         [myDefault setObject:selectedArray forKey:@"selectedAry"];
         [myDefault synchronize];
@@ -134,25 +245,9 @@
         personalView.fromFirstView = YES;
     }
     
-    if ([[segue identifier] isEqualToString:@"successSegue"]){
-        NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *ary= [myDefault objectForKey:@"challenges"];
-        
-        for (NSDictionary *dic in ary) {
-            if([[dic valueForKey:@"type"] isEqualToString:@"success"]){
-                NSMutableArray *nowAry = [[NSMutableArray alloc] initWithObjects:dic, nil];
-                [myDefault setObject:nowAry forKey:@"selectedSuccessAry"];
-            }
-            
-        //データを書き込む
-        [myDefault synchronize];
-        
-        // 遷移先画面に一覧から来たというフラグを渡す
-        ListTableViewController *listTableView = [segue destinationViewController];
-        listTableView.fromFirstView = YES;
-
-        }
-    }
+    
+    
+    
 }
 
 @end

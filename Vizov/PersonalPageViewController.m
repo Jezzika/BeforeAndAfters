@@ -12,8 +12,8 @@
 @interface PersonalPageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic) NSDictionary * tableDict;
+- (IBAction)tapBtn:(id)sender;
 
-@property (nonatomic) NSTimer *timer;
 
 @end
 
@@ -95,47 +95,13 @@
     }
 
 
-
-
-        
-    //現在時刻の表示
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
-                                             target:self
-                                           selector:@selector(onTimer:)
-                                           userInfo:nil
-                                            repeats:YES];
-    
     self.listDetailTable.delegate = self;
     self.listDetailTable.dataSource = self;
     self.listDetailTable.allowsSelection = YES;
     
 }
 
--(void)onTimer:(NSTimer*)timer {
-    NSDate* now = [NSDate date];//現在時刻取得
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    
-    NSDateComponents *dateCamponents = [calendar components:NSCalendarUnitYear |
-                                        NSCalendarUnitMonth  |
-                                        NSCalendarUnitDay    |
-                                        NSCalendarUnitHour   |
-                                        NSCalendarUnitMinute |
-                                        NSCalendarUnitSecond
-                                                   fromDate:now];
-  
-    self.realTime.text = [NSString stringWithFormat:@"%ld/ %02ld/ %02ld",
-                          (long)dateCamponents.year,
-                          (long)dateCamponents.month,
-                          (long)dateCamponents.day];
-    
-    self.realTime2.text = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",
-                          (long)dateCamponents.hour,
-                          (long)dateCamponents.minute,
-                          (long)          dateCamponents.second];
-    
 
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -165,7 +131,7 @@
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"DailyList";
-    PersonalTableViewCell *cell = [self.listDetailTable dequeueReusableCellWithIdentifier:CellIdentifier];
+    PersonalTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[PersonalTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
@@ -186,7 +152,7 @@
 
     
     // カスタムセルにデータを渡して表示処理を委譲
-    [cell setData:tableAry];
+//    [cell setData:];
     
     self.tableDict = tableAry;
     

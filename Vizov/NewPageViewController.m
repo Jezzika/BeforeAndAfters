@@ -13,14 +13,18 @@
 @interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate>
 {
     UIButton *_myButton;
+    UIButton *_myButton2;
     UIView *_myView;
+    UIView *_myView2;
     UIDatePicker *_myDatePicker;
+    UIDatePicker *_myDatePicker2;
     
     //Viewの表示フラグ YES = 表示 NO = 非表示
     BOOL _isVisible;
     
 
 }
+
 @property (nonatomic) NSString *setFinalDate;
 
 @end
@@ -58,12 +62,15 @@
     
     //オレンジ色のビューオブジェクトを生成
     [self createdView];
+    [self createdView2];
     
-    //オレンジ色のビューオブジェクトに紐付いたテキストフィールドを生成
+    //オレンジ色のビューオブジェクトに紐付いたDatePickerを生成
     [self createdDatePicker];
+    [self createdDatePicker2];
     
     //btnオブジェクトの生成
     [self createdBtn];
+    [self createdBtn2];
     
     //最初は非表示なのでNO
     _isVisible = NO;
@@ -131,10 +138,6 @@
             sourceType = UIImagePickerControllerSourceTypeCamera;
             break;
         }
-//        case 2: {
-//            sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-//            break;
-//        }
     }
     
     // 使用可能かどうかチェックする
@@ -217,8 +220,8 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
-    // イメージピッカーを隠す
-    [self dismissViewControllerAnimated:YES completion:nil];
+        // イメージピッカーを隠す
+        [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -226,79 +229,80 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // セクション数を返す
-    return 3;
+        // セクション数を返す
+        return 3;
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath isEqual:[NSIndexPath indexPathForRow:2 inSection:0]]) {
-        return nil;
-    } else {
-        return indexPath;
-    }
+        if ([indexPath isEqual:[NSIndexPath indexPathForRow:2 inSection:0]]) {
+            return nil;
+        } else {
+            return indexPath;
+        }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *cellName = [self.CellNames objectAtIndex:indexPath.row];
-    UITableViewCell *cell = [self.setTableView dequeueReusableCellWithIdentifier:cellName];
-    
-    return cell;
-    
+        NSString *cellName = [self.CellNames objectAtIndex:indexPath.row];
+        UITableViewCell *cell = [self.setTableView dequeueReusableCellWithIdentifier:cellName];
+        
+        return cell;
 
 }
 
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 44;
+        return 44;
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    //[self performSegueWithIdentifier:@"rowNumber" sender:self];
-    if (indexPath.row == 0){
-        
-        [UIView beginAnimations:@"animateViewrOn" context:nil];
-        [UIView setAnimationDuration:0.3];
-        
-        if(_isVisible == NO){
-            _myButton.frame = CGRectMake(0, 0, 40, 20);
-            _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-            _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
-            _isVisible = YES;
-        }else{
+        if (indexPath.row == 0){
             
-            //自作メソッドの使用
-            [self downObjects];
+            [UIView beginAnimations:@"animateViewrOn" context:nil];
+            [UIView setAnimationDuration:0.3];
             
-        }
-        
-        [UIView commitAnimations];
-        
-    } else if(indexPath.row == 1) {
-        [UIView beginAnimations:@"animateViewrOn" context:nil];
-        [UIView setAnimationDuration:0.3];
-        
-        if(_isVisible == NO){
-            _myButton.frame = CGRectMake(0, 0, 40, 20);
-            _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-            _isVisible = YES;
-        }else{
+            if(_isVisible == NO){
+                _myButton.frame = CGRectMake(0, 0, 40, 20);
+                _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
+                _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
+                _isVisible = YES;
+            }else{
+                
+                //自作メソッドの使用
+                [self downObjectsTimer];
+                
+            }
             
-            //自作メソッドの使用
-            [self downObjects];
+            [UIView commitAnimations];
             
         }
+    
+        if (indexPath.row == 1) {
+            [UIView beginAnimations:@"animateViewrOn" context:nil];
+            [UIView setAnimationDuration:0.3];
+            
+            if(_isVisible == NO){
+                _myButton2.frame = CGRectMake(0, 0, 40, 20);
+                _myView2.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
+                 _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
+                _isVisible = YES;
+            }else{
+                
+                //自作メソッドの使用
+                [self downObjectsNotification];
+                
+            }
 
-    }
+        }
 }
 
 
-//~ここから時間設定~
+//〜ここから時間設定〜
 
-//ボタンオブジェクトを生成するメソッド
+//ボタンオブジェクト(Timer用）
 -(void)createdBtn{
     
     //ボタンオブジェクトを生成
@@ -317,8 +321,28 @@
     [_myView addSubview:_myButton];
     
 }
+//ボタンオブジェクト(Notification用）
+-(void)createdBtn2{
+    
+    //ボタンオブジェクトを生成
+    
+    _myButton2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+    
+    [_myButton2 setTitle:@"設定" forState:UIControlStateNormal];
+    
+    //ボタンの文字色指定
+    [_myButton2 setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
+    
+    
+    //メソッドとの紐付け
+    [_myButton2 addTarget:self action:@selector(tapBtn2:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_myView2 addSubview:_myButton2];
+    
+}
 
-//オレンジ色のビューオブジェクトを生成するメソッド
+
+//オレンジ色のビューオブジェクトを生成するメソッド(Timer用）
 -(void)createdView{
     
     _myView = [[UIView alloc] init];
@@ -334,7 +358,24 @@
     
 }
 
-//オレンジ色のビューに紐付いたデートピッカーオブジェクトを作成するめそっど
+//オレンジ色のビューオブジェクトを生成するメソッド(Notification用）
+-(void)createdView2{
+    
+    _myView2 = [[UIView alloc] init];
+    
+    //場所を決定
+    _myView2.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
+    _myView2.alpha = 1.0;
+    
+    //ビューの色を設定
+    [_myView2 setBackgroundColor:[UIColor colorWithRed:1.0 green:0.54901 blue:0 alpha:1]];
+    
+    [self.view addSubview:_myView2];
+    
+}
+
+
+//オレンジ色のビューに紐付いたデートピッカーオブジェクト(Timer用）
 -(void)createdDatePicker{
     
 //    
@@ -356,39 +397,57 @@
     //datepickerの値で今日より前の日を選択できないようにする。
     _myDatePicker.minimumDate = [NSDate date];
     
-    //１０分間隔に設定
-//    _myDatePicker.minuteInterval = 10;
     
     //_myDatePickerのサイズを選択
     CGSize size = [_myDatePicker sizeThatFits:CGSizeZero];
     _myDatePicker.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
-    
-    //現在時刻の２４時間表記
-//    NSLocale *locale = [[NSLocale     alloc] initWithLocaleIdentifier:@"currentLocale"];
-//    [locale setDateFormat:@"yyyy/MM/dd"];
-////    _myDatePicker.locale = locale;
-////    [locale release];
+
     
     //_myViewに追加してあげる
-    NSIndexPath *IndexPath = self.setTableView.indexPathForSelectedRow;
-    if(IndexPath.row == 0){
     [_myView addSubview:_myDatePicker];
-    } else {
-        nil;
-    }
     
-//    [picker release];
     
 }
+
+//オレンジ色のビューに紐付いたデートピッカーオブジェクト(Notification)
+-(void)createdDatePicker2{
+    
+    
+    //場所を決定
+    _myDatePicker2.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
+    _myDatePicker2.alpha = 1.0;
+
+    
+    //１０分間隔に設定
+    _myDatePicker.minuteInterval = 10;
+    
+    //_myDatePickerオブジェクトを作成
+    UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+    _myDatePicker2 = picker;
+    
+    _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _myDatePicker2.datePickerMode = UIDatePickerModeTime;
+    
+    
+    //_myDatePickerのサイズを選択
+    CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
+    _myDatePicker2.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
+    
+    //_myViewに追加してあげる
+    [_myView2 addSubview:_myDatePicker2];
+
+    
+}
+
+
 
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     
     
-    
 }
 
 
-//tapされた時に反応するメソッド
+//tapされた時に反応するメソッド(Timer)
 -(void)tapBtn:(UIButton *)myButton{
     
     
@@ -403,7 +462,7 @@
     }else{
         
         //自作メソッドの使用
-        [self downObjects];
+        [self downObjectsTimer];
         
     }
     
@@ -411,26 +470,32 @@
     
 }
 
-
-//Returnキーが押された時に反応するメソッド
--(void)tapReturn{
+//tapされた時に反応するメソッド(Notification)
+-(void)tapBtn2:(UIButton *)myButton{
     
-    NSLog(@"Return");
     
-    self->_myDatePicker.datePickerMode = UIDatePickerModeTime;
+    [UIView beginAnimations:@"animateViewrOn" context:nil];
+    [UIView setAnimationDuration:0.3];
     
-        //TODO:ボタンやビューが下がる処理を記述
-        [UIView beginAnimations:@"animateViewrOn" context:nil];
-        [UIView setAnimationDuration:0.3];
+    if(!_isVisible){
+        _myButton2.frame = CGRectMake(0, 0, 40, 20);
+        _myView2.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
+        _myDatePicker2.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
+        _isVisible = YES;
+    }else{
         
         //自作メソッドの使用
-        [self downObjects];
+        [self downObjectsNotification];
         
-        [UIView commitAnimations];
+    }
+    
+    [UIView commitAnimations];
+    
 }
 
 //オブジェクトを下げるメソッド
--(void)downObjects{
+//タイマーの設定
+-(void)downObjectsTimer{
     
     _myButton.frame = CGRectMake(50, 50, 40, 20);
     _myView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
@@ -466,6 +531,31 @@
     
 }
 
+//オブジェクトを下げるメソッド
+// 通知設定
+-(void)downObjectsNotification{
+    
+    _myButton2.frame = CGRectMake(50, 50, 40, 20);
+    _myView2.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
+    _myDatePicker2.frame = CGRectMake(0, 0, 50, 50);
+    _isVisible = NO;
+    
+    //モードを指定
+    _myDatePicker2.datePickerMode = UIDatePickerModeTime;
+    
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"HH:mm"];
+    
+    NSString *time = [df stringFromDate:_myDatePicker2.date];
+    
+    self.notificationLabel.text = time;
+    
+    
+    
+}
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"NowSegue"]) {
         
@@ -490,7 +580,7 @@
         NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
         
         //タイプのデータ
-        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        NSString *type = @"success"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
         
         //カウントダウン日数のデータ
         NSString *countDown = self.countdownLabel.text;

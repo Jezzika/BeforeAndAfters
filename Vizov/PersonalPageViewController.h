@@ -15,8 +15,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *settedTimer;
 @property (strong, nonatomic) IBOutlet UITextView *settedDetail;
 
-@property (strong, nonatomic) IBOutlet UILabel *realTime;
-@property (strong, nonatomic) IBOutlet UILabel *realTime2;
+
 
 @property (strong, nonatomic) IBOutlet UITableView *listDetailTable;
 
