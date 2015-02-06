@@ -12,6 +12,7 @@
 
 @implementation PersonalTableViewCell
 
+
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -23,11 +24,10 @@
 }
 
 
-
 - (void)setData:(NSDictionary *)tableAry{
     
-    NSLog(@"もしかして%@",tableAry);
-//    
+    
+//
 //    NSIndexPath *indexPath = dailyEventLabel.indexPathForSelectedRow;
 //    NSArray *selectedArray = self.tableArray[indexPath.row];
     
@@ -37,14 +37,8 @@
        NSLog(@"timer: %@", timer);
     int num = [timer intValue];
     
-//    NSMutableArray *tableAry = [NSMutableArray array];
-//    int i=0;
-//    for (i=1; i<num+1; i++) {
-//        [tableAry addObject:[NSString stringWithFormat:@"%d",i]];
-//    }
-    NSInteger myCount = [tableAry count];
-    int i = 0;
-    for (i = 1; i<myCount; i++) {
+    int i;
+    for (i = 1; i<num; i++) {
         self.DailyNumber.text = [NSString stringWithFormat:@"%d日目",i];
     }
 
@@ -75,6 +69,8 @@
     //        self.challebgeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
     //    }
 }
+
+
 
 
 

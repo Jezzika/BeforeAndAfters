@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PersonalPageViewController : UIViewController
+@interface PersonalPageViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UILabel *settedTitle;
-@property (strong, nonatomic) IBOutlet UIImageView *settedBeforePicture;
 @property (strong, nonatomic) IBOutlet UILabel *settedTimer;
 @property (strong, nonatomic) IBOutlet UITextView *settedDetail;
 
@@ -20,8 +19,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *listDetailTable;
 
 @property (nonatomic) BOOL fromFirstView;
-@property (nonatomic) BOOL fromNewPageView;
+@property (nonatomic) BOOL fromCameraView;
 
-@property (strong, nonatomic) IBOutlet UIButton *toListEventButton;
+@property (strong, nonatomic) UIButton *toListEventButton;
+@property (strong, nonatomic) UIImageView *settedBeforePicture;
+
 
 @end

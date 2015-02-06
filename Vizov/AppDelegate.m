@@ -18,7 +18,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    //if (version_greater_than(@"8.0")) {
     UIUserNotificationType types =  UIUserNotificationTypeBadge|
     UIUserNotificationTypeSound|
     UIUserNotificationTypeAlert;
@@ -26,9 +25,68 @@
     UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
     
     [application registerUserNotificationSettings:mySettings];
-    //}
+    
+    //launchOptions から UILocalNotifiation 情報を取得
+    UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    
+    if (localNotification) {
+//        //通知イベントで送られてきた情報（文字列）をメイン画面のラベルに表示
+//        NSString *itemName = [localNotification.userInfo objectForKey:@"EventKey"];
+//        [self.viewController updateLabel:itemName];
+        
+        //アイコンに右肩に表示されていた数字をカウントダウン
+        //ここでは数字が０になり、アイコンの右肩の赤丸表示がなくなる
+        application.applicationIconBadgeNumber = localNotification.applicationIconBadgeNumber-1;
+    }
+    
+        //UserDefaultのデータを消したい時に使う
+//        NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
+//        [userDef removeObjectForKey:@"challenges"];
+//        [userDef removeObjectForKey:@"maxId"];
+//
+    
+    //カウントゼロのものはsuccessに変わる処理
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usr objectForKey:@"challenges"];
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    //日付のフォーマット指定
+    df.dateFormat = @"yyyy/MM/dd";
+    
+    NSDate *today = [NSDate date];
+    
+    // 日付(NSDate) => 文字列(NSString)に変換
+    NSString *strNow = [df stringFromDate:today];
+    
+
+    NSMutableArray *challenges = [NSMutableArray new];
+    for (NSDictionary *dic in ary) {
+        if ([[dic valueForKey:@"finDate"] isEqualToString:strNow]) {
+            [challenges addObject:dic];
+            [ary setValue:@"success" forKey:@"type"];
+            [usr setObject:ary forKey:@"challenges"];
+            
+
+    }
+
+        [usr synchronize];
+    }
     
     return YES;
+}
+
+// 通常、アプリケーションが起動中の場合はローカル通知は通知されないが、通知されるようにする
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if(notification) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"通知"
+                              message:@"頑張って続けましょう〜！"
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

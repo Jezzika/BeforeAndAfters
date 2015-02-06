@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ListTableViewController : UITableViewController
+@interface ListTableViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate>
+
 @property (nonatomic) BOOL fromFirstView;
 
 
 @property (strong, nonatomic) IBOutlet UITableView *listTableView;
+@property (strong, nonatomic) IBOutlet UITableView *doneListTableView;
 
 @end

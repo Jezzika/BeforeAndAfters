@@ -23,10 +23,6 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSData *data = [userDefault objectForKey:@"takenPicture"];
-    
-    NSLog(@"%@",data);
     
 }
 
@@ -40,12 +36,28 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return 0;
+    
+    // Table Viewの行数を返す
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    
+    NSMutableArray *challengesNow = [NSMutableArray new];
+    NSMutableArray *challengesLater = [NSMutableArray new];
+    for (NSDictionary *dic in ary) {
+        if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
+            [challengesNow addObject:dic];
+        } else if ([[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
+            [challengesLater addObject:dic];
+        }
+    }
+    
+    int myConnt = [challengesNow count] + [challengesLater count];
+    return myConnt;
 }
 
 /*

@@ -13,15 +13,18 @@
 		552287351A68ADD7006E119D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287341A68ADD7006E119D /* AppDelegate.m */; };
 		552287381A68ADD7006E119D /* Vizov.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 552287361A68ADD7006E119D /* Vizov.xcdatamodeld */; };
 		5522873E1A68ADD7006E119D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5522873C1A68ADD7006E119D /* Main.storyboard */; };
-		552287401A68ADD7006E119D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5522873F1A68ADD7006E119D /* Images.xcassets */; };
 		552287431A68ADD7006E119D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 552287411A68ADD7006E119D /* LaunchScreen.xib */; };
 		5522874F1A68ADD7006E119D /* VizovTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522874E1A68ADD7006E119D /* VizovTests.m */; };
 		5522875A1A68B431006E119D /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 552287591A68B431006E119D /* FirstViewController.m */; };
 		5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875C1A68BBA1006E119D /* NewPageViewController.m */; };
 		552287601A694679006E119D /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5522875F1A694679006E119D /* CameraViewController.m */; };
 		553F82101A79C065006E7740 /* PersonalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 553F820F1A79C065006E7740 /* PersonalTableViewCell.m */; };
+		555A20461A8200FD00E92BB9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 555A20451A8200FD00E92BB9 /* AVFoundation.framework */; };
+		556B4E9D1A8341530095DD2E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 556B4E9C1A8341530095DD2E /* Images.xcassets */; };
+		556B4EA01A8397860095DD2E /* DailyNoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B4E9F1A8397860095DD2E /* DailyNoteViewController.m */; };
+		556B4EA31A83987D0095DD2E /* MyEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B4EA21A83987D0095DD2E /* MyEventsTableViewController.m */; };
+		556B4EA61A84B6C00095DD2E /* ListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B4EA51A84B6C00095DD2E /* ListTableViewCell.m */; };
 		55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA695F1A7738240078424E /* FirstTableViewCell.m */; };
-		55EA69691A779FC50078424E /* MyEventsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA69681A779FC50078424E /* MyEventsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +49,6 @@
 		552287341A68ADD7006E119D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		552287371A68ADD7006E119D /* Vizov.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Vizov.xcdatamodel; sourceTree = "<group>"; };
 		5522873D1A68ADD7006E119D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		5522873F1A68ADD7006E119D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		552287421A68ADD7006E119D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		552287481A68ADD7006E119D /* VizovTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VizovTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5522874D1A68ADD7006E119D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -59,10 +61,16 @@
 		5522875F1A694679006E119D /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		553F820E1A79C065006E7740 /* PersonalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalTableViewCell.h; sourceTree = "<group>"; };
 		553F820F1A79C065006E7740 /* PersonalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalTableViewCell.m; sourceTree = "<group>"; };
+		555A20451A8200FD00E92BB9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		556B4E9C1A8341530095DD2E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		556B4E9E1A8397860095DD2E /* DailyNoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyNoteViewController.h; sourceTree = "<group>"; };
+		556B4E9F1A8397860095DD2E /* DailyNoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailyNoteViewController.m; sourceTree = "<group>"; };
+		556B4EA11A83987D0095DD2E /* MyEventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEventsTableViewController.h; sourceTree = "<group>"; };
+		556B4EA21A83987D0095DD2E /* MyEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEventsTableViewController.m; sourceTree = "<group>"; };
+		556B4EA41A84B6C00095DD2E /* ListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListTableViewCell.h; sourceTree = "<group>"; };
+		556B4EA51A84B6C00095DD2E /* ListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListTableViewCell.m; sourceTree = "<group>"; };
 		55EA695E1A7738240078424E /* FirstTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewCell.h; sourceTree = "<group>"; };
 		55EA695F1A7738240078424E /* FirstTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewCell.m; sourceTree = "<group>"; };
-		55EA69671A779FC50078424E /* MyEventsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyEventsTableViewController.h; sourceTree = "<group>"; };
-		55EA69681A779FC50078424E /* MyEventsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyEventsTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				555A20461A8200FD00E92BB9 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +95,7 @@
 		552287231A68ADD7006E119D = {
 			isa = PBXGroup;
 			children = (
+				555A20451A8200FD00E92BB9 /* AVFoundation.framework */,
 				5522872E1A68ADD7006E119D /* Vizov */,
 				5522874B1A68ADD7006E119D /* VizovTests */,
 				5522872D1A68ADD7006E119D /* Products */,
@@ -116,14 +126,18 @@
 				55119D4A1A70A15E00A1C988 /* PersonalPageViewController.m */,
 				553F820E1A79C065006E7740 /* PersonalTableViewCell.h */,
 				553F820F1A79C065006E7740 /* PersonalTableViewCell.m */,
+				556B4E9E1A8397860095DD2E /* DailyNoteViewController.h */,
+				556B4E9F1A8397860095DD2E /* DailyNoteViewController.m */,
 				55119D541A7699C500A1C988 /* ListTableViewController.h */,
 				55119D551A7699C500A1C988 /* ListTableViewController.m */,
+				556B4EA41A84B6C00095DD2E /* ListTableViewCell.h */,
+				556B4EA51A84B6C00095DD2E /* ListTableViewCell.m */,
+				556B4EA11A83987D0095DD2E /* MyEventsTableViewController.h */,
+				556B4EA21A83987D0095DD2E /* MyEventsTableViewController.m */,
 				5522873C1A68ADD7006E119D /* Main.storyboard */,
-				55EA69671A779FC50078424E /* MyEventsTableViewController.h */,
-				55EA69681A779FC50078424E /* MyEventsTableViewController.m */,
 				5522875E1A694679006E119D /* CameraViewController.h */,
 				5522875F1A694679006E119D /* CameraViewController.m */,
-				5522873F1A68ADD7006E119D /* Images.xcassets */,
+				556B4E9C1A8341530095DD2E /* Images.xcassets */,
 				552287411A68ADD7006E119D /* LaunchScreen.xib */,
 				552287361A68ADD7006E119D /* Vizov.xcdatamodeld */,
 				5522872F1A68ADD7006E119D /* Supporting Files */,
@@ -238,8 +252,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5522873E1A68ADD7006E119D /* Main.storyboard in Resources */,
+				556B4E9D1A8341530095DD2E /* Images.xcassets in Resources */,
 				552287431A68ADD7006E119D /* LaunchScreen.xib in Resources */,
-				552287401A68ADD7006E119D /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,16 +271,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55EA69691A779FC50078424E /* MyEventsTableViewController.m in Sources */,
 				553F82101A79C065006E7740 /* PersonalTableViewCell.m in Sources */,
 				55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */,
 				5522875D1A68BBA1006E119D /* NewPageViewController.m in Sources */,
+				556B4EA01A8397860095DD2E /* DailyNoteViewController.m in Sources */,
 				55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */,
 				552287351A68ADD7006E119D /* AppDelegate.m in Sources */,
 				552287321A68ADD7006E119D /* main.m in Sources */,
 				552287601A694679006E119D /* CameraViewController.m in Sources */,
 				5522875A1A68B431006E119D /* FirstViewController.m in Sources */,
 				552287381A68ADD7006E119D /* Vizov.xcdatamodeld in Sources */,
+				556B4EA61A84B6C00095DD2E /* ListTableViewCell.m in Sources */,
+				556B4EA31A83987D0095DD2E /* MyEventsTableViewController.m in Sources */,
 				55119D561A7699C500A1C988 /* ListTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

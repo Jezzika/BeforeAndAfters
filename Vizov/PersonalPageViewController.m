@@ -12,8 +12,6 @@
 @interface PersonalPageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic) NSDictionary * tableDict;
-- (IBAction)tapBtn:(id)sender;
-
 
 @end
 
@@ -32,20 +30,6 @@
     NSString *detail;
     NSData *pictData;
     UIImage *picture;
-    NSString *timer;
-    
-    //UserDefaultの個別データ表示(新規作成ページから）
-    NSMutableArray *ary1;
-    NSString *lastTitle;
-    NSMutableArray *ary2;
-    NSString *lastDetail;
-    NSMutableArray *ary3;
-    NSData *lastPicturedata;
-    UIImage *lastPicture;
-    NSMutableArray *ary4;
-    NSString *lastType;
-    NSMutableArray *ary5;
-    NSString *lastTimer;
     
     
     
@@ -59,46 +43,47 @@
         // NSData→UIImage変換
         picture = [UIImage imageWithData:pictData];
         
-        timer = [[usrDefault objectForKey:@"selectedAry"] valueForKey:@"timer"];
+        NSString *finDate = [[usrDefault objectForKey:@"selectedAry"] valueForKey:@"finDate"];
+        
+        //初期化(カウントダウン用のデータ作成）
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+        
+        NSDate *today = [NSDate date];
+        
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strNow = [df stringFromDate:today];
+        NSDate *currentDate= [df dateFromString:strNow];
+        
+        NSDate *setFinDate = [df dateFromString:finDate];
+        
+        // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
+        NSTimeInterval  since = [setFinDate timeIntervalSinceDate:currentDate];
+        int mySince = (int) since/(24*60*60);
+        if (mySince > 0){
+            self.settedTimer.text = [NSString stringWithFormat:@"%d",mySince];
+        } else {
+        }
+
         
         self.settedTitle.text = title;
         self.settedBeforePicture.image = picture;
-        self.settedTimer.text = timer;
         self.settedDetail.text = detail;
-        
-    } else if (self.fromNewPageView) {
-
-        ary1 = [[usrDefault objectForKey:@"challenges"]valueForKeyPath:@"title"];
-        lastTitle = [ary1 lastObject];
-        
-        ary2 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"detail"];
-        lastDetail = [ary2 lastObject];
-        
-        ary3 = [[usrDefault objectForKey:@"challenges" ]valueForKeyPath:@"picture"];
-        lastPicturedata = [ary3 lastObject];
-        
-        // NSData→UIImage変換
-        lastPicture = [UIImage imageWithData:lastPicturedata];
-        
-        ary4 =[[usrDefault objectForKey:@"challenges"] valueForKeyPath:@"type"];
-        lastType = [ary4 lastObject];
-        
-        ary5 =[[usrDefault objectForKey:@"challenges"] valueForKeyPath:@"timer"];
-        lastTimer = [ary5 lastObject];
-        
-        
-        self.settedTitle.text = lastTitle;
-        self.settedBeforePicture.image = lastPicture;
-        self.settedTimer.text = lastTimer;
-        self.settedDetail.text = lastDetail;
         
     }
 
+    
+    if (self.fromCameraView){
+        NSLog(@"%@",@"カメラから帰ってきたよ〜");
+    }
 
     self.listDetailTable.delegate = self;
     self.listDetailTable.dataSource = self;
     self.listDetailTable.allowsSelection = YES;
     
+
 }
 
 
@@ -116,12 +101,11 @@
     NSMutableArray *ary = [userDefault objectForKey:@"selectedAry"];
     NSString *timer = [ary valueForKey:@"timer"];
     int num = [timer intValue];
-    int number = num + 1;
     int i = 1;
-    while (i < number) {
+    while (i < num) {
         i++;
     }
-    NSLog(@"%d",i);
+    
     return i;
 }
 
@@ -132,6 +116,7 @@
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
     static NSString *CellIdentifier = @"DailyList";
     PersonalTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+   
     if (cell == nil) {
         cell = [[PersonalTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
@@ -142,21 +127,17 @@
     int num = [timer intValue];
     
     NSMutableArray *tableAry = [NSMutableArray array];
-    int i=0;
-    for (i=1; i<num+1; i++) {
+    int i;
+    for (i=1; i<num; i++) {
         [tableAry addObject:[NSString stringWithFormat:@"%d",i]];
     }
     
 
 
+    //カスタムセルにデータを渡して表示処理を委譲
+//    self.tableDict = tableAry;
+    [cell setData:tableAry];
 
-    
-    // カスタムセルにデータを渡して表示処理を委譲
-//    [cell setData:];
-    
-    self.tableDict = tableAry;
-    
-    
     return cell;
 }
     

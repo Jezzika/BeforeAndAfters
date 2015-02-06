@@ -8,16 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CameraViewController : UIViewController
+@interface CameraViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UIImageView *camera;
+@property (strong, nonatomic) IBOutlet UIImageView *cameraPic;
 
-- (IBAction)takePhoto:(UIButton *)sender;
-- (IBAction)selectPhoto:(UIButton *)sender;
-- (IBAction)returnText:(UITextField*)sender;
+@property (strong, nonatomic) IBOutlet UIScrollView *ScrollView;
+
+
+- (IBAction)selectPhoto:(UIBarButtonItem *)sender;
+- (IBAction)takePicture:(UIBarButtonItem *)sender;
+
+- (IBAction)memoField:(id)sender;
+
 
 
 @property (strong, nonatomic) IBOutlet UIView *actionsheetView;
-@property (strong, nonatomic) IBOutlet UITextField *todaysText;
+
 
 @end

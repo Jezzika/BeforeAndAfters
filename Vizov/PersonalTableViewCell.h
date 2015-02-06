@@ -12,10 +12,9 @@
 @interface PersonalTableViewCell : UITableViewCell
 
 
-
-
-@property (strong, nonatomic) IBOutlet UILabel *NoteTitle;
 @property (strong, nonatomic) IBOutlet UILabel *DailyNumber;
+
+- (void)setData:(NSMutableArray *)tableAry;
 
 
 @end

@@ -26,6 +26,13 @@
 }
 
 @property (nonatomic) NSString *setFinalDate;
+@property (nonatomic) NSDate *notificationDate;
+@property (nonatomic) NSDate *finaldate;
+@property (nonatomic) UILabel *tag1;
+@property (nonatomic) UILabel *tag2;
+
+
+
 
 @end
 
@@ -53,6 +60,7 @@
     
     
     
+    
 
 }
 
@@ -75,7 +83,6 @@
     //最初は非表示なのでNO
     _isVisible = NO;
     
-    
 }
 
 
@@ -95,6 +102,8 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
 
 - (IBAction)returnNewTitle:(id)sender {
     //キーボードがreturn押して落ちるように、このメソッドの存在は消さない！
@@ -117,6 +126,235 @@
     
     // アクションシートを表示する
     [sheet showInView:self.view];
+}
+
+- (IBAction)tapNowButton:(id)sender {
+
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+
+        NSDate *today = [NSDate date];
+    
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strNow = [df stringFromDate:today];
+    
+    
+    
+    if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@"<>"] || [self.setFinalDate isEqualToString:strNow]){
+            
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@"エラー"
+                                  message:@"空欄を入力して下さい"
+                                  delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+            [alert show];
+            
+            
+        } else {
+            
+    
+
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        
+        // 入力したいデータを取り出し
+        NSString *title = self.makeNewTitle.text;
+        NSString *detail = self.makeNewDetail.text;
+        UIImage *img =  self.beforeImageView.image;
+        
+        //入力したいデータ　（データ番号）
+        int num = (int)[userDefault integerForKey:@"maxId"];
+        if (num == nil){
+            num = 1;
+            [userDefault setInteger:num forKey:@"maxId"];
+        } else {
+            num ++;
+            [userDefault setInteger:num forKey:@"maxId"];
+        }
+            
+        // UIImage → NSData変換
+        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
+        
+        //タイプのデータ
+        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        
+        //カウントダウン日数のデータ
+        NSString *countDown = self.tag1.text;
+        
+        //終了日
+        NSString *finDate = self.setFinalDate;
+    
+        
+        //通知タイム
+        NSString *notification = self.tag2.text;
+        
+        // 入力したいデータを辞書型にまとめる
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"notification": notification};
+        
+        // 現状で保存されているデータ一覧を取得
+        
+        NSMutableArray *array = [[userDefault objectForKey:@"challenges"] mutableCopy];
+        if ([array count] > 0) {
+            [array addObject:dic];
+            [userDefault setObject:array forKey:@"challenges"];
+        } else {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+            [userDefault setObject:array forKey:@"challenges"];
+        }
+        [userDefault synchronize];
+    
+    
+        //通知アラート設定-------------------------------------
+        //現在日付
+        NSDate *now = [NSDate date];
+        
+        NSCalendar *cal = [NSCalendar currentCalendar];
+        NSDateComponents *comp = [[NSDateComponents alloc] init];
+        [comp setDay:0];
+        
+        // 現在から指定した日付との差分を、日を基準にして取得する。
+        NSDateComponents *def1 = [cal components:NSCalendarUnitDay fromDate:now toDate:self.finaldate options:0];
+        
+        int countdownDayNumber = (int)[def1 day];
+        
+        
+        //インスタンス化(ローカル通知を作成）
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        if (localNotification == nil){
+            return;
+        }
+        
+        // NSDateFormatter を用意します。
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        // 変換用の書式を設定
+        [formatter setDateFormat:@"HH:mm"];
+        
+        
+        //-------- localNotificationの設定 -------------------
+        countdownDayNumber = countdownDayNumber + 1;
+        
+        //通知を受ける時刻を指定
+        localNotification.fireDate = self.notificationDate;
+        
+        //通知メッセージの本文(チャレンジのタイトル)
+        localNotification.alertBody = [NSString stringWithFormat:@"%@:あと%d日です",title,countdownDayNumber];
+        
+        //アイコンバッチの数字
+        localNotification.applicationIconBadgeNumber = countdownDayNumber;
+        
+        //通知メッセージアラートのボタンに表示される文字を指定
+        localNotification.alertAction = @"Open";
+        
+        // 効果音は標準の効果音を利用する(バイブも）
+        localNotification.soundName = UILocalNotificationDefaultSoundName;
+        
+        // タイムゾーンを指定する
+        localNotification.timeZone = [NSTimeZone defaultTimeZone];
+        
+        // 毎日繰り返す
+        localNotification.repeatInterval = NSCalendarUnitDay;
+        
+        //作成した通知イベント情報をアプリケーションに登録
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+        
+        
+        
+        //-------- localNotification End ----------------------
+    
+        
+        // UserDefaultに保存（コンソールで確認するため）
+        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
+        NSLog(@"%@", ary);
+    
+        //一つ前の画面に戻す
+        [self.navigationController popViewControllerAnimated:YES];
+        
+        }
+
+
+}
+
+- (IBAction)tapLaterButton:(id)sender {
+    
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+
+        NSDate *today = [NSDate date];
+
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strNow = [df stringFromDate:today];
+
+
+    
+    if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@""] || [self.setFinalDate isEqualToString:strNow]){
+            UIAlertView *alert = [[UIAlertView alloc]
+                                  initWithTitle:@"エラー"
+                                  message:@"空欄を入力して下さい"
+                                  delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil];
+            [alert show];
+            
+        
+    } else {
+    
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        
+        // 入力したいデータを取り出し
+        NSString *title = self.makeNewTitle.text;
+        NSString *detail = self.makeNewDetail.text;
+        UIImage *img =  self.beforeImageView.image;
+        
+        //入力したいデータ　（データ番号）
+        int num = (int)[userDefault integerForKey:@"maxId"];
+        if (num == nil){
+            num = 1;
+            [userDefault setInteger:num forKey:@"maxId"];
+        } else {
+            num ++;
+            [userDefault setInteger:num forKey:@"maxId"];
+        }
+        
+        // UIImage → NSData変換
+        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
+        
+        //タイプのデータ
+        NSString *type = @"yet"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        
+        //カウントダウン日数のデータ
+        NSString *countDown = self.tag1.text;
+        
+        //終了日
+        NSString *finDate = self.setFinalDate;
+        
+        //通知タイム
+        NSString *notification = self.tag2.text;
+        
+        // 入力したいデータを辞書型にまとめる
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate": finDate, @"notification": notification};
+        
+        // 現状で保存されているデータ一覧を取得
+        NSMutableArray *array = [[userDefault objectForKey:@"challenges"] mutableCopy];
+        if ([array count] > 0) {
+            [array addObject:dic];
+            [userDefault setObject:array forKey:@"challenges"];
+        } else {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+            [userDefault setObject:array forKey:@"challenges"];
+        }
+        [userDefault synchronize];
+    
+        //一つ前の画面に戻す
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+
 }
 
 
@@ -246,7 +484,12 @@
 {
         NSString *cellName = [self.CellNames objectAtIndex:indexPath.row];
         UITableViewCell *cell = [self.setTableView dequeueReusableCellWithIdentifier:cellName];
-        
+    
+        //表示タグ
+        self.tag1 = (UILabel *)[self.setTableView viewWithTag:1];
+        self.tag2 = (UILabel *)[self.setTableView viewWithTag:2];
+
+    
         return cell;
 
 }
@@ -377,15 +620,6 @@
 
 //オレンジ色のビューに紐付いたデートピッカーオブジェクト(Timer用）
 -(void)createdDatePicker{
-    
-//    
-//    //場所を決定
-//    _myDatePicker.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
-//    _myDatePicker.alpha = 1.0;
-//    
-//    // デートピッカーの色を設定
-//    //[_myDatePicker setBackgroundColor:[UIColor blueColor]];
-
 
     //_myDatePickerオブジェクトを作成
     UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
@@ -419,7 +653,7 @@
 
     
     //１０分間隔に設定
-    _myDatePicker.minuteInterval = 10;
+    _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerオブジェクトを作成
     UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
@@ -509,12 +743,20 @@
     df.dateFormat = @"yyyy/MM/dd";
     
     NSDate *today = [NSDate date];
+
+    
     // 日付(NSDate) => 文字列(NSString)に変換
     NSString *strNow = [df stringFromDate:today];
     
     //ラベルに日付を表示
     NSString *settedDate = [df stringFromDate:_myDatePicker.date];
+ 
+    
     NSDate *setDate = [df dateFromString:settedDate];
+    
+    
+    self.finaldate = setDate;
+
     NSDate *currentDate= [df dateFromString:strNow];
     
     // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
@@ -522,12 +764,13 @@
     int mySince = (int) since/(24*60*60);
     if (mySince > 0){
     
-    self.countdownLabel.text = [NSString stringWithFormat: @"%d", mySince];
+    self.tag1.text = [NSString stringWithFormat: @"%d", mySince];
     } else {
     }
     
     //セットされた日付を取得
     self.setFinalDate = settedDate;
+    
     
 }
 
@@ -549,7 +792,12 @@
     
     NSString *time = [df stringFromDate:_myDatePicker2.date];
     
-    self.notificationLabel.text = time;
+    //NSStringから Data型に変更
+    NSDate *date = [df dateFromString:time];
+    
+    self.notificationDate = date;
+    
+    self.tag2.text = time;
     
     
     
@@ -557,114 +805,7 @@
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([[segue identifier] isEqualToString:@"NowSegue"]) {
-        
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        
-        // 入力したいデータを取り出し
-        NSString *title = self.makeNewTitle.text;
-        NSString *detail = self.makeNewDetail.text;
-        UIImage *img =  self.beforeImageView.image;
-        
-        //入力したいデータ　（データ番号）
-        int num = (int)[userDefault integerForKey:@"maxId"];
-        if (num == nil){
-            num = 1;
-            [userDefault setInteger:num forKey:@"maxId"];
-        } else {
-            num ++;
-            [userDefault setInteger:num forKey:@"maxId"];
-        }
-    
-        // UIImage → NSData変換
-        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
-        
-        //タイプのデータ
-        NSString *type = @"success"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
-        
-        //カウントダウン日数のデータ
-        NSString *countDown = self.countdownLabel.text;
-        
-        //終了日
-        NSString *finDate = self.setFinalDate;
 
-        // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate};
-
-        // 現状で保存されているデータ一覧を取得
-
-        NSMutableArray *array = [userDefault objectForKey:@"challenges"];
-        if ([array count] > 0) {
-            [array addObject:dic];
-            [userDefault setObject:array forKey:@"challenges"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [userDefault setObject:array forKey:@"challenges"];
-        }
-        [userDefault synchronize];
-        
-        //遷移画面に一覧から来たというフラグを渡す
-        PersonalPageViewController *personalView = [segue destinationViewController]; //遷移先のコントローラーをセット
-        personalView.fromNewPageView = YES;
-        
-        
-        
-        // UserDefaultに保存（コンソールで確認するため）
-        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
-        NSLog(@"%@", ary);
-        
-    } else if ([[segue identifier] isEqualToString:@"LaterSegue"]){
-        
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        
-        // 入力したいデータを取り出し
-        NSString *title = self.makeNewTitle.text;
-        NSString *detail = self.makeNewDetail.text;
-        UIImage *img =  self.beforeImageView.image;
-        
-        //入力したいデータ　（データ番号）
-        int num = (int)[userDefault integerForKey:@"maxId"];
-        if (num == nil){
-            num = 1;
-            [userDefault setInteger:num forKey:@"maxId"];
-        } else {
-            num ++;
-            [userDefault setInteger:num forKey:@"maxId"];
-        }
-        
-        // UIImage → NSData変換
-        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
-        
-        //タイプのデータ
-        NSString *type = @"yet"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
-        
-        //カウントダウン日数のデータ
-        NSString *countDown = self.countdownLabel.text;
-        
-        //終了日
-        NSString *finDate = self.setFinalDate;
-        
-        // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate};
-        
-        // 現状で保存されているデータ一覧を取得
-        
-        NSMutableArray *array = [userDefault objectForKey:@"challenges"];
-        if ([array count] > 0) {
-            [array addObject:dic];
-            [userDefault setObject:array forKey:@"challenges"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [userDefault setObject:array forKey:@"challenges"];
-        }
-        [userDefault synchronize];
-        
-        //遷移画面に一覧から来たというフラグを渡す
-        PersonalPageViewController *personalView = [segue destinationViewController]; //遷移先のコントローラーをセット
-        personalView.fromNewPageView = YES;
-        
-    }
 }
 
 

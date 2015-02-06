@@ -29,49 +29,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
+    
+
+    //現在時刻の表示
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
+                                                  target:self
+                                                selector:@selector(onTimer:)
+                                                userInfo:nil
+                                                 repeats:YES];
+    
+    
     
     // Table ViewのデータソースにView Controller自身を設定する
-    self.listTableView.dataSource = self;
-    
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSArray *ary= [userDefault objectForKey:@"challenges"];
-    
-    //配列をfor文でまわす
-    int myCountNow = 0;
-    int myCountSuccess = 0;
-    
-    for (NSString *dic in ary) {
-        if([[dic valueForKey:@"type"] isEqualToString:@"now"]){
-            myCountNow++;
-        }
-    }
-    
-    for (NSString *dic in ary) {
-        if ([[dic valueForKey:@"type"] isEqualToString:@"success"]){
-        myCountSuccess++;
-     }
-        
-        //現在時刻の表示
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
-                                                      target:self
-                                                    selector:@selector(onTimer:)
-                                                    userInfo:nil
-                                                     repeats:YES];
-        
-    }
-    
-    //    self.nowEventCount.text = [NSString stringWithFormat:@"%d", myCountNow];
-    
-    //UIButtonの文字を変える！
-    //    NSString *successButton = [NSString stringWithFormat:@"%d", myCountSuccess];
-    //    [self.successEventCountButton setTitle:successButton forState:UIControlStateNormal];
-    //    self.successEventCountButton.titleLabel.text = successButton;
-    
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
     self.listTableView.allowsSelection = YES;
     
+    
+    
+
+    
 }
+
 
 -(void)onTimer:(NSTimer*)timer {
         NSDate* now = [NSDate date];//現在時刻取得
@@ -108,8 +88,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 2;
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usr objectForKey:@"challenges"];
+    
+    if (!ary){
+        return 0;
+    } else {
+        return 2;
+    }// Return the number of sections.
+    
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -138,7 +125,6 @@
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
     
-    
 //    NSMutableArray *challenges = [NSMutableArray new];
 //    for (NSDictionary *dic in ary) {
 //        if ([[dic valueForKey:@"type"] isEqualToString:@"now"] || [[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
@@ -154,7 +140,7 @@
         } else if ([[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
             [challengesLater addObject:dic];
         }
-    }
+    } 
     
     NSInteger rows;
     
@@ -168,6 +154,7 @@
         default:
             break;
     }
+    
     
     self.challengesNow = challengesNow;
     self.challengesLater = challengesLater;
@@ -198,6 +185,7 @@
             break;
     }
 
+    
     
     // カスタムセルにデータを渡して表示処理を委譲
     [cell setData:items];

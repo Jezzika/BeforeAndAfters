@@ -19,10 +19,6 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *setTableView;
 
-@property (strong, nonatomic) IBOutlet UILabel *countdownLabel;
-
-@property (strong, nonatomic) IBOutlet UILabel *notificationLabel;
-
 
 
 
@@ -30,6 +26,8 @@
 - (IBAction)returnNewDetail:(id)sender;
 - (IBAction)showCameraSheet:(id)sender;
 
+- (IBAction)tapNowButton:(id)sender;
+- (IBAction)tapLaterButton:(id)sender;
 
 
 @end
