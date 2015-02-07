@@ -32,20 +32,64 @@
 
     
 
-    //現在時刻の表示
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
-                                                  target:self
-                                                selector:@selector(onTimer:)
-                                                userInfo:nil
-                                                 repeats:YES];
+        //現在時刻の表示
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
+                                                      target:self
+                                                    selector:@selector(onTimer:)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
+        
+        
+        // Table ViewのデータソースにView Controller自身を設定する
+        self.listTableView.delegate = self;
+        self.listTableView.dataSource = self;
+        self.listTableView.allowsSelection = YES;
     
     
+        
+        //カウントゼロのものはsuccessに変わる処理
+        NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary = [[usr objectForKey:@"challenges"] mutableCopy];
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+
+        NSDate *today = [NSDate date];
+
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strNow = [df stringFromDate:today];
     
-    // Table ViewのデータソースにView Controller自身を設定する
-    self.listTableView.delegate = self;
-    self.listTableView.dataSource = self;
-    self.listTableView.allowsSelection = YES;
+
+        //todayの日付と一致するイベントを抽出
+        NSMutableArray *challenges = [NSMutableArray new];
+        for (NSDictionary *dic in ary) {
+            if ([[dic valueForKeyPath:@"finDate"] isEqualToString:strNow]) {
+                    [challenges addObject:dic];
+            }
+        }
     
+    for (NSDictionary *dict in challenges) {
+        [dict setValue:@"success" forKey:@"type"];
+        [ary addObject:dict];
+        [usr setObject:ary forKey:@"challenges"];
+        [usr synchronize];
+    }
+
+        //type = "now"　が存在すれば、以下を実行
+//        if ([challenges count] > 0){
+//            [ary addObject:[ary setValue:@"success" forKey:@"type"]];
+//            [usr setObject:ary forKey:@"challenges"];
+    
+//                 setValue:@"success" forKey:@"type"];
+//                [[usr objectForKey:@"challenges"] addObject:dictionary];
+ 
+
+        NSLog(@"ああああああああ%@",ary);
+
+
+
     
     
 

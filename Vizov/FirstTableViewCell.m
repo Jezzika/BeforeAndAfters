@@ -46,7 +46,7 @@
             self.challengeStatus.text = [NSString stringWithFormat:@"%d",mySince];
            
         } else {
-            
+            self.challengeStatus.text = @"0";
         }
         
         self.challegeTitle.text = [items valueForKeyPath:@"title"];

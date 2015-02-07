@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>902CC45C-AB26-4DEB-8523-5E6CD26BEDB3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Vizov</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4BD168F70922FAAEEB29C9A06FF0336A929B2F70</key>
+		<string>github.com:Jezzika/BeforeAndAfters.git</string>
+		<key>525DBEAA6CB802D0D3CC8A2BC74597A009AE3BC0</key>
+		<string>https://github.com/knife0125/iOS_sample_sources.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Vizov.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4BD168F70922FAAEEB29C9A06FF0336A929B2F70</key>
+		<string>../..</string>
+		<key>525DBEAA6CB802D0D3CC8A2BC74597A009AE3BC0</key>
+		<string>../../../iOS_sample_sources</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:Jezzika/BeforeAndAfters.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4BD168F70922FAAEEB29C9A06FF0336A929B2F70</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>525DBEAA6CB802D0D3CC8A2BC74597A009AE3BC0</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS_sample_sources</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4BD168F70922FAAEEB29C9A06FF0336A929B2F70</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Vizov</string>
+		</dict>
+	</array>
+</dict>
+</plist>

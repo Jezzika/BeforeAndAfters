@@ -111,7 +111,7 @@
         }
     }
     
-    NSDictionary *doneItems = challengesDone[indexPath.row];
+    NSMutableArray *doneItems = challengesDone[indexPath.row];
 
     
     [cell setData:doneItems];

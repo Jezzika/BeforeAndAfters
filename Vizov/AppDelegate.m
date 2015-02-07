@@ -43,34 +43,7 @@
 //        NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
 //        [userDef removeObjectForKey:@"challenges"];
 //        [userDef removeObjectForKey:@"maxId"];
-//
     
-    //カウントゼロのものはsuccessに変わる処理
-    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [usr objectForKey:@"challenges"];
-    //初期化
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    //日付のフォーマット指定
-    df.dateFormat = @"yyyy/MM/dd";
-    
-    NSDate *today = [NSDate date];
-    
-    // 日付(NSDate) => 文字列(NSString)に変換
-    NSString *strNow = [df stringFromDate:today];
-    
-
-    NSMutableArray *challenges = [NSMutableArray new];
-    for (NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"finDate"] isEqualToString:strNow]) {
-            [challenges addObject:dic];
-            [ary setValue:@"success" forKey:@"type"];
-            [usr setObject:ary forKey:@"challenges"];
-            
-
-    }
-
-        [usr synchronize];
-    }
     
     return YES;
 }

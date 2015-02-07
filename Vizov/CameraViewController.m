@@ -18,6 +18,8 @@
 @property (nonatomic) UITableView *myTable;
 @property (nonatomic) NSMutableArray *challengesNow;
 
+@property (nonatomic) NSString *selectStr;
+
 
 @end
 
@@ -159,26 +161,43 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@", [self.challengesNow valueForKey:@"title"][indexPath.row]];
     
-    NSLog (@"ろぐ%@",cell.textLabel.text);
+    self.selectStr = cell.textLabel.text;
+    
     return cell;
 }
 
 //行が押されたときに発動するメソッド(オブジェクトに付随するメソッド-delegateメソッド)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-        NSLog(@"行番号=%ld",(long)indexPath.row);
+
+    [UIView beginAnimations:@"animateViewrOn" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [self downObjects];
+    [UIView commitAnimations];
     
-        // 遷移先画面に一覧から来たというフラグを渡す
-        PersonalPageViewController *personalView;
-        personalView.fromCameraView = YES;
- 
-        [UIView beginAnimations:@"animateViewrOn" context:nil];
-        [UIView setAnimationDuration:0.3];
-        [self downObjects];
-        [UIView commitAnimations];
+    NSUserDefaults *usr =[NSUserDefaults standardUserDefaults];
     
-        PersonalPageViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonalPageViewController"];
-        [self.navigationController pushViewController:controller animated:YES]; //モーダルで呼び出す
+    // UIImage → NSData変換
+    NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(self.cameraPic.image)];
+    
+    // 入力したいデータを辞書型にまとめる
+    NSDictionary *dic = @{@"title": self.selectStr, @"picture": picture};
+    
+    // 現状で保存されているデータ一覧を取得
+    
+    NSMutableArray *array = [[usr objectForKey:@"selectedPic"] mutableCopy];
+    if ([array count] > 0) {
+        [array addObject:dic];
+        [usr setObject:array forKey:@"selectedPic"];
+    } else {
+        NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+        [usr setObject:array forKey:@"selectedPic"];
+    }
+    
+    [usr synchronize];
+    
+    PersonalPageViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonalPageViewController"];
+    [self.navigationController pushViewController:controller animated:YES]; //モーダルで呼び出す
     
 }
 

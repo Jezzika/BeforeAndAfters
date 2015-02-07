@@ -45,7 +45,7 @@
     
     NSLog(@"num :%d", num);
     NSLog(@"配列: %@",tableAry);
-    NSLog(@"配列の数: %ld",tableAry.count);
+    NSLog(@"配列の数: %ld",(unsigned long)tableAry.count);
 
 //    for (NSString *miri in self.tableary) {
 //        NSLog(@"%@",[NSString stringWithFormat:@"%@日目",miri]);

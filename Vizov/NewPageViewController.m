@@ -192,7 +192,7 @@
         NSString *notification = self.tag2.text;
         
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"notification": notification};
+        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"startDate":strNow, @"notification": notification};
         
         // 現状で保存されているデータ一覧を取得
         
@@ -538,6 +538,7 @@
                 [self downObjectsNotification];
                 
             }
+            [UIView commitAnimations];
 
         }
 }
