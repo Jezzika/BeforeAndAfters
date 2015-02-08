@@ -18,11 +18,6 @@
 - (IBAction)selectPhoto:(UIBarButtonItem *)sender;
 - (IBAction)takePicture:(UIBarButtonItem *)sender;
 
-- (IBAction)memoField:(id)sender;
-
-
-
-@property (strong, nonatomic) IBOutlet UIView *actionsheetView;
 
 
 @end

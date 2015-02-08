@@ -264,11 +264,7 @@
         
         //-------- localNotification End ----------------------
     
-        
-        // UserDefaultに保存（コンソールで確認するため）
-        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
-        NSLog(@"%@", ary);
+
     
         //一つ前の画面に戻す
         [self.navigationController popViewControllerAnimated:YES];
@@ -429,15 +425,10 @@
             [UIView setAnimationDuration:0.3];
             
             if(_isVisible == NO){
-                _myButton.frame = CGRectMake(0, 0, 40, 20);
+                _myButton.frame = CGRectMake(150, 200, 40, 20);
                 _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
                 _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
                 _isVisible = YES;
-            }else{
-                
-                //自作メソッドの使用
-                [self downObjectsTimer];
-                
             }
             
             [UIView commitAnimations];
@@ -449,16 +440,12 @@
             [UIView setAnimationDuration:0.3];
             
             if(_isVisible == NO){
-                _myButton2.frame = CGRectMake(0, 0, 40, 20);
+                _myButton2.frame = CGRectMake(150, 200, 40, 20);
                 _myView2.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
                  _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
                 _isVisible = YES;
-            }else{
-                
-                //自作メソッドの使用
-                [self downObjectsNotification];
-                
             }
+            
             [UIView commitAnimations];
 
         }
@@ -472,7 +459,7 @@
     
     //ボタンオブジェクトを生成
     
-    _myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+    _myButton = [[UIButton alloc] initWithFrame:CGRectMake(150, 200, 40, 20)];
     
     [_myButton setTitle:@"SET" forState:UIControlStateNormal];
     
@@ -491,7 +478,7 @@
     
     //ボタンオブジェクトを生成
     
-    _myButton2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 20)];
+    _myButton2 = [[UIButton alloc] initWithFrame:CGRectMake(150, 200, 40, 20)];
     
     [_myButton2 setTitle:@"設定" forState:UIControlStateNormal];
     
@@ -555,8 +542,8 @@
     
     
     //_myDatePickerのサイズを選択
-    CGSize size = [_myDatePicker sizeThatFits:CGSizeZero];
-    _myDatePicker.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
+    CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
+    _myDatePicker2.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
 
     
     //_myViewに追加してあげる
@@ -570,7 +557,7 @@
     
     
     //場所を決定
-    _myDatePicker2.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
+    _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
     _myDatePicker2.alpha = 1.0;
     
     //_myDatePickerオブジェクトを作成
@@ -580,7 +567,7 @@
     _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _myDatePicker2.datePickerMode = UIDatePickerModeTime;
     
-    //１０分間隔に設定
+    //10分間隔に設定
     _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerのサイズを選択
@@ -608,17 +595,10 @@
     [UIView beginAnimations:@"animateViewrOn" context:nil];
     [UIView setAnimationDuration:0.3];
     
-    if(!_isVisible){
-        _myButton.frame = CGRectMake(0, 0, 40, 20);
-        _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-        _myDatePicker.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
-        _isVisible = YES;
-    }else{
-        
-        //自作メソッドの使用
-        [self downObjectsTimer];
-        
-    }
+    
+    //自作メソッドの使用
+    [self downObjectsTimer];
+
     
     [UIView commitAnimations];
     
@@ -630,18 +610,10 @@
     
     [UIView beginAnimations:@"animateViewrOn" context:nil];
     [UIView setAnimationDuration:0.3];
-    
-    if(!_isVisible){
-        _myButton2.frame = CGRectMake(0, 0, 40, 20);
-        _myView2.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-        _myDatePicker2.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
-        _isVisible = YES;
-    }else{
+
+    //自作メソッドの使用
+    [self downObjectsNotification];
         
-        //自作メソッドの使用
-        [self downObjectsNotification];
-        
-    }
     
     [UIView commitAnimations];
     
@@ -651,9 +623,9 @@
 //タイマーの設定
 -(void)downObjectsTimer{
     
-    _myButton.frame = CGRectMake(50, 50, 40, 20);
+    _myButton.frame = CGRectMake(150, 200, 40, 20);
     _myView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    _myDatePicker.frame = CGRectMake(0, 0, 50, 50);
+    _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
     _isVisible = NO;
     
     //初期化
@@ -698,9 +670,9 @@
 // 通知設定
 -(void)downObjectsNotification{
     
-    _myButton2.frame = CGRectMake(50, 50, 40, 20);
+    _myButton2.frame = CGRectMake(150, 200, 40, 20);
     _myView2.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    _myDatePicker2.frame = CGRectMake(0, 0, 50, 50);
+    _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
     _isVisible = NO;
     
     //モードを指定

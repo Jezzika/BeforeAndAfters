@@ -161,28 +161,15 @@
         // Table Viewの行数を返す
         NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
         NSMutableArray *ary = [userDefault objectForKey:@"selectedAry"];
+        NSString *timer = [ary valueForKey:@"timer"];
+        int num = [timer intValue];
+        int number = num ;
+        int i = 1;
+        while (i < number) {
+            i++;
+        }
     
-        //開始日と今日の差分を求めてその分だけ行数を返す
-        NSString *start = [ary valueForKey:@"startDate"];
-        
-        //初期化
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        //日付のフォーマット指定
-        df.dateFormat = @"yyyy/MM/dd";
-        NSDate *today = [NSDate date];
-        // 日付(NSDate) => 文字列(NSString)に変換
-        NSString *strNow    = [df stringFromDate:today];
-        NSDate *currentDate = [df dateFromString:strNow];
-        NSDate *setStartDate  = [df dateFromString:start];
-        
-        // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
-        NSTimeInterval  since = [setStartDate timeIntervalSinceDate:currentDate];
-        int mySince = (int) since/(24*60*60);
-    
-
-        NSInteger rows = mySince +1;
-    
-        return rows;
+        return i;
 
 }
 
@@ -203,19 +190,40 @@
         NSString *timer = [dict valueForKey:@"timer"];
         
         int num = [timer intValue];
+    
+    
+        // 日付のオフセットを生成(次の日をとってくる)
+        NSDateComponents *dateComp = [[NSDateComponents alloc] init];
         
-        NSMutableArray *timerAry= [NSMutableArray array];
-        int i;
-        for (i=1; i<num+1; i++) {
-            [timerAry addObject:[NSString stringWithFormat:@"%d",i]];
+        // x日後とする
+        int x;
+
+        // x日後のNSDateインスタンスを取得する
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+    
+        NSDate *date = [NSDate date];
+        NSString *result = [NSString string];
+    
+        NSMutableArray *eventDaysAry = [NSMutableArray array];
+        for (x=0; x<num; x++) {
+            
+            [dateComp setDay:x];
+            date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:[NSDate date] options:0];
+            result = [df stringFromDate:date];
+            [eventDaysAry addObject:result];
             
         }
     
-        NSMutableArray *timerArySet = timerAry[indexPath.row];
+
     
+        NSMutableArray *eventDaysArySet = eventDaysAry[indexPath.row];
+
     
         //カスタムセルにデータを渡して表示処理を委譲
-        [cell setData:timerArySet];
+        [cell setData:eventDaysArySet];
 
         return cell;
 }

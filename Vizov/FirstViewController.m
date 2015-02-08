@@ -44,12 +44,12 @@
         self.listTableView.allowsSelection = YES;
     
     
-    //    NSLog(@"いまのけんきゅう%@",ary);
     NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
-    NSArray *ary = [usr objectForKey:@"challenges"];
-    NSLog(@"いまのけんきゅう2%lu",(unsigned long)[[usr objectForKey:@"dailyPictures"] count]);
-    NSLog(@"いまのけんきゅう2%@",ary);
-        NSLog(@"いまのけんきゅう2%lu",[ary count]);
+    NSArray *picary = [usr objectForKey:@"dailyPictures"];
+    
+//    NSLog(@"いまのけんきゅう1%@",picary);
+    NSLog(@"いまのけんきゅう2%lu",[picary count]);
+
 
 
 }

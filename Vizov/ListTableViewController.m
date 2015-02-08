@@ -8,10 +8,12 @@
 
 #import "ListTableViewController.h"
 #import "ListTableViewCell.h"
+#import "MyEventsTableViewController.h"
 
 @interface ListTableViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic) NSMutableArray *now;
+@property(nonatomic) NSMutableArray *doneChallenges;
 
 @end
 
@@ -88,6 +90,8 @@
         }
     }
     
+    self.doneChallenges = challengesDone;
+    
     return [challengesDone count];
 }
 
@@ -124,7 +128,35 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
 }
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([[segue identifier] isEqualToString:@"toMyEvents"]){
+        
+        NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
+        NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
+        
+        NSMutableDictionary *selectedDic;
+        
+        selectedDic = self.doneChallenges[indexPath.row];
+        
+        
+        //データを書き込む selectedAry はactually Dictionaryです
+        [myDefault setObject:selectedDic forKey:@"selectedAry2"];
+        [myDefault synchronize];
+    
+        
+        // 遷移先画面(PersonalPageView)に一覧から来たというフラグを渡す
+        MyEventsTableViewController *personalView = [segue destinationViewController];
+        personalView.fromListView = YES;
+    }
+    
+    
+    
+    
+}
+
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

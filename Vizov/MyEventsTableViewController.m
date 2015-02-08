@@ -7,9 +7,9 @@
 //
 
 #import "MyEventsTableViewController.h"
+#import "MyEventsTableViewCell.h"
 
 @interface MyEventsTableViewController ()
-
 @end
 
 @implementation MyEventsTableViewController
@@ -22,6 +22,35 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dic        = [usrDefault objectForKey:@"selectedAry2"];
+    
+    //UserDefaultの個別データ表示(ホームの一覧リストから）
+    NSString *title;
+    NSString *detail;
+    NSData *pictData;
+    UIImage *picture;
+    NSString *finDate;
+    
+    if (self.fromListView) {
+        title = [dic valueForKeyPath:@"title"];
+        
+        detail = [dic valueForKeyPath:@"detail"];
+        
+        pictData = [dic valueForKeyPath:@"picture"];
+        
+        // NSData→UIImage変換
+        picture = [UIImage imageWithData:pictData];
+        
+        finDate = [dic valueForKey:@"finDate"];
+        
+    }
+    
+    // Table ViewのデータソースにView Controller自身を設定する
+    self.myEventsTable.delegate = self;
+    self.myEventsTable.dataSource = self;
+    self.myEventsTable.allowsSelection = YES;
     
     
 }
@@ -44,18 +73,70 @@
     
     // Table Viewの行数を返す
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
+    NSDictionary *dic = [userDefault objectForKey:@"selectedAry2"];
+    NSString *str = [dic valueForKey:@"timer"];
     
-    NSMutableArray *challengesNow = [NSMutableArray new];
-        for (NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
-            [challengesNow addObject:dic];
-        }
+    int myCount = (int)[str intValue];
+    
+    return myCount;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
+    static NSString *CellIdentifier = @"MyCell";
+    MyEventsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[MyEventsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    int myConnt = [challengesNow count];
-    return myConnt;
+    
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSDictionary *dict = [userDefault objectForKey:@"selectedAry2"];
+    NSString *timer = [dict valueForKey:@"timer"];
+    
+    int num = [timer intValue];
+    
+    
+    // 日付のオフセットを生成(次の日をとってくる)
+    NSDateComponents *dateComp = [[NSDateComponents alloc] init];
+    
+    // x日後とする
+    int x;
+    
+    // x日後のNSDateインスタンスを取得する
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    //日付のフォーマット指定
+    df.dateFormat = @"yyyy/MM/dd";
+    
+    NSDate *date = [NSDate date];
+    NSString *result = [NSString string];
+    
+    NSMutableArray *eventDaysAry = [NSMutableArray array];
+    for (x=0; x<num; x++) {
+        
+        [dateComp setDay:x];
+        date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:[NSDate date] options:0];
+        result = [df stringFromDate:date];
+        [eventDaysAry addObject:result];
+        
+    }
+    
+    
+    
+    NSMutableArray *eventDaysArySet = eventDaysAry[indexPath.row];
+    
+    NSLog(@"ぬあああ%@",eventDaysArySet);
+    
+    //カスタムセルにデータを渡して表示処理を委譲
+    [cell setData:eventDaysArySet];
+    
+    return cell;
 }
+
+
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -111,4 +192,16 @@
 }
 */
 
+- (IBAction)shareButton:(id)sender {
+    
+    NSString *text = @"Vizov/Before and Afters";
+    NSURL *url = [NSURL URLWithString:@"http://google.com"];
+    NSArray *activityItems = @[text];
+    
+    UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    
+    //セグエ線を使用しない場合のモーダル表示
+    [self presentViewController:activityView animated:YES completion:nil];
+
+}
 @end

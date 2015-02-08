@@ -24,48 +24,69 @@
 }
 
 
-- (void)setData:(NSMutableArray *)timerArySet{
+- (void)setData:(NSMutableArray *)eventDaysArySet{
     
 
-    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-    
-    //カメラで撮影された画像 UserDefault
-    NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
-    NSData *selectedPicture = [selectedPic valueForKey:@"picture"];
-    
-    //カメラで撮影された画像 をNSData→UIImageに変換 （セルで処理をする）
-    UIImage *dailyPic = [UIImage imageWithData:selectedPicture];
-    
-    //セルの設定メソッドに送る情報　（撮影画像）
-    self.DailyPicture.image = dailyPic;
-    
-    //カメラで取った写真がある場合にそのイベントに写真を紐づけるUserDefaultを作成
-    if (self.DailyPicture.image) {
-        
-        NSString *date = [selectedPic valueForKey:@"date"];
-        NSString *title = [selectedPic valueForKey:@"title"];
-        
-        // 入力したいデータを辞書型にまとめる
-        NSMutableDictionary *dic = @{@"title": title, @"picture": selectedPicture, @"date":date}.mutableCopy;
-        
-        // 現状で保存されているデータ一覧を取得
-        NSMutableArray *array = [usrDefault objectForKey:@"dailyPictures"];
-        if ([array count] > 0) {
-            [array addObject:dic];
-            [usrDefault setObject:array forKey:@"dailyPictures"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [usrDefault setObject:array forKey:@"dailyPictures"];
+        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary        = [usrDefault objectForKey:@"challenges"];
+        NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
+        NSMutableArray *selectedAry = [usrDefault objectForKey:@"selectedAry"];
+
+        //カメラで撮影された画像 UserDefault
+        NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
+        NSData *selectedPicture = [selectedPic valueForKey:@"picture"];
+
+        //カメラで撮影された画像 をNSData→UIImageに変換 （セルで処理をする）
+        UIImage *dailyPic = [UIImage imageWithData:selectedPicture];
+
+        //セルの設定メソッドに送る情報　（撮影画像）
+        self.DailyPicture.image = dailyPic;
+
+        //カメラで取った写真がある場合にそのイベントに写真を紐づけるUserDefaultを作成
+        if (selectedPicture) {
+            
+            NSString *date = [selectedPic valueForKey:@"date"];
+            NSString *title = [selectedPic valueForKey:@"title"];
+            
+            NSNumber *eventId   = [NSNumber new];
+            for (NSDictionary *dic in ary) {
+                if ([[dic valueForKey:@"title"] isEqualToString:title]) {
+                    eventId = [dic valueForKey:@"id"];
+                }
+            }
+            
+            // 入力したいデータを辞書型にまとめる
+            NSMutableDictionary *dic = @{@"id": eventId, @"picture": selectedPicture, @"date":date}.mutableCopy;
+            
+            // 現状で保存されているデータ一覧を取得
+            NSMutableArray *array = [[usrDefault objectForKey:@"dailyPictures"]mutableCopy];
+            if ([array count] > 0) {
+                    [array addObject:dic];
+                    [usrDefault setObject:array forKey:@"dailyPictures"];
+            } else {
+                NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+                [usrDefault setObject:array forKey:@"dailyPictures"];
+            }
             [usrDefault synchronize];
         }
-    }
-    
-    [usrDefault removeObjectForKey:@"selectedPic"];
-    
-    self.DailyNumber.text =  [NSString stringWithFormat:@"%@日目",timerArySet];
 
-    
+        [usrDefault removeObjectForKey:@"selectedPic"];
 
+        self.DailyNumber.text =  [NSString stringWithFormat:@"%@",eventDaysArySet];
+
+        //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
+        NSData *picData   = [NSData new];
+        for (NSDictionary *dic in cameraAry) {
+            if ([[dic valueForKey:@"date"] isEqualToString:eventDaysArySet] && [[dic valueForKey:@"id"] isEqualToNumber:[selectedAry valueForKey:@"id"]]) {
+                picData = [dic valueForKey:@"picture"];
+            }
+        }
+
+        // NSData→UIImage変換
+        UIImage *setPic = [UIImage imageWithData:picData];
+
+        self.DailyPicture.image = setPic;
+    
 
 }
 

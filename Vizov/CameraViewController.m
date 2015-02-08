@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "PersonalPageViewController.h"
 
-@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic) UIButton *myButton;
 @property (nonatomic) BOOL isVisible;
@@ -83,12 +83,11 @@
 -(void)createdBtn{
     
     //ボタンオブジェクトを生成
-    self.myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 220, self.view.bounds.size.height, self.view.bounds.size.width)];
+    self.myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
     
     [self.myButton setTitle:@"SAVE" forState:UIControlStateNormal];
     
     if (!self.cameraPic.image) {
-        
         //ボタンの文字色指定（最初うっすら透明）
         [self.myButton setTitleColor:[UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:0.5] forState:UIControlStateNormal];
     } else {
@@ -179,10 +178,18 @@
     NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(self.cameraPic.image)];
     
     //画像選択日（today)
-    NSDate *now = [NSDate date];
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    //日付のフォーマット指定
+    df.dateFormat = @"yyyy/MM/dd";
+    
+    NSDate *today = [NSDate date];
+    
+    // 日付(NSDate) => 文字列(NSString)に変換
+    NSString *strToday = [df stringFromDate:today];
     
     // 入力したいデータを辞書型にまとめる
-    NSDictionary *dic = @{@"title": selectStr, @"picture": picture, @"date":now};
+    NSDictionary *dic = @{@"title": selectStr, @"picture": picture, @"date":strToday};
 
     
     // 現状で保存されているデータ一覧を取得
@@ -315,7 +322,7 @@ didSelectViewController:
     
     // 画像を表示する
     self.cameraPic.image = img_2;
-    NSLog (@"%@",imgData);
+    
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

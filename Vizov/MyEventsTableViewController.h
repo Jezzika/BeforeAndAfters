@@ -10,4 +10,9 @@
 
 @interface MyEventsTableViewController : UITableViewController
 
+@property (nonatomic) BOOL fromListView;
+
+@property (strong, nonatomic) IBOutlet UITableView *myEventsTable;
+- (IBAction)shareButton:(id)sender;
+
 @end

@@ -34,7 +34,7 @@
     self.beforeImage.image = picture;
     
     //かかった期間
-    self.totalDays.text = [doneItems valueForKey:@"timer"];
+    self.totalDays.text = [NSString stringWithFormat:@"期間：%@日",[doneItems valueForKey:@"timer"]];
     
 
     
