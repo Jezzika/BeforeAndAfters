@@ -59,7 +59,7 @@
     self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
     
     
-    
+    [self objectsDesign];
     
 
 }
@@ -192,7 +192,7 @@
         NSString *notification = self.tag2.text;
         
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"startDate":strNow, @"notification": notification};
+        NSMutableDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"startDate":strNow, @"notification": notification}.mutableCopy;
         
         // 現状で保存されているデータ一覧を取得
         
@@ -243,11 +243,11 @@
         localNotification.alertBody = [NSString stringWithFormat:@"%@:あと%d日です",title,countdownDayNumber];
         
         //アイコンバッチの数字
-        localNotification.applicationIconBadgeNumber = countdownDayNumber;
+        localNotification.applicationIconBadgeNumber = 1;
         
         //通知メッセージアラートのボタンに表示される文字を指定
         localNotification.alertAction = @"Open";
-        
+            
         // 効果音は標準の効果音を利用する(バイブも）
         localNotification.soundName = UILocalNotificationDefaultSoundName;
         
@@ -338,7 +338,7 @@
         NSString *notification = self.tag2.text;
         
         // 入力したいデータを辞書型にまとめる
-        NSDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate": finDate, @"notification": notification};
+        NSMutableDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate": finDate, @"notification": notification}.mutableCopy;
         
         // 現状で保存されているデータ一覧を取得
         NSMutableArray *array = [[userDefault objectForKey:@"challenges"] mutableCopy];
@@ -651,10 +651,6 @@
     //場所を決定
     _myDatePicker2.frame = CGRectMake(0, 0, self.view.bounds.size.width, 50);
     _myDatePicker2.alpha = 1.0;
-
-    
-    //１０分間隔に設定
-    _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerオブジェクトを作成
     UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
@@ -663,6 +659,8 @@
     _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _myDatePicker2.datePickerMode = UIDatePickerModeTime;
     
+    //１０分間隔に設定
+    _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerのサイズを選択
     CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
@@ -809,6 +807,27 @@
 
 }
 
+- (void)objectsDesign{
+    
+    // NowBtnDesignFalat化
+    self.NowBtnDesign.buttonColor = [UIColor turquoiseColor];
+    self.NowBtnDesign.shadowColor = [UIColor greenSeaColor];
+    self.NowBtnDesign.shadowHeight = 3.0f;
+    self.NowBtnDesign.cornerRadius = 6.0f;
+    self.NowBtnDesign.titleLabel.font = [UIFont boldFlatFontOfSize:20];
+    [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    
+    
+    // LaterBtnDesignFalat化
+    self.LaterBtnDesign.buttonColor = [UIColor turquoiseColor];
+    self.LaterBtnDesign.shadowColor = [UIColor greenSeaColor];
+    self.LaterBtnDesign.shadowHeight = 3.0f;
+    self.LaterBtnDesign.cornerRadius = 6.0f;
+    self.LaterBtnDesign.titleLabel.font = [UIFont boldFlatFontOfSize:20];
+    [self.LaterBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [self.LaterBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+}
 
 
 

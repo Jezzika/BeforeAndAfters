@@ -24,50 +24,49 @@
 }
 
 
-- (void)setData:(NSDictionary *)tableAry{
+- (void)setData:(NSMutableArray *)timerArySet{
     
+
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
     
-//
-//    NSIndexPath *indexPath = dailyEventLabel.indexPathForSelectedRow;
-//    NSArray *selectedArray = self.tableArray[indexPath.row];
+    //カメラで撮影された画像 UserDefault
+    NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
+    NSData *selectedPicture = [selectedPic valueForKey:@"picture"];
     
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *dict = [userDefault objectForKey:@"selectedAry"];
-    NSString *timer = [dict valueForKey:@"timer"];
-       NSLog(@"timer: %@", timer);
-    int num = [timer intValue];
+    //カメラで撮影された画像 をNSData→UIImageに変換 （セルで処理をする）
+    UIImage *dailyPic = [UIImage imageWithData:selectedPicture];
     
-    int i;
-    for (i = 1; i<num; i++) {
-        self.DailyNumber.text = [NSString stringWithFormat:@"%d日目",i];
+    //セルの設定メソッドに送る情報　（撮影画像）
+    self.DailyPicture.image = dailyPic;
+    
+    //カメラで取った写真がある場合にそのイベントに写真を紐づけるUserDefaultを作成
+    if (self.DailyPicture.image) {
+        
+        NSString *date = [selectedPic valueForKey:@"date"];
+        NSString *title = [selectedPic valueForKey:@"title"];
+        
+        // 入力したいデータを辞書型にまとめる
+        NSMutableDictionary *dic = @{@"title": title, @"picture": selectedPicture, @"date":date}.mutableCopy;
+        
+        // 現状で保存されているデータ一覧を取得
+        NSMutableArray *array = [usrDefault objectForKey:@"dailyPictures"];
+        if ([array count] > 0) {
+            [array addObject:dic];
+            [usrDefault setObject:array forKey:@"dailyPictures"];
+        } else {
+            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
+            [usrDefault setObject:array forKey:@"dailyPictures"];
+            [usrDefault synchronize];
+        }
     }
+    
+    [usrDefault removeObjectForKey:@"selectedPic"];
+    
+    self.DailyNumber.text =  [NSString stringWithFormat:@"%@日目",timerArySet];
 
     
-    NSLog(@"num :%d", num);
-    NSLog(@"配列: %@",tableAry);
-    NSLog(@"配列の数: %ld",(unsigned long)tableAry.count);
 
-//    for (NSString *miri in self.tableary) {
-//        NSLog(@"%@",[NSString stringWithFormat:@"%@日目",miri]);
-//    }
-    
 
-    
-    
-//    if (dailyEventLabel  == 0){
-//        
-//    
-//        
-//    }
-//    if(![[dailyEventLabel valueForKey:@"detail"] isEqualToString:@""]){
-//        self.NoteTitle.text = [dailyEventLabel valueForKey:@"detail"];
-//    }
-
-    //    セルに ary を番号順に突っ込む  type:yet or now のみを表示
-    //
-    //    if ([[homeEventLabel valueForKey:@"type"] isEqualToString:@"now"] || [[homeEventLabel valueForKey:@"type"] isEqualToString:@"yet"]){
-    //        self.challebgeTitle.text = [homeEventLabel valueForKeyPath:@"title"];
-    //    }
 }
 
 

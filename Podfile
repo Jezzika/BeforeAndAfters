@@ -2,6 +2,7 @@
 # platform :ios, '6.0'
 
 target 'Vizov' do
+pod 'FlatUIKit'
 
 end
 

@@ -33,6 +33,9 @@
     
     self.beforeImage.image = picture;
     
+    //かかった期間
+    self.totalDays.text = [doneItems valueForKey:@"timer"];
+    
 
     
     

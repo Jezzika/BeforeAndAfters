@@ -18,7 +18,7 @@
 @property (nonatomic) UITableView *myTable;
 @property (nonatomic) NSMutableArray *challengesNow;
 
-@property (nonatomic) NSString *selectStr;
+@property (nonatomic) NSString *selectTitle;
 
 
 @end
@@ -161,8 +161,6 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@", [self.challengesNow valueForKey:@"title"][indexPath.row]];
     
-    self.selectStr = cell.textLabel.text;
-    
     return cell;
 }
 
@@ -175,26 +173,26 @@
     [self downObjects];
     [UIView commitAnimations];
     
-    NSUserDefaults *usr =[NSUserDefaults standardUserDefaults];
+    NSString *selectStr = [NSString stringWithFormat:@"%@", [self.challengesNow valueForKey:@"title"][indexPath.row]];
     
     // UIImage → NSData変換
     NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(self.cameraPic.image)];
     
+    //画像選択日（today)
+    NSDate *now = [NSDate date];
+    
     // 入力したいデータを辞書型にまとめる
-    NSDictionary *dic = @{@"title": self.selectStr, @"picture": picture};
+    NSDictionary *dic = @{@"title": selectStr, @"picture": picture, @"date":now};
+
     
     // 現状で保存されているデータ一覧を取得
+    NSUserDefaults *usr =[NSUserDefaults standardUserDefaults];
     
-    NSMutableArray *array = [[usr objectForKey:@"selectedPic"] mutableCopy];
-    if ([array count] > 0) {
-        [array addObject:dic];
-        [usr setObject:array forKey:@"selectedPic"];
-    } else {
-        NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-        [usr setObject:array forKey:@"selectedPic"];
-    }
-    
+    [usr setObject:dic forKey:@"selectedPic"];
+
     [usr synchronize];
+    
+    
     
     PersonalPageViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonalPageViewController"];
     [self.navigationController pushViewController:controller animated:YES]; //モーダルで呼び出す

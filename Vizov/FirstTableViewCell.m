@@ -21,40 +21,48 @@
 }
 
 - (void)setData:(NSDictionary *)items{
-    if([[items valueForKey:@"type"] isEqualToString:@"now"]){
-        NSString *findate = [items valueForKey:@"finDate"];
-        
-        //初期化
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        
-        //日付のフォーマット指定
-        df.dateFormat = @"yyyy/MM/dd";
-        
-        NSDate *today = [NSDate date];
-        
-        // 日付(NSDate) => 文字列(NSString)に変換
-        NSString *strNow = [df stringFromDate:today];
-        
-        NSDate *currentDate= [df dateFromString:strNow];
-        
-        NSDate *setFinDate = [df dateFromString:findate];
-        
-        // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
-        NSTimeInterval  since = [setFinDate timeIntervalSinceDate:currentDate];
-        int mySince = (int) since/(24*60*60);
-        if (mySince > 0){
-            self.challengeStatus.text = [NSString stringWithFormat:@"%d",mySince];
-           
+    
+        if([[items valueForKey:@"type"] isEqualToString:@"now"]){
+            
+            NSString *findate = [items valueForKey:@"finDate"];
+            
+            //初期化
+            NSDateFormatter *df = [[NSDateFormatter alloc] init];
+            
+            //日付のフォーマット指定
+            df.dateFormat = @"yyyy/MM/dd";
+            
+            NSDate *today = [NSDate date];
+            
+            // 日付(NSDate) => 文字列(NSString)に変換
+            NSString *strNow = [df stringFromDate:today];
+            
+            NSDate *currentDate= [df dateFromString:strNow];
+            
+            NSDate *setFinDate = [df dateFromString:findate];
+            
+            // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
+            NSTimeInterval  since = [setFinDate timeIntervalSinceDate:currentDate];
+            int mySince = (int) since/(24*60*60);
+            if (mySince > 0){
+                
+                self.challengeStatus.text = [NSString stringWithFormat:@"%d",mySince];
+               
+            } else {
+                
+                self.challengeStatus.text = @"0";
+                
+            }
+            
+            self.challegeTitle.text = [items valueForKeyPath:@"title"];
+            
         } else {
-            self.challengeStatus.text = @"0";
+            
+            self.challengeStatus.text = @"予約";
+            self.challegeTitle.text = [items valueForKeyPath:@"title"];
+            
         }
         
-        self.challegeTitle.text = [items valueForKeyPath:@"title"];
-    } else {
-        self.challengeStatus.text = @"予約";
-        self.challegeTitle.text = [items valueForKeyPath:@"title"];
-    }
-    
 
 }
 

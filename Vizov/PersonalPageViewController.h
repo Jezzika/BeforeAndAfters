@@ -24,4 +24,6 @@
 @property (strong, nonatomic) UIImageView *settedBeforePicture;
 
 
+
+
 @end

@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *beforeImage;
 @property (strong, nonatomic) IBOutlet UIImageView *afterImage;
+@property (weak, nonatomic) IBOutlet UILabel *totalDays;
 
 @end
 

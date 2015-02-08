@@ -14,7 +14,8 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *DailyNumber;
 
-- (void)setData:(NSMutableArray *)tableAry;
+- (void)setData:(NSMutableArray *)timerArySet;
 
+@property (weak, nonatomic) IBOutlet UIImageView *DailyPicture;
 
 @end

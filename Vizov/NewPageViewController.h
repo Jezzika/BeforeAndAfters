@@ -7,6 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FUIButton.h"
+#import "UIColor+FlatUI.h"
+#import "UIFont+FlatUI.h"
+#import "UIImage+FlatUI.h"
+#import "NSString+Icons.h"
+
 
 @interface NewPageViewController : UIViewController
 
@@ -29,5 +35,7 @@
 - (IBAction)tapNowButton:(id)sender;
 - (IBAction)tapLaterButton:(id)sender;
 
+@property (weak, nonatomic) IBOutlet FUIButton *NowBtnDesign;
+@property (weak, nonatomic) IBOutlet FUIButton *LaterBtnDesign;
 
 @end

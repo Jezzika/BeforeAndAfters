@@ -36,14 +36,51 @@
         
         //アイコンに右肩に表示されていた数字をカウントダウン
         //ここでは数字が０になり、アイコンの右肩の赤丸表示がなくなる
-        application.applicationIconBadgeNumber = localNotification.applicationIconBadgeNumber-1;
+//        application.applicationIconBadgeNumber = localNotification.applicationIconBadgeNumber-1;
+        
+        
+//        /*--ローカル通知を削除するよ--*/
+//        //バッチを０にするよ
+//        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//        
+//        //このアプリ名義で登録しているローカル通知を削除するよ
+//        [[UIApplication sharedApplication] cancelAllLocalNotifications];
     }
     
-        //UserDefaultのデータを消したい時に使う
+        //--------UserDefaultのデータを消したい時に使う------------------------
 //        NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
 //        [userDef removeObjectForKey:@"challenges"];
 //        [userDef removeObjectForKey:@"maxId"];
+//        [userDef removeObjectForKey:@"selectedPic"];
+//        [userDef removeObjectForKey:@"dailyPictures"];
     
+    
+
+        //-------終了日のものはsuccessに変わる処理----------
+        NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+        NSMutableArray *ary = [usr objectForKey:@"challenges"];
+
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+
+        NSDate *today = [NSDate date];
+
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strToday = [df stringFromDate:today];
+
+        //todayの日付と一致するイベントを抽出
+        NSMutableArray *challenges = [[NSMutableArray new] mutableCopy];
+        for (NSMutableDictionary *dict in ary) {
+            if ([[dict valueForKey:@"finDate"] isEqualToString:strToday]){
+                [dict setObject:@"success" forKey:@"type"];
+                [challenges addObject:dict];
+                [usr synchronize];
+            }
+        }
+
+     
     
     return YES;
 }
@@ -61,6 +98,7 @@
         [alert show];
     }
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
