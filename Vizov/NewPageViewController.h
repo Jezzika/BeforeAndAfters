@@ -33,9 +33,7 @@
 - (IBAction)showCameraSheet:(id)sender;
 
 - (IBAction)tapNowButton:(id)sender;
-- (IBAction)tapLaterButton:(id)sender;
 
 @property (weak, nonatomic) IBOutlet FUIButton *NowBtnDesign;
-@property (weak, nonatomic) IBOutlet FUIButton *LaterBtnDesign;
 
 @end

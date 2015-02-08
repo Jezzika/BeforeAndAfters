@@ -179,7 +179,7 @@
         NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
         
         //タイプのデータ
-        NSString *type = @"now"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
+        NSString *type = @"now"; //now,success,failure のどれか（ここではnow)
         
         //カウントダウン日数のデータ
         NSString *countDown = self.tag1.text;
@@ -275,85 +275,6 @@
         
         }
 
-
-}
-
-- (IBAction)tapLaterButton:(id)sender {
-    
-        //初期化
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-
-        //日付のフォーマット指定
-        df.dateFormat = @"yyyy/MM/dd";
-
-        NSDate *today = [NSDate date];
-
-        // 日付(NSDate) => 文字列(NSString)に変換
-        NSString *strNow = [df stringFromDate:today];
-
-
-    
-    if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@""] || [self.setFinalDate isEqualToString:strNow]){
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:@"エラー"
-                                  message:@"空欄を入力して下さい"
-                                  delegate:self
-                                  cancelButtonTitle:@"OK"
-                                  otherButtonTitles:nil];
-            [alert show];
-            
-        
-    } else {
-    
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        
-        // 入力したいデータを取り出し
-        NSString *title = self.makeNewTitle.text;
-        NSString *detail = self.makeNewDetail.text;
-        UIImage *img =  self.beforeImageView.image;
-        
-        //入力したいデータ　（データ番号）
-        int num = (int)[userDefault integerForKey:@"maxId"];
-        if (num == nil){
-            num = 1;
-            [userDefault setInteger:num forKey:@"maxId"];
-        } else {
-            num ++;
-            [userDefault setInteger:num forKey:@"maxId"];
-        }
-        
-        // UIImage → NSData変換
-        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(img)];
-        
-        //タイプのデータ
-        NSString *type = @"yet"; //0=now,1=yet,2=success,3=failure のどれか（ここではnow)
-        
-        //カウントダウン日数のデータ
-        NSString *countDown = self.tag1.text;
-        
-        //終了日
-        NSString *finDate = self.setFinalDate;
-        
-        //通知タイム
-        NSString *notification = self.tag2.text;
-        
-        // 入力したいデータを辞書型にまとめる
-        NSMutableDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate": finDate, @"notification": notification}.mutableCopy;
-        
-        // 現状で保存されているデータ一覧を取得
-        NSMutableArray *array = [[userDefault objectForKey:@"challenges"] mutableCopy];
-        if ([array count] > 0) {
-            [array addObject:dic];
-            [userDefault setObject:array forKey:@"challenges"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [userDefault setObject:array forKey:@"challenges"];
-        }
-        [userDefault synchronize];
-    
-        //一つ前の画面に戻す
-        [self.navigationController popViewControllerAnimated:YES];
-    }
 
 }
 
@@ -818,15 +739,6 @@
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     
-    
-    // LaterBtnDesignFalat化
-    self.LaterBtnDesign.buttonColor = [UIColor turquoiseColor];
-    self.LaterBtnDesign.shadowColor = [UIColor greenSeaColor];
-    self.LaterBtnDesign.shadowHeight = 3.0f;
-    self.LaterBtnDesign.cornerRadius = 6.0f;
-    self.LaterBtnDesign.titleLabel.font = [UIFont boldFlatFontOfSize:20];
-    [self.LaterBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [self.LaterBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 

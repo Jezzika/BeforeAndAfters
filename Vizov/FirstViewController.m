@@ -17,7 +17,6 @@
 @property (nonatomic) NSArray * tableArray;
 @property (nonatomic) NSMutableArray * timerAscArray;
 @property (nonatomic) NSMutableArray *challengesNow;
-@property (nonatomic) NSMutableArray *challengesLater;
 
 @property (nonatomic) NSTimer *timer;
 
@@ -105,7 +104,7 @@
         if (!ary){
             return 0;
         } else {
-            return 2;
+            return 1;
         }
 // Return the number of sections.
     
@@ -117,17 +116,9 @@
         NSString *title;
         
         // 表示しているセクションのタイトル
-        switch (section) {
-            case 0:
+        if (section == 0) {
                 title = @"NOW";
-                break;
-            case 1:
-                title = @"RESERVED";
-                break;
-            default:
-                break;
         }
-        
         return title;
 }
 
@@ -137,34 +128,22 @@
         NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
         NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
     
-        //NOWとYETのチャレンジを配列に格納
+        //NOWのチャレンジを配列に格納
         NSMutableArray *challengesNow   = [NSMutableArray new];
-        NSMutableArray *challengesLater = [NSMutableArray new];
     
         for (NSDictionary *dic in ary) {
             if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
                 [challengesNow addObject:dic];
-            } else if ([[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
-                [challengesLater addObject:dic];
             }
         } 
         
         NSInteger rows;
         
-        switch (section) {
-            case 0:
-                rows = [challengesNow count];
-                break;
-            case 1:
-                rows = [challengesLater count];
-                break;
-            default:
-                break;
+        if (section == 0){
+                    rows = [challengesNow count];
         }
-        
-        
+    
         self.challengesNow   = challengesNow;
-        self.challengesLater = challengesLater;
         
         return rows;
     
@@ -184,17 +163,9 @@
         }
 
         NSDictionary *items;
-        switch (indexPath.section) {
-            case 0:
-                items = self.challengesNow[indexPath.row];
-                break;
-            case 1:
-                items = self.challengesLater[indexPath.row];
-                break;
-            default:
-                break;
+        if (indexPath.section == 0) {
+            items = self.challengesNow[indexPath.row];
         }
-
 
 
         // カスタムセルにデータを渡して表示処理を委譲
@@ -227,12 +198,10 @@
             NSInteger section = [sender section];
             NSInteger row = [sender row];
             NSArray *selectedArray;
+        
             if (section == 0) {
                 selectedArray = self.challengesNow[row];
-            } else if (section == 1) {
-                selectedArray = self.challengesLater[row];
             }
-            
             //データを書き込む selectedAry はactually Dictionaryです
             [myDefault setObject:selectedArray forKey:@"selectedAry"];
             [myDefault synchronize];

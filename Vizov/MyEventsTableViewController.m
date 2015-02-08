@@ -47,16 +47,13 @@
     NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
     
     NSMutableArray *challengesNow = [NSMutableArray new];
-    NSMutableArray *challengesLater = [NSMutableArray new];
-    for (NSDictionary *dic in ary) {
+        for (NSDictionary *dic in ary) {
         if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
             [challengesNow addObject:dic];
-        } else if ([[dic valueForKey:@"type"] isEqualToString:@"yet"]) {
-            [challengesLater addObject:dic];
         }
     }
     
-    int myConnt = [challengesNow count] + [challengesLater count];
+    int myConnt = [challengesNow count];
     return myConnt;
 }
 

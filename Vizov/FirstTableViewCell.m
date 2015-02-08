@@ -56,13 +56,7 @@
             
             self.challegeTitle.text = [items valueForKeyPath:@"title"];
             
-        } else {
-            
-            self.challengeStatus.text = @"予約";
-            self.challegeTitle.text = [items valueForKeyPath:@"title"];
-            
-        }
-        
+        }         
 
 }
 
