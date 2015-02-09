@@ -76,11 +76,12 @@
             if ([[dict valueForKey:@"finDate"] isEqualToString:strToday]){
                 [dict setObject:@"success" forKey:@"type"];
                 [challenges addObject:dict];
-                [usr synchronize];
+                
             }
+           
         }
 
-     
+        [usr synchronize];
     
     return YES;
 }

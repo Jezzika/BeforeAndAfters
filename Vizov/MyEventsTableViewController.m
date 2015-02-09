@@ -17,40 +17,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+        // Uncomment the following line to preserve selection between presentations.
+        // self.clearsSelectionOnViewWillAppear = NO;
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *dic        = [usrDefault objectForKey:@"selectedAry2"];
-    
-    //UserDefaultの個別データ表示(ホームの一覧リストから）
-    NSString *title;
-    NSString *detail;
-    NSData *pictData;
-    UIImage *picture;
-    NSString *finDate;
-    
-    if (self.fromListView) {
-        title = [dic valueForKeyPath:@"title"];
-        
-        detail = [dic valueForKeyPath:@"detail"];
-        
-        pictData = [dic valueForKeyPath:@"picture"];
-        
-        // NSData→UIImage変換
-        picture = [UIImage imageWithData:pictData];
-        
-        finDate = [dic valueForKey:@"finDate"];
-        
-    }
-    
-    // Table ViewのデータソースにView Controller自身を設定する
-    self.myEventsTable.delegate = self;
-    self.myEventsTable.dataSource = self;
-    self.myEventsTable.allowsSelection = YES;
+        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+        NSDictionary *dic        = [usrDefault objectForKey:@"selectedAry2"];
+
+        //UserDefaultの個別データ表示(ホームの一覧リストから）
+        NSString *title;
+        NSString *detail;
+        NSData *pictData;
+        UIImage *picture;
+        NSString *finDate;
+
+        if (self.fromListView) {
+            title = [dic valueForKeyPath:@"title"];
+            
+            detail = [dic valueForKeyPath:@"detail"];
+            
+            pictData = [dic valueForKeyPath:@"picture"];
+            
+            // NSData→UIImage変換
+            picture = [UIImage imageWithData:pictData];
+            
+            finDate = [dic valueForKey:@"finDate"];
+            
+        }
+
+        // Table ViewのデータソースにView Controller自身を設定する
+        self.myEventsTable.delegate = self;
+        self.myEventsTable.dataSource = self;
+        self.myEventsTable.allowsSelection = YES;
     
     
 }

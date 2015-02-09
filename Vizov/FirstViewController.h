@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FUIButton.h"
+#import "UIColor+FlatUI.h"
+#import "UIFont+FlatUI.h"
+#import "UIImage+FlatUI.h"
+#import "NSString+Icons.h"
 
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;

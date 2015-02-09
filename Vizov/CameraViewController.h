@@ -11,6 +11,7 @@
 @interface CameraViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *cameraPic;
+@property (weak, nonatomic) IBOutlet UITextField *textField;
 
 @property (strong, nonatomic) IBOutlet UIScrollView *ScrollView;
 

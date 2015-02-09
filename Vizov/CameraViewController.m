@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "PersonalPageViewController.h"
 
-@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
 @property (nonatomic) UIButton *myButton;
 @property (nonatomic) BOOL isVisible;
@@ -43,6 +43,9 @@
 
     
     }
+    
+    // textFieldはUITextField型の変数
+    self.textField.delegate = self;
 
 
     
@@ -347,9 +350,31 @@ didSelectViewController:
 }
 
 
+- (BOOL)textFieldShouldReturn:(UITextField *)targetTextField {
+    
+    // textFieldを最初にイベントを受け取る対象から外すことで、
+    // キーボードを閉じる。
+    [targetTextField resignFirstResponder];
+    
+    return YES;
+}
 
+//TextFieldに文字を入力する時にキーボードに隠れないようにする処理
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    NSInteger marginFromKeyboard = 10;
+    NSInteger keyboardHeight = 250;
+    
+    CGRect tmpRect = textField.frame;
+    if ((tmpRect.origin.y + tmpRect.size.height + marginFromKeyboard + keyboardHeight) > self.ScrollView.frame.size.height) {
+        NSInteger yOffset;
+        yOffset = keyboardHeight + marginFromKeyboard + tmpRect.origin.y + tmpRect.size.height - self.ScrollView.frame.size.height;
+        [self.ScrollView setContentOffset:CGPointMake(0, yOffset) animated:YES];
+    }
+}
 
-
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    [self.ScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+}
 
 /*
 #pragma mark - Navigation

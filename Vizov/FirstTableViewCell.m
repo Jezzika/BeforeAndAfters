@@ -56,6 +56,12 @@
             
             self.challegeTitle.text = [items valueForKeyPath:@"title"];
             
+            //画像を取得
+            NSData *beforePic = [items valueForKey:@"picture"];
+            UIImage *beforePic2 = [UIImage imageWithData:beforePic];
+            
+            self.beforeImageView.image = beforePic2;
+            
         }         
 
 }

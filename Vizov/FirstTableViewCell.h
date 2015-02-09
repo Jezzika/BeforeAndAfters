@@ -12,7 +12,10 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *challengeStatus;
 @property (strong, nonatomic) IBOutlet UILabel *challegeTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *beforeImageView;
 
 - (void)setData:(NSDictionary *)homeEventLabel;
+
+
 
 @end
