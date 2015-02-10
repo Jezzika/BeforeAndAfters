@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 
 
+
 @interface AppDelegate ()
 
 @end
@@ -43,7 +44,7 @@
 //        //バッチを０にするよ
 //        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 //        
-//        //このアプリ名義で登録しているローカル通知を削除するよ
+        //このアプリ名義で登録しているローカル通知を削除するよ
 //        [[UIApplication sharedApplication] cancelAllLocalNotifications];
     }
     
@@ -76,11 +77,9 @@
             if ([[dict valueForKey:@"finDate"] isEqualToString:strToday]){
                 [dict setObject:@"success" forKey:@"type"];
                 [challenges addObject:dict];
-                
             }
-           
         }
-
+    
         [usr synchronize];
     
     return YES;

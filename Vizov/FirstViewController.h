@@ -12,6 +12,12 @@
 #import "UIFont+FlatUI.h"
 #import "UIImage+FlatUI.h"
 #import "NSString+Icons.h"
+#import <FlatUIKit/UIColor+FlatUI.h>
+#import "UINavigationBar+FlatUI.h"
+#import "UIBarButtonItem+FlatUI.h"
+#import "UITableViewCell+FlatUI.h"
+#import "FUICellBackgroundView.h"
+
 
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;

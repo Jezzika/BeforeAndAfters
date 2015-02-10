@@ -61,8 +61,8 @@
     self.doneListTableView.dataSource = self;
     self.doneListTableView.allowsSelection = YES;
     
-
-
+    //デザイン用のメソッドを作成
+    [self objectsDesign];
     
 }
 
@@ -133,28 +133,21 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"toMyEvents"]){
-        
         NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
         NSIndexPath *indexPath = self.listTableView.indexPathForSelectedRow;
         
         NSMutableDictionary *selectedDic;
         
         selectedDic = self.doneChallenges[indexPath.row];
-        
-        
-        //データを書き込む selectedAry はactually Dictionaryです
-        [myDefault setObject:selectedDic forKey:@"selectedAry2"];
+            
+        //データを書き込む
+        [myDefault setObject:selectedDic forKey:@"selectedDic2"];
         [myDefault synchronize];
-    
         
         // 遷移先画面(PersonalPageView)に一覧から来たというフラグを渡す
         MyEventsTableViewController *personalView = [segue destinationViewController];
         personalView.fromListView = YES;
     }
-    
-    
-    
-    
 }
 
 
@@ -211,5 +204,13 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+- (void)objectsDesign{
+    
+    // tableviewの境界線の色
+    self.listTableView.separatorColor = [UIColor whiteColor];
+    
+    
+}
 
 @end

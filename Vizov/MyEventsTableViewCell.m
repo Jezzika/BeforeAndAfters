@@ -26,7 +26,7 @@
 //    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
 //    NSMutableArray *ary        = [usrDefault objectForKey:@"challenges"];
 //    NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
-//    NSMutableArray *selectedAry = [usrDefault objectForKey:@"selectedAry"];
+//    NSMutableArray *selectedDic = [usrDefault objectForKey:@"selectedDic"];
 //    
 //    //カメラで撮影された画像 UserDefault
 //    NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
@@ -39,7 +39,7 @@
 //    //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
 //    NSData *picData   = [NSData new];
 //    for (NSDictionary *dic in cameraAry) {
-//        if ([[dic valueForKey:@"date"] isEqualToString:eventDaysArySet] && [[dic valueForKey:@"id"] isEqualToNumber:[selectedAry valueForKey:@"id"]]) {
+//        if ([[dic valueForKey:@"date"] isEqualToString:eventDaysArySet] && [[dic valueForKey:@"id"] isEqualToNumber:[selectedDic valueForKey:@"id"]]) {
 //            picData = [dic valueForKey:@"picture"];
 //        }
 //    }

@@ -3,6 +3,8 @@
 
 target 'Vizov' do
 pod 'FlatUIKit'
+pod 'CLImageEditor'
+
 
 end
 

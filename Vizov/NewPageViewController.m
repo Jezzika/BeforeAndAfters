@@ -8,9 +8,9 @@
 
 #import "NewPageViewController.h"
 #import "PersonalPageViewController.h"
+#import "CLImageEditor.h"
 
-
-@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate>
+@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate,CLImageEditorDelegate>
 {
     UIButton *_myButton;
     UIButton *_myButton2;
@@ -58,7 +58,7 @@
     self.setTableView.dataSource = self;
     self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
     
-    
+    //デザイン用のメソッドを作成
     [self objectsDesign];
     
 
@@ -83,9 +83,25 @@
     //最初は非表示なのでNO
     _isVisible = NO;
     
+    //キーボードの閉じるボタンの作成
+    UIView* accessoryView =[[UIView alloc] initWithFrame:CGRectMake(0,0,320,50)];
+    accessoryView.backgroundColor = [UIColor whiteColor];
+    
+    // ボタンを作成する。
+    UIButton* closeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    closeButton.frame = CGRectMake(210,10,100,30);
+    [closeButton setTitle:@"閉じる" forState:UIControlStateNormal];
+    // ボタンを押したときによばれる動作を設定する。
+    [closeButton addTarget:self action:@selector(closeKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    // ボタンをViewに貼る
+    [accessoryView addSubview:closeButton];
+    
+    self.makeNewDetail.inputAccessoryView = accessoryView;
 }
 
-
+-(void)closeKeyboard:(id)sender{
+    [self.makeNewDetail resignFirstResponder];
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -109,8 +125,12 @@
     //キーボードがreturn押して落ちるように、このメソッドの存在は消さない！
 }
 
-- (IBAction)returnNewDetail:(id)sender {
-    //キーボードがreturn押して落ちるように、このメソッドの存在は消さない！
+- (BOOL)textViewShouldReturn:(UITextView *)targetTextView {
+    
+    // キーボードを閉じる
+    [targetTextView resignFirstResponder];
+    
+    return YES;
 }
 
 - (IBAction)showCameraSheet:(id)sender {
@@ -151,7 +171,8 @@
                                   delegate:self
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
-            [alert show];
+        
+        [alert show];
             
             
         } else {
@@ -311,67 +332,90 @@
     [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController*)picker
-        didFinishPickingImage:(UIImage*)image
-                  editingInfo:(NSDictionary*)editingInfo
-{
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
     //ImagePickerのデリケードメソッド (画像取得時)
     
-        CGFloat width = 150;    // リサイズ後幅のサイズ
-        CGFloat height = 150;   // リサイズ後高さのサイズ
-        CGRect rect = CGRectMake(0, 0, width, height);
+    CGFloat width = 150;    // リサイズ後幅のサイズ
+    CGFloat height = 150;   // リサイズ後高さのサイズ
+    CGRect rect = CGRectMake(0, 0, width, height);
+    
+    // 読み込んだ画像のサイズ取得
+    CGFloat tmp_w = image.size.width;
+    CGFloat tmp_h = image.size.height;
+    
+    // 選択した画像が正方形じゃなかった場合、隙間が生まれないようにリサイズする
+    // 縦長の画像
+    if (tmp_w < tmp_h) {
+        float per   = width / tmp_w;
+        width       = tmp_w * per;
+        height      = tmp_h * per;
         
-        // 読み込んだ画像のサイズ取得
-        CGFloat tmp_w = image.size.width;
-        CGFloat tmp_h = image.size.height;
+        rect = CGRectMake(0, -height/2 +rect.size.width/2, rect.size.width, rect.size.height);
+    }
+    // 横長の画像
+    else if (tmp_w > tmp_h) {
+        float per   = height / tmp_h;
+        width       = tmp_w * per;
+        height      = tmp_h * per;
         
-        // 選択した画像が正方形じゃなかった場合、隙間が生まれないようにリサイズする
-        // 縦長の画像
-        if (tmp_w < tmp_h) {
-            float per   = width / tmp_w;
-            width       = tmp_w * per;
-            height      = tmp_h * per;
-            
-            rect = CGRectMake(0, -height/2 +rect.size.width/2, rect.size.width, rect.size.height);
-        }
-        // 横長の画像
-        else if (tmp_w > tmp_h) {
-            float per   = height / tmp_h;
-            width       = tmp_w * per;
-            height      = tmp_h * per;
-            
-            rect = CGRectMake(-width/2 +rect.size.height/2, 0, rect.size.width, rect.size.height);
-        }
-        
-        // 画像の比率を保ちながらリサイズ
-        UIGraphicsBeginImageContext(CGSizeMake(width, height));
-        [image drawInRect:CGRectMake(0, 0, width, height)];
-        UIImage *img_1 = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        // 150x150サイズでトリミング
-        UIGraphicsBeginImageContext(rect.size);
-        [img_1 drawAtPoint:rect.origin];
-        UIImage *img_2 = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        
-        // 読み込んだ画像ファイルをバイナリデータで保存
-        NSData *imgData = [NSData dataWithData:UIImagePNGRepresentation(img_2)];
-        
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        [defaults setObject:imgData forKey:@"picture"];
-        [defaults synchronize];
+        rect = CGRectMake(-width/2 +rect.size.height/2, 0, rect.size.width, rect.size.height);
+    }
+    
+    // 画像の比率を保ちながらリサイズ
+    UIGraphicsBeginImageContext(CGSizeMake(width, height));
+    [image drawInRect:CGRectMake(0, 0, width, height)];
+    UIImage *img_1 = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // 150x150サイズでトリミング
+    UIGraphicsBeginImageContext(rect.size);
+    [img_1 drawAtPoint:rect.origin];
+    UIImage *img_2 = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
     
     
+    // 読み込んだ画像ファイルをバイナリデータで保存
+    NSData *imgData = [NSData dataWithData:UIImagePNGRepresentation(img_2)];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:imgData forKey:@"picture"];
+    [defaults synchronize];
+    
+    CLImageEditor *editor;
+    if (tmp_w < tmp_h) {
         // 画像を表示する
         self.beforeImageView.image = img_2;
-        NSLog (@"%@",imgData);
+        editor = [[CLImageEditor alloc] initWithImage:img_2];
+    } else {
+        self.beforeImageView.image = img_1;
+        editor = [[CLImageEditor alloc] initWithImage:img_1];
+        
+    }
     
-        [self dismissViewControllerAnimated:YES completion:nil];
+    editor.delegate = self;
+    
+    [picker pushViewController:editor animated:YES];
+}
+
+- (void)imageEditor:(CLImageEditor *)editor didFinishEdittingWithImage:(UIImage *)image
+{
+    self.beforeImageView.image = image;
+    
+    [editor dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 
+- (void) imageEditorDidCancel:(CLImageEditor *)editor{
+    // Editorを隠す
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
+}
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
@@ -567,8 +611,8 @@
     _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _myDatePicker2.datePickerMode = UIDatePickerModeTime;
     
-    //10分間隔に設定
-    _myDatePicker2.minuteInterval = 10;
+//    //10分間隔に設定
+//    _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerのサイズを選択
     CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
@@ -580,12 +624,6 @@
     
 }
 
-
-
-- (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    
-    
-}
 
 
 //tapされた時に反応するメソッド(Timer)
@@ -683,13 +721,17 @@
     [df setDateFormat:@"HH:mm"];
     
     NSString *time = [df stringFromDate:_myDatePicker2.date];
+ 
     
-    //NSStringから Data型に変更
+    //NSStringから Date型に変更
     NSDate *date = [df dateFromString:time];
     
     self.notificationDate = date;
     
+    
     self.tag2.text = time;
+    
+
     
     
     

@@ -22,6 +22,8 @@
 
 - (void)setData:(NSDictionary *)items{
     
+
+    
         if([[items valueForKey:@"type"] isEqualToString:@"now"]){
             
             NSString *findate = [items valueForKey:@"finDate"];
@@ -48,11 +50,10 @@
                 
                 self.challengeStatus.text = [NSString stringWithFormat:@"%d",mySince];
                
-            } else {
-                
-                self.challengeStatus.text = @"0";
-                
             }
+            
+            
+            //----------表示させる内容の作成---------
             
             self.challegeTitle.text = [items valueForKeyPath:@"title"];
             
@@ -62,9 +63,12 @@
             
             self.beforeImageView.image = beforePic2;
             
-        }         
+        }
+    
 
 }
+
+
 
 
 @end

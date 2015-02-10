@@ -20,11 +20,12 @@
         // Uncomment the following line to preserve selection between presentations.
         // self.clearsSelectionOnViewWillAppear = NO;
 
+    
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
         NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-        NSDictionary *dic        = [usrDefault objectForKey:@"selectedAry2"];
+        NSDictionary *dic        = [usrDefault objectForKey:@"selectedDic2"];
 
         //UserDefaultの個別データ表示(ホームの一覧リストから）
         NSString *title;
@@ -73,7 +74,7 @@
     
     // Table Viewの行数を返す
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *dic = [userDefault objectForKey:@"selectedAry2"];
+    NSDictionary *dic = [userDefault objectForKey:@"selectedDic2"];
     NSString *str = [dic valueForKey:@"timer"];
     
     int myCount = (int)[str intValue];
@@ -93,7 +94,7 @@
     
     
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *dict = [userDefault objectForKey:@"selectedAry2"];
+    NSDictionary *dict = [userDefault objectForKey:@"selectedDic2"];
     NSString *timer = [dict valueForKey:@"timer"];
     
     int num = [timer intValue];

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface FirstTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UILabel *challengeStatus;

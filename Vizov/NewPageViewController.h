@@ -14,12 +14,14 @@
 #import "NSString+Icons.h"
 
 
+
 @interface NewPageViewController : UIViewController
 
 
 @property (weak, nonatomic) IBOutlet UITextField *makeNewTitle;
-@property (weak, nonatomic) IBOutlet UITextField *makeNewDetail;
+
 @property (weak, nonatomic) IBOutlet UIImageView *beforeImageView;
+@property (weak, nonatomic) IBOutlet UITextView *makeNewDetail;
 
 @property (assign, nonatomic) NSArray *CellNames;
 
@@ -29,7 +31,6 @@
 
 
 - (IBAction)returnNewTitle:(id)sender;
-- (IBAction)returnNewDetail:(id)sender;
 - (IBAction)showCameraSheet:(id)sender;
 
 - (IBAction)tapNowButton:(id)sender;

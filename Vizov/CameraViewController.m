@@ -7,15 +7,14 @@
 //
 
 #import "CameraViewController.h"
-#import <AVFoundation/AVFoundation.h>
 #import "PersonalPageViewController.h"
+#import "CLImageEditor.h"
 
-@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface CameraViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextViewDelegate,UIActionSheetDelegate,CLImageEditorDelegate>
 
-@property (nonatomic) UIButton *myButton;
+@property (nonatomic) FUIButton *myButton;
 @property (nonatomic) BOOL isVisible;
 
-@property (nonatomic) UITableView *myTable;
 @property (nonatomic) NSMutableArray *challengesNow;
 
 @property (nonatomic) NSString *selectTitle;
@@ -44,8 +43,14 @@
     
     }
     
-    // textFieldはUITextField型の変数
-    self.textField.delegate = self;
+    
+    // textViewはUITextView型の変数
+    self.textView.delegate = self;
+    
+    //デザインの処理メソッドを作成
+    [self objectsDesign];
+
+
 
 
     
@@ -56,29 +61,26 @@
     //btnオブジェクトの生成
     [self createdBtn];
     
-    //動的なテーブルの作成2
-    [self createTableView];
-    self.isVisible = NO;
+    //キーボードの閉じるボタンの作成
+    UIView* accessoryView =[[UIView alloc] initWithFrame:CGRectMake(0,0,320,50)];
+    accessoryView.backgroundColor = [UIColor whiteColor];
     
-    self.myTable.delegate = self;
-    self.myTable.dataSource = self;
+    // ボタンを作成する。
+    FUIButton* closeButton = [FUIButton buttonWithType:UIButtonTypeRoundedRect];
+    closeButton.frame = CGRectMake(210,10,100,30);
+    [closeButton setTitle:@"閉じる" forState:UIControlStateNormal];
+    // ボタンを押したときによばれる動作を設定する。
+    [closeButton addTarget:self action:@selector(closeKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    // ボタンをViewに貼る
+    [accessoryView addSubview:closeButton];
+    
+    self.textView.inputAccessoryView = accessoryView;
     
     
 }
 
-//テーブルビューオブジェクトの作成（SAVE後）
--(void)createTableView{
-    self.myTable = [[UITableView alloc] init];
-    
-    //場所を決定
-    self.myTable.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    self.myTable.alpha = 1.0;
-    
-    //ビューの色を設定
-    [self.myTable setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1]];
-    
-    [self.view addSubview:self.myTable];
-    
+-(void)closeKeyboard:(id)sender{
+    [self.textView resignFirstResponder];
 }
 
 
@@ -86,20 +88,27 @@
 -(void)createdBtn{
     
     //ボタンオブジェクトを生成
-    self.myButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+    self.myButton = [[FUIButton alloc] initWithFrame:CGRectMake(250, 180, 60, 60)];
     
     [self.myButton setTitle:@"SAVE" forState:UIControlStateNormal];
     
-    if (!self.cameraPic.image) {
+    if ([self.cameraPic.image  isEqual: [UIImage imageNamed:@"noimage"]] || !(self.textView.text)) {
         //ボタンの文字色指定（最初うっすら透明）
-        [self.myButton setTitleColor:[UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:0.5] forState:UIControlStateNormal];
+        self.myButton.buttonColor = [UIColor cloudsColor];
+        [self.myButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.myButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+        
     } else {
-        [self.myButton setTitleColor:[UIColor colorWithRed:0.0 green:0.5 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+        self.myButton.buttonColor = [UIColor turquoiseColor];
+        self.myButton.shadowColor = [UIColor greenSeaColor];
+        self.myButton.shadowHeight = 3.0f;
+        self.myButton.cornerRadius = 6.0f;
+        [self.myButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.myButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
         //メソッドとの紐付け
         [self.myButton addTarget:self action:@selector(tapBtn:) forControlEvents:UIControlEventTouchUpInside];
         
     }
-    
     
     [self.ScrollView addSubview:self.myButton];
     
@@ -107,115 +116,54 @@
 }
 
 //tapされた時に反応するメソッド(SAVE)
--(void)tapBtn:(UIButton *)myButton{
-
-    [UIView beginAnimations:@"animateViewrOn" context:nil];
-    [UIView setAnimationDuration:0.3];
-    
-    if(self.isVisible == NO){
-        self.myTable.frame = CGRectMake(0, self.view.bounds.size.height-270, self.view.bounds.size.width, 270);
-        self.isVisible = YES;
-    }else{
+-(void)tapBtn:(FUIButton *)myButton{
         
-        [self downObjects];
-    }
+        [UIView beginAnimations:@"animateViewrOn" context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView commitAnimations];
+        
+        // 現状で保存されているデータ一覧を取得
+        NSUserDefaults *usr =[NSUserDefaults standardUserDefaults];
+        NSDictionary *dic = [usr objectForKey:@"selectedDic"];
+        
+        //選択されたイベントのIDを取得
+        NSNumber *id = [dic valueForKey:@"id"];
+        
+        // UIImage → NSData変換
+        NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(self.cameraPic.image)];
+        
+        //画像選択日（today)
+        //初期化
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        //日付のフォーマット指定
+        df.dateFormat = @"yyyy/MM/dd";
+        
+        NSDate *today = [NSDate date];
+        
+        // 日付(NSDate) => 文字列(NSString)に変換
+        NSString *strToday = [df stringFromDate:today];
+        
+        //書いたメモの処理
+        NSString *memo = self.textView.text;
+        
+        // 入力したいデータを辞書型にまとめる
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        dictionary = @{@"id": id, @"picture": picture, @"memo": memo, @"date":strToday}.mutableCopy;
+        
+        
+        // 現状で保存されているデータ一覧を取得した後の処理
+        [usr setObject:dictionary forKey:@"selectedPic"];
+        [usr synchronize];
+        
+        
+        
+        PersonalPageViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonalPageViewController"];
+        [self.navigationController pushViewController:controller animated:YES];
+    
     
     [UIView commitAnimations];
     
-//     MyEventsTableViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"MyEventsTableViewController"];
-//    
-//    [self presentViewController:controller animated:YES completion: nil]; //モーダルで呼び出す
-    
-    
-    
 }
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
-    // Table Viewの行数を返す
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary = [userDefault objectForKey:@"challenges"];
-    
-    
-    NSMutableArray *challengesNow = [NSMutableArray new];
-    for (NSDictionary *dic in ary) {
-        if ([[dic valueForKey:@"type"] isEqualToString:@"now"]) {
-            [challengesNow addObject:dic];
-        }
-    }
-    self.challengesNow = challengesNow;
-    
-    return [challengesNow count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    //staticで定数宣言　中身を変更したくないため static:静的
-    static NSString *CellIdentifier = @"Cell";
-    
-    //再利用可能なCellオブジェクトを作成
-    UITableViewCell *cell = [self.myTable dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", [self.challengesNow valueForKey:@"title"][indexPath.row]];
-    
-    return cell;
-}
-
-//行が押されたときに発動するメソッド(オブジェクトに付随するメソッド-delegateメソッド)
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-
-    [UIView beginAnimations:@"animateViewrOn" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [self downObjects];
-    [UIView commitAnimations];
-    
-    NSString *selectStr = [NSString stringWithFormat:@"%@", [self.challengesNow valueForKey:@"title"][indexPath.row]];
-    
-    // UIImage → NSData変換
-    NSData *picture = [NSData dataWithData:UIImagePNGRepresentation(self.cameraPic.image)];
-    
-    //画像選択日（today)
-    //初期化
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    //日付のフォーマット指定
-    df.dateFormat = @"yyyy/MM/dd";
-    
-    NSDate *today = [NSDate date];
-    
-    // 日付(NSDate) => 文字列(NSString)に変換
-    NSString *strToday = [df stringFromDate:today];
-    
-    // 入力したいデータを辞書型にまとめる
-    NSDictionary *dic = @{@"title": selectStr, @"picture": picture, @"date":strToday};
-
-    
-    // 現状で保存されているデータ一覧を取得
-    NSUserDefaults *usr =[NSUserDefaults standardUserDefaults];
-    
-    [usr setObject:dic forKey:@"selectedPic"];
-
-    [usr synchronize];
-    
-    
-    
-    PersonalPageViewController *controller = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonalPageViewController"];
-    [self.navigationController pushViewController:controller animated:YES]; //モーダルで呼び出す
-    
-}
-
-
--(void)downObjects{
-    
-    self.myTable.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    self.isVisible = NO;
-}
-
 
 
 - (void)didReceiveMemoryWarning {
@@ -223,17 +171,48 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)tabBarController:
-(UITabBarController*)tabBarController
-didSelectViewController:
-(UIViewController*)CameraviewController{
+- (IBAction)selectPhoto:(UIBarButtonItem *)sender {
     
-    NSInteger sourceType = UIImagePickerControllerSourceTypeCamera;
+    // アクションシートを作る
+    UIActionSheet*  sheet;
+    sheet = [[UIActionSheet alloc]
+             initWithTitle:@"Select Image"
+             delegate:self
+             cancelButtonTitle:@"Cancel"
+             destructiveButtonTitle:nil
+             otherButtonTitles:@"Photo Library", @"Camera", nil];
+    
+    // アクションシートを表示する
+    [sheet showInView:self.view];
+    
+
+}
+
+- (void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    // ボタンインデックスをチェックする
+    if (buttonIndex >= 3) {
+        return;
+    }
+    
+    // ソースタイプを決定する
+    UIImagePickerControllerSourceType   sourceType = 0;
+    switch (buttonIndex) {
+        case 0: {
+            sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            break;
+        }
+        case 1: {
+            sourceType = UIImagePickerControllerSourceTypeCamera;
+            break;
+        }
+    }
     
     // 使用可能かどうかチェックする
     if (![UIImagePickerController isSourceTypeAvailable:sourceType]) {
         return;
     }
+    
     // イメージピッカーを作る
     UIImagePickerController *imagePicker;
     imagePicker = [[UIImagePickerController alloc] init];
@@ -243,37 +222,14 @@ didSelectViewController:
     
     // イメージピッカーを表示する
     [self presentViewController:imagePicker animated:YES completion:nil];
-    
-    
 }
 
-- (IBAction)selectPhoto:(UIBarButtonItem *)sender {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    [self presentViewController:picker animated:YES completion:NULL];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
-
-}
-
-- (IBAction)takePicture:(UIBarButtonItem *)sender {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-}
-
-- (IBAction)memoField:(id)sender {
-}
-
-- (void)imagePickerController:(UIImagePickerController*)picker
-        didFinishPickingImage:(UIImage*)image
-                  editingInfo:(NSDictionary*)editingInfo
-{
     //ImagePickerのデリケードメソッド (画像取得時)
     
     CGFloat width = 150;    // リサイズ後幅のサイズ
@@ -314,22 +270,23 @@ didSelectViewController:
     UIImage *img_2 = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
+    CLImageEditor *editor;
+    if (tmp_w < tmp_h) {
+        // 画像を表示する
+        self.cameraPic.image = img_2;
+        editor = [[CLImageEditor alloc] initWithImage:img_2];
+    } else {
+        self.cameraPic.image = img_1;
+        editor = [[CLImageEditor alloc] initWithImage:img_1];
+        
+    }
     
-    // 読み込んだ画像ファイルをバイナリデータで保存
-    NSData *imgData = [NSData dataWithData:UIImagePNGRepresentation(img_2)];
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:imgData forKey:@"picture"];
-    [defaults synchronize];
-    
-    
-    // 画像を表示する
-    self.cameraPic.image = img_2;
-    
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
+    
+    editor.delegate = self;
+    
+    [picker pushViewController:editor animated:YES];
+}
 
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
@@ -341,30 +298,27 @@ didSelectViewController:
 
 
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+- (void)imageEditor:(CLImageEditor *)editor didFinishEdittingWithImage:(UIImage *)image
+{
+    self.cameraPic.image = image;
     
-    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.cameraPic.image = chosenImage;
-    
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+    [editor dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (BOOL)textFieldShouldReturn:(UITextField *)targetTextField {
+- (BOOL)textViewShouldReturn:(UITextView *)targetTextView {
     
-    // textFieldを最初にイベントを受け取る対象から外すことで、
-    // キーボードを閉じる。
-    [targetTextField resignFirstResponder];
+    // キーボードを閉じる
+    [targetTextView resignFirstResponder];
     
     return YES;
 }
 
 //TextFieldに文字を入力する時にキーボードに隠れないようにする処理
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
+- (void)textViewDidBeginEditing:(UITextView *)textView {
     NSInteger marginFromKeyboard = 10;
-    NSInteger keyboardHeight = 250;
+    NSInteger keyboardHeight = 300;
     
-    CGRect tmpRect = textField.frame;
+    CGRect tmpRect = self.textView.frame;
     if ((tmpRect.origin.y + tmpRect.size.height + marginFromKeyboard + keyboardHeight) > self.ScrollView.frame.size.height) {
         NSInteger yOffset;
         yOffset = keyboardHeight + marginFromKeyboard + tmpRect.origin.y + tmpRect.size.height - self.ScrollView.frame.size.height;
@@ -372,9 +326,22 @@ didSelectViewController:
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    
     [self.ScrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
+
+
+- (void)objectsDesign{
+    
+    //スクロールビューの背景を変更
+    self.ScrollView.backgroundColor = [UIColor cloudsColor];
+    
+ 
+}
+
+
 
 /*
 #pragma mark - Navigation

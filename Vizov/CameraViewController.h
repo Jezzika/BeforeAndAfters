@@ -7,17 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FUIButton.h"
+#import "UIColor+FlatUI.h"
+#import "UIFont+FlatUI.h"
+#import "UIImage+FlatUI.h"
+#import "NSString+Icons.h"
+#import "FUITextField.h"
+#import "FUISegmentedControl.h"
+#import "UITableViewCell+FlatUI.h"
+#import "FUICellBackgroundView.h"
 
-@interface CameraViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+
+@interface CameraViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIImageView *cameraPic;
-@property (weak, nonatomic) IBOutlet UITextField *textField;
+
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+
 
 @property (strong, nonatomic) IBOutlet UIScrollView *ScrollView;
 
 
 - (IBAction)selectPhoto:(UIBarButtonItem *)sender;
-- (IBAction)takePicture:(UIBarButtonItem *)sender;
+
 
 
 
