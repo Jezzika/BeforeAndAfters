@@ -24,7 +24,7 @@
 
 
 
-- (void)setData:(NSMutableArray *)eventDaysArySet{
+- (void)setData:(NSString *)eventDaysArySet{
     
     //デザイン用のメソッドを作成
     [self objectsDesign];
@@ -50,18 +50,19 @@
     if (selectedPicture || selectedMemo) {
         
         NSString *date = [selectedPic valueForKey:@"date"];
-        NSString *title = [selectedPic valueForKey:@"title"];
+        NSNumber *id = [selectedPic valueForKey:@"id"];
         NSString *memo = [selectedPic valueForKey:@"memo"];
         
         NSNumber *eventId   = [NSNumber new];
         for (NSDictionary *dic in ary) {
-            if ([[dic valueForKey:@"title"] isEqualToString:title]) {
+            if ([[dic valueForKey:@"id"] isEqualToNumber:id]) {
                 eventId = [dic valueForKey:@"id"];
             }
         }
 
         // 入力したいデータを辞書型にまとめる
         NSMutableDictionary *dic = [NSMutableDictionary new];
+        
         dic = @{@"id": eventId, @"picture": selectedPicture, @"memo": memo, @"date":date}.mutableCopy;
         
         // 現状で保存されているデータ一覧を取得
@@ -78,7 +79,6 @@
 
     [usrDefault removeObjectForKey:@"selectedPic"];
 
-
     //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
     NSData *picData   = [NSData new];
     NSString *setMemo = [NSString new];
@@ -94,15 +94,6 @@
     
     
     //画面上にセットするデータを作成
-    NSLog(@"なに%@",eventDaysArySet);
-    
-//        int c;
-//        NSInteger count = [eventDaysArySet count];
-//        for (c =1; c < count; c++) {
-//            self.DailyNumber.text =  [NSString stringWithFormat:@"Day:%d",c];
-//        }
-//
-    
     self.DailyNumber.text =  [NSString stringWithFormat:@"%@",eventDaysArySet];;
     self.DailyPicture.image = setPic;
     self.DailyTextView.text = setMemo;

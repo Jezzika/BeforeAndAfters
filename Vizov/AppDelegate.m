@@ -54,6 +54,8 @@
 //        [userDef removeObjectForKey:@"maxId"];
 //        [userDef removeObjectForKey:@"selectedPic"];
 //        [userDef removeObjectForKey:@"dailyPictures"];
+        //イベントごとに紐づく日付たち
+//        [userDef removeObjectForKey:@"daysArray"];
     
     
 
