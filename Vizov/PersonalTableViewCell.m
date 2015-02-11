@@ -24,7 +24,7 @@
 
 
 
-- (void)setData:(NSString *)eventDaysArySet{
+- (void)setData:(NSDictionary *)eventDaysArySet{
     
     //デザイン用のメソッドを作成
     [self objectsDesign];
@@ -32,79 +32,46 @@
     
     //カメラ撮影
     NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-    NSMutableArray *ary        = [usrDefault objectForKey:@"challenges"];
     NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
-    NSDictionary *selectedDic = [usrDefault objectForKey:@"selectedDic"];
-
-    //カメラで撮影された画像 UserDefault
-    NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
-    NSData *selectedPicture = [selectedPic valueForKey:@"picture"];
-    NSString *selectedMemo = [selectedPic valueForKey:@"memo"];
 
     
-    //　〃（メモ）
-    NSString *dailyMemo = [selectedPic valueForKey:@"memo"];
-    self.DailyTextView.text = dailyMemo;
+    NSString *day = [eventDaysArySet valueForKey:@"days"];
+    NSNumber *setId  = [eventDaysArySet valueForKey:@"id"];
     
-    //カメラで取った写真 or メモがある場合にそのイベントに写真を紐づけるUserDefaultを作成
-    if (selectedPicture || selectedMemo) {
-        
-        NSString *date = [selectedPic valueForKey:@"date"];
-        NSNumber *id = [selectedPic valueForKey:@"id"];
-        NSString *memo = [selectedPic valueForKey:@"memo"];
-        
-        NSNumber *eventId   = [NSNumber new];
-        for (NSDictionary *dic in ary) {
-            if ([[dic valueForKey:@"id"] isEqualToNumber:id]) {
-                eventId = [dic valueForKey:@"id"];
-            }
-        }
 
-        // 入力したいデータを辞書型にまとめる
-        NSMutableDictionary *dic = [NSMutableDictionary new];
-        
-        dic = @{@"id": eventId, @"picture": selectedPicture, @"memo": memo, @"date":date}.mutableCopy;
-        
-        // 現状で保存されているデータ一覧を取得
-        NSMutableArray *array = [[usrDefault objectForKey:@"dailyPictures"]mutableCopy];
-        if ([array count] > 0) {
-                [array addObject:dic];
-                [usrDefault setObject:array forKey:@"dailyPictures"];
-        } else {
-            NSMutableArray *array = [[NSMutableArray alloc] initWithObjects:dic, nil];
-            [usrDefault setObject:array forKey:@"dailyPictures"];
-        }
-        [usrDefault synchronize];
-    }
-
-    [usrDefault removeObjectForKey:@"selectedPic"];
+    NSLog(@"aa%@",eventDaysArySet);
 
     //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
-    NSData *picData   = [NSData new];
-    NSString *setMemo = [NSString new];
+    NSMutableArray *setAry = [NSMutableArray array];
     for (NSDictionary *dic in cameraAry) {
-        if ([[dic valueForKey:@"date"] isEqualToString:eventDaysArySet] && [[dic valueForKey:@"id"] isEqualToNumber:[selectedDic valueForKey:@"id"]]) {
-            picData = [dic valueForKey:@"picture"];
-            setMemo = [dic valueForKey:@"memo"];
+        if ([[dic valueForKey:@"date"] isEqualToString:day] && [[dic valueForKey:@"id"]isEqualToNumber:setId]){
+                [setAry addObject:dic];
         }
     }
+    
 
-    // NSData→UIImage変換
-    UIImage *setPic = [UIImage imageWithData:picData];
-    
-    
+    NSLog(@"おねがいいい%lu",[setAry count]);
+    UIImage *setPic;
+    NSString *setMemo;
+    if ([setAry count] > 0) {
+        
+        // NSData→UIImage変換
+        setPic = [UIImage imageWithData:[[setAry valueForKey:@"picture"]lastObject]];
+        NSLog(@"%@",setPic);
+        //Memo
+        setMemo = [[setAry valueForKey:@"memo"]lastObject];
+        
+        //データのセット
+        self.DailyTextView.text = setMemo;
+        self.DailyPicture.image = setPic;
+      
+        
+    }
+
+ 
     //画面上にセットするデータを作成
-    self.DailyNumber.text =  [NSString stringWithFormat:@"%@",eventDaysArySet];;
-    self.DailyPicture.image = setPic;
-    self.DailyTextView.text = setMemo;
-    
-    
-    //カメラで撮影された画像 をNSData→UIImageに変換 （セルで処理をする）
-    UIImage *dailyPic = [UIImage imageWithData:selectedPicture];
-    
-    //セルの設定メソッドに送る情報　（撮影画像）
-    self.DailyPicture.image = dailyPic;
-    
+    self.DailyNumber.text =  [NSString stringWithFormat:@"%@",[eventDaysArySet valueForKey:@"days"]];;
+
 
 }
 

@@ -129,7 +129,6 @@
     
     NSMutableArray *eventDaysArySet = eventDaysAry[indexPath.row];
     
-    NSLog(@"ぬあああ%@",eventDaysArySet);
     
     //カスタムセルにデータを渡して表示処理を委譲
     [cell setData:eventDaysArySet];

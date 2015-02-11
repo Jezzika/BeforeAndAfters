@@ -28,28 +28,15 @@
     //UserDefaultの個別データ表示(ホームの一覧リストから）
     NSString *title;
     NSString *detail;
-    NSData *pictData;
-    UIImage *picture;
     
-    //UserDefaultの個別データ表示(カメラ撮影ページから）
-    NSString *title2;
-    NSString *detail2;
-    NSData *pictData2;
-    UIImage *picture2;
-    
-    
-    
-    
+
     if (self.fromFirstView) {
 
         NSDictionary *dic = [usrDefault objectForKey:@"selectedDic"];
         
         title = [dic valueForKeyPath:@"title"];
         detail = [dic valueForKeyPath:@"detail"];
-        pictData = [dic valueForKeyPath:@"picture"];
         
-        // NSData→UIImage変換
-        picture = [UIImage imageWithData:pictData];
         NSString *finDate = [dic valueForKey:@"finDate"];
         
         //初期化(カウントダウン用のデータ作成）
@@ -70,39 +57,72 @@
         if (mySince > 0){
             self.settedTimer.text = [NSString stringWithFormat:@"%d",mySince];
         } else {
+            self.settedTimer.text = @"0";
         }
 
         self.settedTitle.text = title;
-        self.settedBeforePicture.image = picture;
         self.settedDetail.text = detail;
         
         
     } else {
-        //elseということでこのページにくるもう一方のデータ（fromCameraView)と認識させる
+
         
-        //カメラで撮影された画像 UserDefault
-        NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
-        NSString *selectedPicTitle = [selectedPic valueForKey:@"title"];
+    }
+
+    self.listDetailTable.delegate = self;
+    self.listDetailTable.dataSource = self;
+    self.listDetailTable.allowsSelection = YES;
+    
+    //TextViewを編集不可にする処理
+    self.settedDetail.editable = NO;
+    
+    //背景viewの色を変更
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    //デザイン用のメソッドを作成
+    [self objectsDesign];
+    
+    
+
+}
+
+
+
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    //自前でハイライト解除
+    [self.listDetailTable deselectRowAtIndexPath:[self.listDetailTable indexPathForSelectedRow] animated:animated];
+    
+    
+    //カメラで撮影された画像 UserDefault
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
+    NSMutableDictionary *selectedPic = [usrDefault objectForKey:@"selectedPic"];
+    NSLog(@"いっこだけでね！%lu",[selectedPic count]);
+    NSLog(@"%@",selectedPic);
+    
+    if ([selectedPic count] > 0) {
         
-        //全データ UserDefault
-        NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
+        
+        //UserDefaultの個別データ表示(カメラ撮影ページから）
+        NSString *title;
+        NSString *detail;
+        NSNumber *selectedPicId = [selectedPic valueForKey:@"id"];
         
         NSMutableArray *challengesEqual = [NSMutableArray new];
         for (NSDictionary *dic in ary) {
-            if ([[dic valueForKey:@"title"] isEqualToString:selectedPicTitle]) {
+            if ([[dic valueForKey:@"id"] isEqualToNumber:selectedPicId]) {
                 [challengesEqual addObject:dic];
             }
-        
         }
-    
-        //マッチしたchallengeのデータ（これを使います！）
-        NSMutableArray *challengesEqualLast = [challengesEqual lastObject];
         
         //---title と　detail と countdownのデータはいつも通り---
-        title2 = [challengesEqualLast valueForKeyPath:@"title"];
-        detail2 = [challengesEqualLast valueForKeyPath:@"detail"];
+        title = [[challengesEqual valueForKeyPath:@"title"]lastObject];
+        detail = [[challengesEqual valueForKeyPath:@"detail"]lastObject];
         
-        NSString *finDate = [challengesEqualLast valueForKey:@"finDate"];
+        NSString *finDate = [[challengesEqual valueForKey:@"finDate"]lastObject];
         
         //初期化(カウントダウン用のデータ作成）
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -115,7 +135,6 @@
         // 日付(NSDate) => 文字列(NSString)に変換
         NSString *strNow = [df stringFromDate:today];
         NSDate *currentDate= [df dateFromString:strNow];
-        
         NSDate *setFinDate = [df dateFromString:finDate];
         
         // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
@@ -124,36 +143,29 @@
         if (mySince > 0){
             self.settedTimer.text = [NSString stringWithFormat:@"%d",mySince];
         } else {
-
+            self.settedTimer.text = @"0";
+            
         }
         
-        self.settedTitle.text = title2;
-        self.settedDetail.text = detail2;
+        self.settedTitle.text = title;
+        self.settedDetail.text = detail;
         
-        //--カメラ撮影での処理なので--
-        //セルで処理
+        //SelectedPicは常に一つのみなのでここでは削除の処理を行う
+        [usrDefault removeObjectForKey:@"selectedPic"];
         
-        //デザイン用のメソッドを作成
-        [self objectsDesign];
-        
+        //再読み込みを行う
+        [self.listDetailTable reloadData];
     }
-
-    self.listDetailTable.delegate = self;
-    self.listDetailTable.dataSource = self;
-    self.listDetailTable.allowsSelection = YES;
+    
     
     //TextViewを編集不可にする処理
     self.settedDetail.editable = NO;
     
     //背景viewの色を変更
-    self.view.backgroundColor = [UIColor sunflowerColor];
-
-}
-
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    //自前でハイライト解除
-    [self.listDetailTable deselectRowAtIndexPath:[self.listDetailTable indexPathForSelectedRow] animated:animated];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    //デザイン用のメソッドを作成
+    [self objectsDesign];
 }
 
 
@@ -264,29 +276,28 @@
         
         
     }
-    NSLog(@"%@",[userDefault objectForKey:@"daysArray"]);
 
     NSMutableArray *setDataAry = [NSMutableArray array];
     for (NSMutableDictionary *dic in testAry2) {
-        if ([dict valueForKey:@"id"] == [[userDefault objectForKey:@"daysArray"]valueForKey:@"id"]){
+        if ([dict valueForKey:@"id"] == [dic valueForKey:@"id"]){
             [setDataAry addObject:dic];
         }
     }
-    NSLog(@"%@",setDataAry);
+
     
-    NSString *eventDaysArySet = eventDaysAry[indexPath.row];
+    NSDictionary *eventDaysArySet = setDataAry[indexPath.row];
     
     //カスタムセルにデータを渡して表示処理を委譲
-//    [cell setData:eventDaysArySet];
+    [cell setData:eventDaysArySet];
     
     [cell configureFlatCellWithColor:[UIColor whiteColor]
                        selectedColor:[UIColor cloudsColor]];
     
-    cell.cornerRadius = 5; // optional
+    cell.cornerRadius = 5; // optionalz
  
     
     // tableviewの境界線の色
-    self.listDetailTable.separatorColor = [UIColor whiteColor];
+    self.listDetailTable.separatorColor = [UIColor turquoiseColor];
 
     return cell;
 }
@@ -309,8 +320,6 @@
     NSUserDefaults *myDefault = [NSUserDefaults standardUserDefaults];
     NSDictionary *dic =[myDefault objectForKey:@"selectedDic"];
         
-
-    NSLog(@"みてみる！%@", dic);
 
     //データを書き込む
     [myDefault setObject:dic forKey:@"selectedDic"];

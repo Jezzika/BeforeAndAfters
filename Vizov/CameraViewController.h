@@ -16,13 +16,14 @@
 #import "FUISegmentedControl.h"
 #import "UITableViewCell+FlatUI.h"
 #import "FUICellBackgroundView.h"
-
+#import "UIBarButtonItem+FlatUI.h"
 
 @interface CameraViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UIImageView *cameraPic;
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveBtnItem;
 
 
 @property (strong, nonatomic) IBOutlet UIScrollView *ScrollView;
@@ -30,7 +31,9 @@
 
 - (IBAction)selectPhoto:(UIBarButtonItem *)sender;
 
+- (IBAction)cancelBtn:(id)sender;
 
+- (IBAction)saveBtn:(id)sender;
 
 
 @end

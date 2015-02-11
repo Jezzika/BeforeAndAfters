@@ -44,18 +44,21 @@
     NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
     NSArray *picary = [usr objectForKey:@"dailyPictures"];
     
-//    NSLog(@"いまのけんきゅう1%@",picary);
-    NSLog(@"いまのけんきゅう2%lu",[picary count]);
     
     //デザインのメソッドを作成
     [self objectsDesign];
+    
+
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     //自前でハイライト解除
     [self.listTableView deselectRowAtIndexPath:[self.listTableView indexPathForSelectedRow] animated:animated];
+
 }
+
+
 
 
 -(void)onTimer:(NSTimer*)timer {
@@ -115,8 +118,6 @@
     rows = [challengesNow count];
     self.challengesNow   = challengesNow;
 
-    
-NSLog(@"%lu", [self.challengesNow count]);
     
     return rows;
 }
@@ -178,8 +179,6 @@ NSLog(@"%lu", [self.challengesNow count]);
             NSDictionary *selectedDic;
         
             selectedDic = self.challengesNow[row];
-        
-NSLog(@"%lu", [self.challengesNow count]);
         
             //データを書き込む
             [myDefault setObject:selectedDic forKey:@"selectedDic"];

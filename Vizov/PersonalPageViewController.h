@@ -29,9 +29,9 @@
 @property (strong, nonatomic) IBOutlet UITableView *listDetailTable;
 
 @property (nonatomic) BOOL fromFirstView;
+@property (nonatomic) BOOL fromCameraView;
 
 @property (strong, nonatomic) UIButton *toListEventButton;
-@property (strong, nonatomic) UIImageView *settedBeforePicture;
 
 
 

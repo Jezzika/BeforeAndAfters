@@ -44,7 +44,7 @@
 //        //バッチを０にするよ
 //        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 //        
-        //このアプリ名義で登録しているローカル通知を削除するよ
+//        //このアプリ名義で登録しているローカル通知を削除するよ
 //        [[UIApplication sharedApplication] cancelAllLocalNotifications];
     }
     
@@ -54,7 +54,7 @@
 //        [userDef removeObjectForKey:@"maxId"];
 //        [userDef removeObjectForKey:@"selectedPic"];
 //        [userDef removeObjectForKey:@"dailyPictures"];
-        //イベントごとに紐づく日付たち
+//        //イベントごとに紐づく日付たち
 //        [userDef removeObjectForKey:@"daysArray"];
     
     
@@ -100,6 +100,7 @@
         [alert show];
     }
 }
+
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
