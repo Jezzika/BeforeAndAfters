@@ -21,7 +21,9 @@
 
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;
-
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnItem;
+@property (weak, nonatomic) IBOutlet UINavigationItem *naviItem;
+@property (nonatomic) NSMutableArray *challengesNow;
 
 
 @property (strong, nonatomic) IBOutlet UILabel *realTime;

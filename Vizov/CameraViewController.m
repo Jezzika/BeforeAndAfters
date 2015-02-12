@@ -110,6 +110,7 @@
 
 }
 
+//SAVEボタン押された後の処理
 - (IBAction)saveBtn:(id)sender {
     
     // 現状で保存されているデータ一覧を取得
@@ -181,24 +182,15 @@
             [usr setObject:array forKey:@"dailyPictures"];
         }
         [usr synchronize];
+        
     }
+    
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     
     
 }
 
-//
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([[segue identifier] isEqualToString:@"unwindToFirst"]){
-//
-//        
-//        // 遷移先画面(FirstView)に一覧から来たというフラグを渡す
-//        FirstViewController *firstView = [segue destinationViewController];
-//        firstView.fromCameraView = YES;
-//    }
-//
-//    
-//}
 
 - (void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {

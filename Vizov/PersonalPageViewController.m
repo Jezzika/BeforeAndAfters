@@ -249,7 +249,7 @@
 
     
     //aryForDaysの中に選択されたidがあるかチェックするための配列
-    NSMutableArray *testAry   = [NSMutableArray new];
+    NSMutableArray *testAry   = [NSMutableArray array];
     for (NSMutableDictionary *dic in aryForDays) {
         if ([[[aryForDays valueForKey:@"id"]lastObject] isEqualToNumber:[dict valueForKey:@"id"]]) {
             [testAry addObject:dic];
@@ -277,7 +277,8 @@
         
     }
 
-    NSMutableArray *setDataAry = [NSMutableArray array];
+    NSMutableArray *setDataAry = [[NSMutableArray array]mutableCopy];
+
     for (NSMutableDictionary *dic in testAry2) {
         if ([dict valueForKey:@"id"] == [dic valueForKey:@"id"]){
             [setDataAry addObject:dic];
@@ -285,7 +286,11 @@
     }
 
     
-    NSDictionary *eventDaysArySet = setDataAry[indexPath.row];
+    NSMutableDictionary *eventDaysArySet =[[NSMutableDictionary dictionary]mutableCopy];
+    NSLog(@"あと%lu",[setDataAry count]);
+    NSLog(@"%lu",[testAry2 count]);
+
+    eventDaysArySet = setDataAry[indexPath.row];
     
     //カスタムセルにデータを渡して表示処理を委譲
     [cell setData:eventDaysArySet];
@@ -293,7 +298,7 @@
     [cell configureFlatCellWithColor:[UIColor whiteColor]
                        selectedColor:[UIColor cloudsColor]];
     
-    cell.cornerRadius = 5; // optionalz
+    cell.cornerRadius = 5; // optional
  
     
     // tableviewの境界線の色

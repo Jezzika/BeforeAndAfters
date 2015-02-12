@@ -16,8 +16,6 @@
 
 @property (nonatomic) NSArray * tableArray;
 @property (nonatomic) NSMutableArray * timerAscArray;
-@property (nonatomic) NSMutableArray *challengesNow;
-
 @property (nonatomic) NSTimer *timer;
 
 
@@ -36,18 +34,23 @@
                                                 userInfo:nil
                                                  repeats:YES];
     
+
+    
+    
     // Table ViewのデータソースにView Controller自身を設定する
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
     self.listTableView.allowsSelection = YES;
     
-    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
-    NSArray *picary = [usr objectForKey:@"dailyPictures"];
-    
-    
-    //デザインのメソッドを作成
-    [self objectsDesign];
-    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
+                                                                              style:UIBarButtonItemStyleBordered
+                                                                             target:self
+                                                                             action:@selector(didTapEditButton)];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
+    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor cloudsColor]
+                                  highlightedColor:[UIColor greenSeaColor]
+                                      cornerRadius:3];
 
 }
 
@@ -55,9 +58,26 @@
     [super viewWillAppear:animated];
     //自前でハイライト解除
     [self.listTableView deselectRowAtIndexPath:[self.listTableView indexPathForSelectedRow] animated:animated];
-
+    
+    //デザインのメソッドを作成
+    [self objectsDesign];
+    
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+}
+
+- (void)didTapEditButton
+{
+    [self.listTableView setEditing:!self.listTableView.editing animated:YES];
+    if (self.listTableView.editing) {
+        self.navigationItem.rightBarButtonItem.title = @"Cancel";
+    } else {
+        self.navigationItem.rightBarButtonItem.title = @"Edit";
+    }
+}
 
 
 
@@ -154,21 +174,41 @@
 
         return cell;
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 }
+
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         [self performSegueWithIdentifier:@"toPersonalPage" sender:indexPath];
 }
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
+    
+    NSLog(@"する前%lu",(unsigned long)[ary count]);
+    NSLog(@"する前%@",ary);
+    
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+  
+        // Delete the row from the data source
+        NSInteger row = [indexPath row];
+        [self.challengesNow removeObjectAtIndex: row];
+//
+//        [tableView deleteRowsAtIndexPaths:@[indexPath]  withRowAnimation:UITableViewRowAnimationFade];
+        
+    } else {
+        
+    }
+    
+    NSLog(@"した後%lu",(unsigned long)[ary count]);
+}
+
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -197,12 +237,16 @@
                                   highlightedColor:[UIColor greenSeaColor]
                                       cornerRadius:3];
     
+
+    
     // NavBarデザイン
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor cloudsColor]];
     
     
     // tableviewの境界線の色
     self.listTableView.separatorColor = [UIColor whiteColor];
+    
+
     
     
 

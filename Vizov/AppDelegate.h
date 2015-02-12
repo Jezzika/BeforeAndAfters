@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "FUIAlertView.h"
+#import "FUIButton.h"
+#import "UIColor+FlatUI.h"
+#import "UIFont+FlatUI.h"
+#import "UIImage+FlatUI.h"
+#import "NSString+Icons.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate>

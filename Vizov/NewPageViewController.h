@@ -12,6 +12,7 @@
 #import "UIFont+FlatUI.h"
 #import "UIImage+FlatUI.h"
 #import "NSString+Icons.h"
+#import "FUIAlertView.h"
 
 
 

@@ -10,7 +10,7 @@
 #import "PersonalPageViewController.h"
 #import "CLImageEditor.h"
 
-@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate,CLImageEditorDelegate>
+@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate,CLImageEditorDelegate,UITextFieldDelegate,FUIAlertViewDelegate>
 {
     UIButton *_myButton;
     UIButton *_myButton2;
@@ -60,6 +60,9 @@
     
     //デザイン用のメソッドを作成
     [self objectsDesign];
+    
+    // デリゲートを設定
+    self.makeNewTitle.delegate = self;
     
 
 }
@@ -125,6 +128,67 @@
     //キーボードがreturn押して落ちるように、このメソッドの存在は消さない！
 }
 
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // 最大入力文字数
+    int maxInputLength = 25;
+    
+    // 入力済みのテキストを取得
+    NSMutableString *str = [self.makeNewTitle.text mutableCopy];
+    
+    // 入力済みのテキストと入力が行われたテキストを結合
+    [str replaceCharactersInRange:range withString:string];
+    
+    if ([str length] > maxInputLength) {
+        
+        // ※ここに文字数制限を超えたことを通知する処理を追加
+        FUIAlertView *alert = [[FUIAlertView alloc]
+                              initWithTitle:@"Error"
+                              message:@"Maximum characters: 25"
+                              delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        alert.titleLabel.textColor = [UIColor cloudsColor];
+        alert.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+        alert.messageLabel.textColor = [UIColor cloudsColor];
+        alert.messageLabel.font = [UIFont flatFontOfSize:14];
+        alert.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        alert.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+        alert.defaultButtonColor = [UIColor cloudsColor];
+        alert.defaultButtonShadowColor = [UIColor asbestosColor];
+        alert.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+        alert.defaultButtonTitleColor = [UIColor asbestosColor];
+        
+        [alert show];
+        
+        return NO;
+    }
+    
+    NSString *strNgWord = @"\"\\#$%&'()@[]{}|^~=;:?<>,/-*.";	// チェック対象の文字を複数定義
+    
+    // 無効な文字列が含まれていないかどうかチェック
+    for (int i=0; i<[strNgWord length]; i++) {
+    // チェック対象の文字を設定
+    NSString *strCk = [strNgWord substringWithRange:NSMakeRange(i, 1)];
+    // 入力値がNGワードと一致する場合
+        if ([string isEqual:strCk]) {
+        // 入力取り消し
+        return NO;
+        }
+    }
+
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    // キーボードを隠す
+    [self.view endEditing:YES];
+    
+    return YES;
+}
+
 - (BOOL)textViewShouldReturn:(UITextView *)targetTextView {
     
     // キーボードを閉じる
@@ -165,12 +229,22 @@
     
     if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@"<>"] || [self.setFinalDate isEqualToString:strNow]){
             
-            UIAlertView *alert = [[UIAlertView alloc]
+            FUIAlertView *alert = [[FUIAlertView alloc]
                                   initWithTitle:@"エラー"
                                   message:@"空欄を入力して下さい"
                                   delegate:self
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
+        alert.titleLabel.textColor = [UIColor cloudsColor];
+        alert.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+        alert.messageLabel.textColor = [UIColor cloudsColor];
+        alert.messageLabel.font = [UIFont flatFontOfSize:14];
+        alert.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        alert.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+        alert.defaultButtonColor = [UIColor cloudsColor];
+        alert.defaultButtonShadowColor = [UIColor asbestosColor];
+        alert.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+        alert.defaultButtonTitleColor = [UIColor asbestosColor];
         
         [alert show];
             

@@ -10,7 +10,7 @@
 
 
 
-@interface AppDelegate ()
+@interface AppDelegate ()<FUIAlertViewDelegate>
 
 @end
 
@@ -18,6 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
     
     UIUserNotificationType types =  UIUserNotificationTypeBadge|
     UIUserNotificationTypeSound|
@@ -29,74 +30,94 @@
     
     //launchOptions から UILocalNotifiation 情報を取得
     UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    
+    NSLog(@"%@",localNotification);
     if (localNotification) {
-//        //通知イベントで送られてきた情報（文字列）をメイン画面のラベルに表示
-//        NSString *itemName = [localNotification.userInfo objectForKey:@"EventKey"];
-//        [self.viewController updateLabel:itemName];
         
-        //アイコンに右肩に表示されていた数字をカウントダウン
-        //ここでは数字が０になり、アイコンの右肩の赤丸表示がなくなる
-//        application.applicationIconBadgeNumber = localNotification.applicationIconBadgeNumber-1;
+        /*--ローカル通知を削除するよ--*/
+        if ([[[usr objectForKey:@"challenges"]valueForKey:@"type"]isEqualToString:@"success"]){
         
+            //バッチを0にするよ
+            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+            
+            //このアプリ名義で登録しているローカル通知を削除するよ
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            
+        }
         
-//        /*--ローカル通知を削除するよ--*/
-//        //バッチを０にするよ
-//        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-//        
-//        //このアプリ名義で登録しているローカル通知を削除するよ
-//        [[UIApplication sharedApplication] cancelAllLocalNotifications];
     }
     
         //--------UserDefaultのデータを消したい時に使う------------------------
+    
 //        NSUserDefaults *userDef = [NSUserDefaults standardUserDefaults];
 //        [userDef removeObjectForKey:@"challenges"];
 //        [userDef removeObjectForKey:@"maxId"];
 //        [userDef removeObjectForKey:@"selectedPic"];
+//        [userDef removeObjectForKey:@"selectedDic"];
 //        [userDef removeObjectForKey:@"dailyPictures"];
 //        //イベントごとに紐づく日付たち
 //        [userDef removeObjectForKey:@"daysArray"];
     
     
 
-        //-------終了日のものはsuccessに変わる処理----------
-        NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
-        NSMutableArray *ary = [usr objectForKey:@"challenges"];
+    //-------終了日のものはsuccessに変わる処理----------
+    //イベントの全データを取得
+    NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
 
-        //初期化
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        //日付のフォーマット指定
-        df.dateFormat = @"yyyy/MM/dd";
+    //初期化
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    
+    //日付のフォーマット指定
+    df.dateFormat = @"yyyy/MM/dd";
+    NSDate *today = [NSDate date];
 
-        NSDate *today = [NSDate date];
+    // 日付(NSDate) => 文字列(NSString)に変換
+    NSString *strToday = [df stringFromDate:today];
 
-        // 日付(NSDate) => 文字列(NSString)に変換
-        NSString *strToday = [df stringFromDate:today];
-
-        //todayの日付と一致するイベントを抽出
-        NSMutableArray *challenges = [[NSMutableArray new] mutableCopy];
-        for (NSMutableDictionary *dict in ary) {
-            if ([[dict valueForKey:@"finDate"] isEqualToString:strToday]){
-                [dict setObject:@"success" forKey:@"type"];
-                [challenges addObject:dict];
-            }
+    //todayの日付と一致するイベントを抽出
+    for (NSDictionary *dict in [ary reverseObjectEnumerator]) {
+        NSMutableDictionary *mDict = [dict mutableCopy];
+        if ([[dict valueForKey:@"finDate"] isEqualToString:strToday] && ![[dict valueForKey:@"type"]isEqualToString:@"success"]) {
+            
+            //mutableCopyのdicのtypeを書き換え
+            [mDict setObject:@"success" forKey:@"type"];
+            
+            //元のデータを削除
+            [ary removeObject:dict];
+            
+            //書き換えたデータを保存
+            [ary addObject:mDict];
+            [usr setObject:ary forKey:@"challenges"];
+            [usr synchronize];
         }
-    
-        [usr synchronize];
-    
+    }
+
+
     return YES;
+    
 }
 
 // 通常、アプリケーションが起動中の場合はローカル通知は通知されないが、通知されるようにする
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
     if(notification) {
-        UIAlertView *alert = [[UIAlertView alloc]
+        FUIAlertView *alert = [[FUIAlertView alloc]
                               initWithTitle:@"通知"
                               message:@"頑張って続けましょう〜！"
                               delegate:self
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil];
+        
+        //デザイン
+        alert.titleLabel.textColor = [UIColor cloudsColor];
+        alert.titleLabel.font = [UIFont boldFlatFontOfSize:16];
+        alert.messageLabel.textColor = [UIColor cloudsColor];
+        alert.messageLabel.font = [UIFont flatFontOfSize:14];
+        alert.backgroundOverlay.backgroundColor = [[UIColor cloudsColor] colorWithAlphaComponent:0.8];
+        alert.alertContainer.backgroundColor = [UIColor midnightBlueColor];
+        alert.defaultButtonColor = [UIColor cloudsColor];
+        alert.defaultButtonShadowColor = [UIColor asbestosColor];
+        alert.defaultButtonFont = [UIFont boldFlatFontOfSize:16];
+        alert.defaultButtonTitleColor = [UIColor asbestosColor];
         [alert show];
     }
 }
