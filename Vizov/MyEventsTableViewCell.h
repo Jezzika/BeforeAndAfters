@@ -10,8 +10,9 @@
 
 @interface MyEventsTableViewCell : UITableViewCell
 
-- (void)setData:(NSMutableArray *)eventDaysArySet;
-@property (weak, nonatomic) IBOutlet UIImageView *pic;
+- (void)setData:(NSMutableDictionary *)eventDaysArySet;
+@property (weak, nonatomic) IBOutlet        UIImageView *pic;
 @property (weak, nonatomic) IBOutlet UILabel *date;
+@property (weak, nonatomic) IBOutlet UITextView *setMemo;
 
 @end

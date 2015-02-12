@@ -30,7 +30,7 @@
     [self objectsDesign];
     
     
-    //カメラ撮影
+    //カメラ撮影でとった写真のデータを取得
     NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
 
@@ -69,7 +69,7 @@
     }
 
  
-    //画面上にセットするデータを作成
+    //画面上にセット日付を取得
     self.DailyNumber.text =  [NSString stringWithFormat:@"%@",[eventDaysArySet valueForKey:@"days"]];;
 
 

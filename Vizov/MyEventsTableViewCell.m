@@ -21,33 +21,48 @@
 }
 
 
-- (void)setData:(NSMutableArray *)eventDaysArySet{
-    
-//    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-//    NSMutableArray *ary        = [usrDefault objectForKey:@"challenges"];
-//    NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
-//    NSMutableArray *selectedDic = [usrDefault objectForKey:@"selectedDic"];
-//    
-//    //カメラで撮影された画像 UserDefault
-//    NSMutableArray *selectedPic = [usrDefault objectForKey:@"selectedPic"];
-//    NSData *selectedPicture = [selectedPic valueForKey:@"picture"];
+- (void)setData:(NSMutableDictionary *)eventDaysArySet{
     
 
     
-    self.date.text =  [NSString stringWithFormat:@"%@ですよ！",eventDaysArySet];
     
-//    //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
-//    NSData *picData   = [NSData new];
-//    for (NSDictionary *dic in cameraAry) {
-//        if ([[dic valueForKey:@"date"] isEqualToString:eventDaysArySet] && [[dic valueForKey:@"id"] isEqualToNumber:[selectedDic valueForKey:@"id"]]) {
-//            picData = [dic valueForKey:@"picture"];
-//        }
-//    }
-//    
-//    // NSData→UIImage変換
-//    UIImage *setPic = [UIImage imageWithData:picData];
+    //カメラ撮影でとった写真のデータを取得
+    NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *cameraAry  = [usrDefault objectForKey:@"dailyPictures"];
     
-//    self.DailyPicture.image = setPic;
+    NSLog(@"%@",eventDaysArySet);
+    
+    NSString *day = [eventDaysArySet valueForKey:@"days"];
+    NSNumber *setId  = [eventDaysArySet valueForKey:@"id"];
+    
+    
+    NSLog(@"aa%@",eventDaysArySet);
+    
+    //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
+    NSMutableArray *setAry = [NSMutableArray array];
+    for (NSDictionary *dic in cameraAry) {
+        if ([[dic valueForKey:@"date"] isEqualToString:day] && [[dic valueForKey:@"id"]isEqualToNumber:setId]){
+            [setAry addObject:dic];
+        }
+    }
+    
+    UIImage *setPic;
+    NSString *setMemo;
+    if ([setAry count] > 0) {
+        
+        // NSData→UIImage変換
+        setPic = [UIImage imageWithData:[[setAry valueForKey:@"picture"]lastObject]];
+        NSLog(@"%@",setPic);
+        //Memo
+        setMemo = [[setAry valueForKey:@"memo"]lastObject];
+        
+        //データのセット
+        self.setMemo.text = setMemo;
+        self.pic.image = setPic;
+        self.date.text =  [NSString stringWithFormat:@"%@ですよ！",eventDaysArySet];
+        
+        
+    }
 
     
 }

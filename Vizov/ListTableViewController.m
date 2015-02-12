@@ -78,6 +78,12 @@
     return 1;
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    
+    //自前でハイライト解除
+    [self.listTableView deselectRowAtIndexPath:[self.listTableView indexPathForSelectedRow] animated:animated];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
@@ -120,7 +126,6 @@
     
     [cell setData:doneItems];
     
-    
     return cell;
 }
 
@@ -148,6 +153,7 @@
         MyEventsTableViewController *personalView = [segue destinationViewController];
         personalView.fromListView = YES;
     }
+
 }
 
 
@@ -208,8 +214,7 @@
 - (void)objectsDesign{
     
     // tableviewの境界線の色
-    self.listTableView.separatorColor = [UIColor whiteColor];
-    
+    self.listTableView.separatorColor = [UIColor turquoiseColor];
     
 }
 

@@ -827,6 +827,14 @@
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
     
+    //TextFieldのFlat化
+    self.makeNewTitle.font = [UIFont flatFontOfSize:16];
+    self.makeNewTitle.backgroundColor = [UIColor clearColor];
+    self.makeNewTitle.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
+    self.makeNewTitle.textFieldColor = [UIColor whiteColor];
+    self.makeNewTitle.borderColor = [UIColor turquoiseColor];
+    self.makeNewTitle.borderWidth = 2.0f;
+    self.makeNewTitle.cornerRadius = 3.0f;
 }
 
 

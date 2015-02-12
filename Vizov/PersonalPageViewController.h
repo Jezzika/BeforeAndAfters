@@ -32,6 +32,7 @@
 @property (nonatomic) BOOL fromCameraView;
 
 @property (strong, nonatomic) UIButton *toListEventButton;
+@property (weak, nonatomic) IBOutlet UIView *timerView;
 
 
 

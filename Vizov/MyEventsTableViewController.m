@@ -78,7 +78,7 @@
     NSString *str = [dic valueForKey:@"timer"];
     
     int myCount = (int)[str intValue];
-    
+
     return myCount;
 }
 
@@ -99,12 +99,8 @@
     
     int num = [timer intValue];
     
-    
     // 日付のオフセットを生成(次の日をとってくる)
     NSDateComponents *dateComp = [[NSDateComponents alloc] init];
-    
-    // x日後とする
-    int x;
     
     // x日後のNSDateインスタンスを取得する
     //初期化
@@ -112,22 +108,77 @@
     //日付のフォーマット指定
     df.dateFormat = @"yyyy/MM/dd";
     
-    NSDate *date = [NSDate date];
-    NSString *result = [NSString string];
+    NSString *date1 = [dict valueForKey:@"startDate"];
     
+    //NSStringから Date型に変更
+    NSDate *dateDate = [df dateFromString:date1];
+    NSDate *resultDate = [NSDate new];
+    
+    NSString *result = [NSString string];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
     NSMutableArray *eventDaysAry = [NSMutableArray array];
+    // x日後とする
+    int x;
     for (x=0; x<num; x++) {
-        
         [dateComp setDay:x];
-        date = [[NSCalendar currentCalendar] dateByAddingComponents:dateComp toDate:[NSDate date] options:0];
-        result = [df stringFromDate:date];
+        resultDate = [calendar dateByAddingComponents:dateComp toDate:dateDate options:0];
+        result = [df stringFromDate:resultDate];
         [eventDaysAry addObject:result];
         
     }
     
+    //イベントの日付ArrayをUserDefaultにて作成
+    NSMutableDictionary *daysDict = [NSMutableDictionary dictionary];
+    NSNumber *id = [dict valueForKey:@"id"];//選択されたdictのid
+    
+    NSMutableArray *aryForDays = [NSMutableArray array];
+    for (NSMutableDictionary *dict2 in eventDaysAry) {
+        daysDict = @{ @"id": id,@"days":dict2}.mutableCopy;
+        [aryForDays addObject:daysDict];
+    }
     
     
-    NSMutableArray *eventDaysArySet = eventDaysAry[indexPath.row];
+    //aryForDaysの中に選択されたidがあるかチェックするための配列
+    NSMutableArray *testAry   = [NSMutableArray array];
+    for (NSMutableDictionary *dic in aryForDays) {
+        if ([[[aryForDays valueForKey:@"id"]lastObject] isEqualToNumber:[dict valueForKey:@"id"]]) {
+            [testAry addObject:dic];
+        }
+    }
+    
+    
+    //重複データはとらない！id１個に紐づく日付の配列を作る
+    NSMutableArray *testAry2 = [[userDefault objectForKey:@"daysArray"] mutableCopy];
+    if ([testAry2 count] > 0){
+        for (NSMutableDictionary *dic2 in aryForDays) {
+            [testAry2 removeObject:dic2];
+            [testAry2 addObject:dic2];
+            [userDefault setObject:testAry2 forKey:@"daysArray"];
+            [userDefault synchronize];
+        }
+    } else {
+        for (NSMutableDictionary *dic2 in aryForDays) {
+            NSMutableArray *testAry2 = [[NSMutableArray alloc] initWithObjects:dic2, nil];
+            [testAry2 addObject:dic2];
+            [userDefault setObject:testAry2 forKey:@"daysArray"];
+            [userDefault synchronize];
+        }
+        
+        
+    }
+    
+    NSMutableArray *setDataAry = [[NSMutableArray array]mutableCopy];
+    
+    for (NSMutableDictionary *dic in testAry2) {
+        if ([dict valueForKey:@"id"] == [dic valueForKey:@"id"]){
+            [setDataAry addObject:dic];
+        }
+    }
+    
+    
+    NSMutableDictionary *eventDaysArySet =[[NSMutableDictionary dictionary]mutableCopy];
+    
+    eventDaysArySet = setDataAry[indexPath.row];
     
     
     //カスタムセルにデータを渡して表示処理を委譲

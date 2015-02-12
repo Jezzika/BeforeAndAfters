@@ -13,13 +13,13 @@
 #import "UIImage+FlatUI.h"
 #import "NSString+Icons.h"
 #import "FUIAlertView.h"
-
+#import "FUITextField.h"
 
 
 @interface NewPageViewController : UIViewController
 
 
-@property (weak, nonatomic) IBOutlet UITextField *makeNewTitle;
+@property (weak, nonatomic) IBOutlet FUITextField *makeNewTitle;
 
 @property (weak, nonatomic) IBOutlet UIImageView *beforeImageView;
 @property (weak, nonatomic) IBOutlet UITextView *makeNewDetail;

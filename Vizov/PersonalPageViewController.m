@@ -287,8 +287,6 @@
 
     
     NSMutableDictionary *eventDaysArySet =[[NSMutableDictionary dictionary]mutableCopy];
-    NSLog(@"あと%lu",[setDataAry count]);
-    NSLog(@"%lu",[testAry2 count]);
 
     eventDaysArySet = setDataAry[indexPath.row];
     
@@ -315,6 +313,8 @@
 
 - (void)objectsDesign{
     
+    //timerの背景
+    self.timerView.backgroundColor = [UIColor turquoiseColor];
 
 }
 
