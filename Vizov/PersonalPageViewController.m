@@ -168,7 +168,6 @@
     [self objectsDesign];
 }
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -315,7 +314,31 @@
     
     //timerの背景
     self.timerView.backgroundColor = [UIColor turquoiseColor];
-
+    
+    
+//    //BarButtonの色変更
+//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
+    
+//    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor cloudsColor]
+//                                  highlightedColor:[UIColor greenSeaColor]
+//                                      cornerRadius:3];
+//    
+    
+    //TextView目標に枠線をつける
+    self.settedDetail.layer.borderWidth = 3;
+    self.settedDetail.layer.borderColor = [[UIColor sunflowerColor] CGColor];
+    self.settedDetail.layer.cornerRadius = 6;
+    
+    //カウントダウンの丸枠
+    self.timerView.layer.cornerRadius = 6;
+    self.timerView.clipsToBounds = true;
+    
+    //タイトル
+    self.settedTitle.layer.cornerRadius = 6;
+    self.settedTitle.clipsToBounds = true;
+    self.settedTitle.tintColor = [UIColor cloudsColor];
+    self.settedTitle.textColor = [UIColor midnightBlueColor];
+    
 }
 
 

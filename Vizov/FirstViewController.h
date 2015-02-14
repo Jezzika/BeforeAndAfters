@@ -17,6 +17,7 @@
 #import "UIBarButtonItem+FlatUI.h"
 #import "UITableViewCell+FlatUI.h"
 #import "FUICellBackgroundView.h"
+#import "UITabBar+FlatUI.h"
 
 
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
@@ -25,9 +26,8 @@
 @property (weak, nonatomic) IBOutlet UINavigationItem *naviItem;
 @property (nonatomic) NSMutableArray *challengesNow;
 
-
-@property (strong, nonatomic) IBOutlet UILabel *realTime;
-@property (strong, nonatomic) IBOutlet UILabel *realTime2;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteItem;
+- (IBAction)deleteItemBtn:(id)sender;
 
 
 

@@ -19,6 +19,7 @@
 @property (nonatomic) NSTimer *timer;
 
 
+
 @end
 
 @implementation FirstViewController
@@ -27,30 +28,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    //現在時刻の表示
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:(1.0)
-                                                  target:self
-                                                selector:@selector(onTimer:)
-                                                userInfo:nil
-                                                 repeats:YES];
-    
-
-    
-    
     // Table ViewのデータソースにView Controller自身を設定する
     self.listTableView.delegate = self;
     self.listTableView.dataSource = self;
     self.listTableView.allowsSelection = YES;
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
-                                                                              style:UIBarButtonItemStyleBordered
-                                                                             target:self
-                                                                             action:@selector(didTapEditButton)];
+
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
-    self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
-    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor cloudsColor]
-                                  highlightedColor:[UIColor greenSeaColor]
-                                      cornerRadius:3];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
 
 }
 
@@ -59,51 +43,19 @@
     //自前でハイライト解除
     [self.listTableView deselectRowAtIndexPath:[self.listTableView indexPathForSelectedRow] animated:animated];
     
-    //デザインのメソッドを作成
-    [self objectsDesign];
+    // tableviewの境界線の色
+    self.listTableView.separatorColor = [UIColor clearColor];
+    // NavBarデザイン
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor turquoiseColor]];
     
+        
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
-}
 
-- (void)didTapEditButton
-{
-    [self.listTableView setEditing:!self.listTableView.editing animated:YES];
-    if (self.listTableView.editing) {
-        self.navigationItem.rightBarButtonItem.title = @"Cancel";
-    } else {
-        self.navigationItem.rightBarButtonItem.title = @"Edit";
-    }
-}
-
-
-
--(void)onTimer:(NSTimer*)timer {
-    //現在時刻取得
-    NSDate* now = [NSDate date];
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    
-    NSDateComponents *dateCamponents = [calendar components:NSCalendarUnitYear |
-                                        NSCalendarUnitMonth  |
-                                        NSCalendarUnitDay    |
-                                        NSCalendarUnitHour   |
-                                        NSCalendarUnitMinute |
-                                        NSCalendarUnitSecond
-                                                   fromDate:now];
-    
-    self.realTime.text = [NSString stringWithFormat:@"%ld/ %02ld/ %02ld",
-                          (long)dateCamponents.year,
-                          (long)dateCamponents.month,
-                          (long)dateCamponents.day];
-    
-    self.realTime2.text = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",
-                           (long)dateCamponents.hour,
-                           (long)dateCamponents.minute,
-                           (long)          dateCamponents.second];
 }
 
 
@@ -165,11 +117,17 @@
         [cell setData:items];
     
 
-        [cell configureFlatCellWithColor:[UIColor turquoiseColor]
+        [cell configureFlatCellWithColor:[UIColor whiteColor]
                            selectedColor:[UIColor cloudsColor]];
-
+    
+    
+        cell.layer.borderWidth =4;
+        cell.layer.borderColor = [UIColor midnightBlueColor].CGColor;
         cell.cornerRadius = 5.0f; // optional
         cell.separatorHeight = 2.0f; // optional
+        
+    
+
 
 
         return cell;
@@ -183,32 +141,34 @@
         [self performSegueWithIdentifier:@"toPersonalPage" sender:indexPath];
 }
 
+//削除ボタンの実装メソッド
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
     
     NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
-    
-    NSLog(@"する前%lu",(unsigned long)[ary count]);
-    NSLog(@"する前%@",ary);
-    
+
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-  
-        // Delete the row from the data source
-        NSInteger row = [indexPath row];
-        [self.challengesNow removeObjectAtIndex: row];
-//
-//        [tableView deleteRowsAtIndexPaths:@[indexPath]  withRowAnimation:UITableViewRowAnimationFade];
+        
+        //該当するデータを削除する
+        [ary removeObject:self.challengesNow[indexPath.row]];
+        [usr setObject:ary forKey:@"challenges"];
+        [usr synchronize];
+        
+        //テーブルから行を削除
+        [self.listTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
     } else {
         
     }
     
-    NSLog(@"した後%lu",(unsigned long)[ary count]);
 }
 
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES; //行の並べ替えを可に
+}
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -232,25 +192,26 @@
 
 - (void)objectsDesign{
     
-    // BarBtnFlat化
-    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor turquoiseColor]
-                                  highlightedColor:[UIColor greenSeaColor]
-                                      cornerRadius:3];
-    
 
     
     // NavBarデザイン
-    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor cloudsColor]];
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor turquoiseColor]];
+    
     
     
     // tableviewの境界線の色
-    self.listTableView.separatorColor = [UIColor whiteColor];
-    
-
+    self.listTableView.separatorColor = [UIColor clearColor];
     
     
 
 }
 
+- (IBAction)deleteItemBtn:(id)sender {
+    
+    [self.listTableView setEditing:!self.listTableView.editing animated:YES];
+
+    
+    
+}
 @end
 

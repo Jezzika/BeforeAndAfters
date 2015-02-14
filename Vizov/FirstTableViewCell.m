@@ -65,6 +65,27 @@
             
         }
     
+        //TextViewメモに枠線をつける
+        self.challengeStatus.layer.borderWidth = 3;
+        self.challengeStatus.textColor = [UIColor turquoiseColor];
+        self.challengeStatus.backgroundColor = [UIColor whiteColor];
+        self.challengeStatus.layer.borderColor = (__bridge CGColorRef)([UIColor turquoiseColor]);
+        self.challengeStatus.layer.cornerRadius = 3;
+        self.challengeStatus.clipsToBounds = true;
+    
+        //title
+        self.challegeTitle.textColor = [UIColor midnightBlueColor];
+        self.challegeTitle.backgroundColor = [UIColor clearColor];
+        self.challegeTitle.layer.cornerRadius = 3;
+        self.challegeTitle.layer.borderColor = [UIColor midnightBlueColor].CGColor;
+        self.challegeTitle.layer.borderWidth = 6;
+    
+        self.challegeTitle.clipsToBounds = true;
+
+        //beforeImageをリメイク
+        self.beforeImageView.layer.cornerRadius = 6;
+        self.beforeImageView.clipsToBounds = true;
+    
 
 }
 

@@ -26,6 +26,7 @@
 		556B4EA61A84B6C00095DD2E /* ListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 556B4EA51A84B6C00095DD2E /* ListTableViewCell.m */; };
 		55D6F4481A85C5E200840784 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55D6F4471A85C5E200840784 /* CoreText.framework */; };
 		55EA69601A7738240078424E /* FirstTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55EA695F1A7738240078424E /* FirstTableViewCell.m */; };
+		55FA98801A8D8B8F001BA99A /* TabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55FA987F1A8D8B8F001BA99A /* TabBarController.m */; };
 		7CFB1BF2F69A62351ADBEDCB /* libPods-Vizov.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 246B179DD3A2B3B3F428FD0E /* libPods-Vizov.a */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,8 @@
 		55D6F4471A85C5E200840784 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		55EA695E1A7738240078424E /* FirstTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewCell.h; sourceTree = "<group>"; };
 		55EA695F1A7738240078424E /* FirstTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewCell.m; sourceTree = "<group>"; };
+		55FA987E1A8D8B8F001BA99A /* TabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarController.h; sourceTree = "<group>"; };
+		55FA987F1A8D8B8F001BA99A /* TabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 			children = (
 				552287331A68ADD7006E119D /* AppDelegate.h */,
 				552287341A68ADD7006E119D /* AppDelegate.m */,
+				55FA987E1A8D8B8F001BA99A /* TabBarController.h */,
+				55FA987F1A8D8B8F001BA99A /* TabBarController.m */,
 				552287581A68B431006E119D /* FirstViewController.h */,
 				552287591A68B431006E119D /* FirstViewController.m */,
 				55EA695E1A7738240078424E /* FirstTableViewCell.h */,
@@ -341,6 +346,7 @@
 				55119D4B1A70A15E00A1C988 /* PersonalPageViewController.m in Sources */,
 				552287351A68ADD7006E119D /* AppDelegate.m in Sources */,
 				552287321A68ADD7006E119D /* main.m in Sources */,
+				55FA98801A8D8B8F001BA99A /* TabBarController.m in Sources */,
 				552287601A694679006E119D /* CameraViewController.m in Sources */,
 				5522875A1A68B431006E119D /* FirstViewController.m in Sources */,
 				552287381A68ADD7006E119D /* Vizov.xcdatamodeld in Sources */,

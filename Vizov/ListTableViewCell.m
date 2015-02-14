@@ -23,18 +23,13 @@
 - (void)setData:(NSDictionary *)doneItems{
 
     //タイトル
-    self.titleLabel.text = [doneItems valueForKeyPath:@"title"];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@DAYS %@",[doneItems valueForKey:@"timer"],[doneItems valueForKeyPath:@"title"]];
     
     //Before写真のイメージ
     NSData *pictData = [doneItems valueForKeyPath:@"picture"];
-    
     // NSData→UIImage変換
     UIImage *picture = [UIImage imageWithData:pictData];
-    
     self.beforeImage.image = picture;
-    
-    //かかった期間
-    self.totalDays.text = [NSString stringWithFormat:@"期間：%@日",[doneItems valueForKey:@"timer"]];
     
     //After写真のイメージ（カメラ撮影でとった写真のデータを取得）
     NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
@@ -58,9 +53,33 @@
     self.afterImage.image = setPic;
     
         
-
-
     
+    
+    
+    //デザイン
+    //BEFOREラベル/Image
+    self.beforeLabel.backgroundColor = [UIColor peterRiverColor];
+    self.beforeLabel.layer.cornerRadius = 3;
+    self.beforeLabel.clipsToBounds = true;
+
+    self.beforeImage.layer.cornerRadius = 3;
+    self.beforeImage.clipsToBounds = true;
+    
+    //AFTERラベル/Image
+    self.afterLabel.backgroundColor = [UIColor alizarinColor];
+    self.afterLabel.layer.cornerRadius = 3;
+    self.afterLabel.clipsToBounds = true;
+    
+    self.afterImage.layer.cornerRadius = 3;
+    self.afterImage.clipsToBounds = true;
+    
+    //Title
+    self.titleLabel.backgroundColor = [UIColor cloudsColor];
+    self.titleLabel.textColor = [UIColor midnightBlueColor];
+    
+    //totalDays
+    self.totalDays.backgroundColor = [UIColor cloudsColor];
+    self.totalDays.textColor = [UIColor midnightBlueColor];
     
 }
 

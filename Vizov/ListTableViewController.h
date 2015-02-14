@@ -24,6 +24,6 @@
 
 
 @property (strong, nonatomic) IBOutlet UITableView *listTableView;
-@property (strong, nonatomic) IBOutlet UITableView *doneListTableView;
+
 
 @end

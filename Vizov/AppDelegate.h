@@ -14,6 +14,7 @@
 #import "UIFont+FlatUI.h"
 #import "UIImage+FlatUI.h"
 #import "NSString+Icons.h"
+#import "UITabBar+FlatUI.h"
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate>

@@ -93,13 +93,14 @@
     // ボタンを作成する。
     UIButton* closeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     closeButton.frame = CGRectMake(210,10,100,30);
-    [closeButton setTitle:@"閉じる" forState:UIControlStateNormal];
+    [closeButton setTitle:@"Back" forState:UIControlStateNormal];
     // ボタンを押したときによばれる動作を設定する。
     [closeButton addTarget:self action:@selector(closeKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     // ボタンをViewに貼る
     [accessoryView addSubview:closeButton];
     
     self.makeNewDetail.inputAccessoryView = accessoryView;
+
 }
 
 -(void)closeKeyboard:(id)sender{
@@ -373,7 +374,7 @@
 - (void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     // ボタンインデックスをチェックする
-    if (buttonIndex >= 3) {
+    if (buttonIndex >= 2) {
         return;
     }
     
@@ -582,7 +583,7 @@
     [_myButton setTitle:@"SET" forState:UIControlStateNormal];
     
     //ボタンの文字色指定
-    [_myButton setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
+    [_myButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     
     //メソッドとの紐付け
@@ -598,10 +599,10 @@
     
     _myButton2 = [[UIButton alloc] initWithFrame:CGRectMake(150, 200, 40, 20)];
     
-    [_myButton2 setTitle:@"設定" forState:UIControlStateNormal];
+    [_myButton2 setTitle:@"SET" forState:UIControlStateNormal];
     
     //ボタンの文字色指定
-    [_myButton2 setTitleColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1] forState:UIControlStateNormal];
+    [_myButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     
     //メソッドとの紐付け
@@ -622,7 +623,7 @@
     _myView.alpha = 1.0;
     
     //ビューの色を設定
-    [_myView setBackgroundColor:[UIColor colorWithRed:1.0 green:0.54901 blue:0 alpha:1]];
+    [_myView setBackgroundColor:[UIColor turquoiseColor]];
     
     [self.view addSubview:_myView];
     
@@ -638,14 +639,14 @@
     _myView2.alpha = 1.0;
     
     //ビューの色を設定
-    [_myView2 setBackgroundColor:[UIColor colorWithRed:1.0 green:0.54901 blue:0 alpha:1]];
+    [_myView2 setBackgroundColor:[UIColor turquoiseColor]];
     
     [self.view addSubview:_myView2];
     
 }
 
 
-//オレンジ色のビューに紐付いたデートピッカーオブジェクト(Timer用）
+//ビューに紐付いたデートピッカーオブジェクト(Timer用）
 -(void)createdDatePicker{
 
     //_myDatePickerオブジェクトを作成
@@ -670,7 +671,7 @@
     
 }
 
-//オレンジ色のビューに紐付いたデートピッカーオブジェクト(Notification)
+//ビューに紐付いたデートピッカーオブジェクト(Notification)
 -(void)createdDatePicker2{
     
     
@@ -684,9 +685,6 @@
     
     _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _myDatePicker2.datePickerMode = UIDatePickerModeTime;
-    
-//    //10分間隔に設定
-//    _myDatePicker2.minuteInterval = 10;
     
     //_myDatePickerのサイズを選択
     CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
@@ -826,15 +824,41 @@
     self.NowBtnDesign.titleLabel.font = [UIFont boldFlatFontOfSize:20];
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+
     
-    //TextFieldのFlat化
-    self.makeNewTitle.font = [UIFont flatFontOfSize:16];
-    self.makeNewTitle.backgroundColor = [UIColor clearColor];
-    self.makeNewTitle.edgeInsets = UIEdgeInsetsMake(4.0f, 15.0f, 4.0f, 15.0f);
-    self.makeNewTitle.textFieldColor = [UIColor whiteColor];
+    self.navigationItem.leftBarButtonItem.tintColor = [UIColor turquoiseColor];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
+
+    
+    //TextViewメモに枠線をつける
+    self.makeNewDetail.layer.borderWidth = 3;
+    self.makeNewDetail.layer.borderColor = [[UIColor sunflowerColor] CGColor];
+    self.makeNewDetail.layer.cornerRadius = 6;
+    
+    //beforeLabelに枠線をつける
+    self.beforeLabel.layer.borderWidth = 3;
+    self.beforeLabel.backgroundColor = [UIColor turquoiseColor];
+    self.beforeLabel.layer.cornerRadius = 3;
+    self.beforeLabel.layer.borderColor = (__bridge CGColorRef)([UIColor sunflowerColor]);
+    self.beforeLabel.clipsToBounds = true;
+    
+    //beforeImageに枠線をつける
+    self.goalLabel.layer.borderWidth = 3;
+    self.goalLabel.backgroundColor = [UIColor turquoiseColor];
+    self.goalLabel.layer.cornerRadius = 3;
+    self.goalLabel.layer.borderColor = (__bridge CGColorRef)([UIColor sunflowerColor]);
+    self.goalLabel.clipsToBounds = true;
+    
+    
+    // tableviewの境界線の色
+    self.setTableView.separatorColor = [UIColor turquoiseColor];
+    
+    //textFieldの線の色変更
     self.makeNewTitle.borderColor = [UIColor turquoiseColor];
-    self.makeNewTitle.borderWidth = 2.0f;
-    self.makeNewTitle.cornerRadius = 3.0f;
+    self.makeNewTitle.borderWidth = 2;
+    self.makeNewTitle.cornerRadius = 3;
+    
+
 }
 
 

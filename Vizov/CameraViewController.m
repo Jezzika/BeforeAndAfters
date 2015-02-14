@@ -15,6 +15,7 @@
 @property (nonatomic) NSMutableArray *challengesNow;
 
 @property (nonatomic) NSString *selectTitle;
+@property (weak, nonatomic) IBOutlet UILabel *rara;
 
 
 @end
@@ -46,7 +47,9 @@
     
     //デザインの処理メソッドを作成
     [self objectsDesign];
-
+    
+    self.rara.backgroundColor = [UIColor turquoiseColor];
+    self.rara.textColor = [UIColor whiteColor];
 
 
 
@@ -63,7 +66,7 @@
     // ボタンを作成する。
     FUIButton* closeButton = [FUIButton buttonWithType:UIButtonTypeRoundedRect];
     closeButton.frame = CGRectMake(210,10,100,30);
-    [closeButton setTitle:@"閉じる" forState:UIControlStateNormal];
+    [closeButton setTitle:@"Back" forState:UIControlStateNormal];
     // ボタンを押したときによばれる動作を設定する。
     [closeButton addTarget:self action:@selector(closeKeyboard:) forControlEvents:UIControlEventTouchUpInside];
     // ボタンをViewに貼る
@@ -74,6 +77,13 @@
     //デザインの処理メソッドを作成
     [self objectsDesign];
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    
+    //デザインの処理メソッドを作成
+    [self objectsDesign];
+
 }
 
 -(void)closeKeyboard:(id)sender{
@@ -87,7 +97,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)selectPhoto:(UIBarButtonItem *)sender {
+
+
+- (IBAction)selectPhotoBtn:(id)sender {
     
     // アクションシートを作る
     UIActionSheet*  sheet;
@@ -101,7 +113,6 @@
     // アクションシートを表示する
     [sheet showInView:self.view];
     
-
 }
 
 - (IBAction)cancelBtn:(id)sender {
@@ -195,7 +206,7 @@
 - (void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     // ボタンインデックスをチェックする
-    if (buttonIndex >= 3) {
+    if (buttonIndex >= 2) {
         return;
     }
     
@@ -343,13 +354,23 @@
     self.ScrollView.backgroundColor = [UIColor whiteColor];
     
     
-    if ([self.cameraPic.image  isEqual: [UIImage imageNamed:@"noimage"]] || !(self.textView.text)) {
+    if ([self.cameraPic.image  isEqual: [UIImage imageNamed:@"noimage2"]] || !(self.textView.text)) {
         //ボタンの文字色指定（最初うっすら透明）
         self.saveBtnItem.tintColor = [UIColor whiteColor];
+        self.saveBtnItem.enabled = NO;
     } else {
         self.saveBtnItem.tintColor = [UIColor turquoiseColor];
+        self.saveBtnItem.enabled = YES;
     }
-
+    
+    //TextViewに枠線をつける
+    self.textView.layer.borderWidth = 3;
+    self.textView.layer.borderColor = [[UIColor turquoiseColor] CGColor];
+    self.textView.layer.cornerRadius = 6;
+    
+    
+    //BarBtnItemsに色づけ
+    self.cancelBtnItem.tintColor = [UIColor turquoiseColor];
     
  
 }

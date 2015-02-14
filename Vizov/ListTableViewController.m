@@ -57,9 +57,9 @@
         
     }
     
-    self.doneListTableView.delegate = self;
-    self.doneListTableView.dataSource = self;
-    self.doneListTableView.allowsSelection = YES;
+    self.listTableView.delegate = self;
+    self.listTableView.dataSource = self;
+    self.listTableView.allowsSelection = YES;
     
     //デザイン用のメソッドを作成
     [self objectsDesign];
@@ -82,7 +82,10 @@
     
     //自前でハイライト解除
     [self.listTableView deselectRowAtIndexPath:[self.listTableView indexPathForSelectedRow] animated:animated];
+
+    
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
@@ -98,7 +101,15 @@
     
     self.doneChallenges = challengesDone;
     
-    return [challengesDone count];
+    NSInteger rows;
+    
+    if ([challengesDone count] > 0) {
+        rows = [challengesDone count];
+    } else {
+        rows = 0;
+    }
+    
+    return rows;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -126,15 +137,21 @@
     
     [cell setData:doneItems];
     
+    [cell configureFlatCellWithColor:[UIColor whiteColor]
+                       selectedColor:[UIColor cloudsColor]];
+    
+    cell.cornerRadius = 5.0f; // optional
+    cell.separatorHeight = 2.0f; // optional
+    
     return cell;
 }
 
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-}
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [self performSegueWithIdentifier:@"toMyEvents" sender:indexPath];
+//}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"toMyEvents"]){
@@ -156,65 +173,16 @@
 
 }
 
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (void)objectsDesign{
     
     // tableviewの境界線の色
-    self.listTableView.separatorColor = [UIColor turquoiseColor];
+    self.listTableView.separatorColor = [UIColor cloudsColor];
+    
+    // NavBarデザイン
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor whiteColor]];
+    
+
+    
     
 }
 

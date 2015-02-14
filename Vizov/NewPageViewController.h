@@ -33,9 +33,11 @@
 
 - (IBAction)returnNewTitle:(id)sender;
 - (IBAction)showCameraSheet:(id)sender;
-
 - (IBAction)tapNowButton:(id)sender;
 
 @property (weak, nonatomic) IBOutlet FUIButton *NowBtnDesign;
+@property (weak, nonatomic) IBOutlet UILabel *beforeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *goalLabel;
+
 
 @end

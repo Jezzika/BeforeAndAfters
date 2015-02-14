@@ -17,6 +17,8 @@
 #import "UITableViewCell+FlatUI.h"
 #import "FUICellBackgroundView.h"
 #import "UIBarButtonItem+FlatUI.h"
+#import "UINavigationBar+FlatUI.h"
+#import "UIBarButtonItem+FlatUI.h"
 
 @interface CameraViewController : UIViewController
 
@@ -27,9 +29,10 @@
 
 
 @property (strong, nonatomic) IBOutlet UIScrollView *ScrollView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelBtnItem;
 
+- (IBAction)selectPhotoBtn:(id)sender;
 
-- (IBAction)selectPhoto:(UIBarButtonItem *)sender;
 
 - (IBAction)cancelBtn:(id)sender;
 

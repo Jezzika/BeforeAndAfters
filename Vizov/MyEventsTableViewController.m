@@ -9,7 +9,7 @@
 #import "MyEventsTableViewController.h"
 #import "MyEventsTableViewCell.h"
 
-@interface MyEventsTableViewController ()
+@interface MyEventsTableViewController ()<UITableViewDataSource,UITableViewDelegate>
 @end
 
 @implementation MyEventsTableViewController
@@ -24,35 +24,39 @@
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-        NSDictionary *dic        = [usrDefault objectForKey:@"selectedDic2"];
-
-        //UserDefaultの個別データ表示(ホームの一覧リストから）
-        NSString *title;
-        NSString *detail;
-        NSData *pictData;
-        UIImage *picture;
-        NSString *finDate;
-
-        if (self.fromListView) {
-            title = [dic valueForKeyPath:@"title"];
-            
-            detail = [dic valueForKeyPath:@"detail"];
-            
-            pictData = [dic valueForKeyPath:@"picture"];
-            
-            // NSData→UIImage変換
-            picture = [UIImage imageWithData:pictData];
-            
-            finDate = [dic valueForKey:@"finDate"];
-            
-        }
+//        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
+//        NSDictionary *dic        = [usrDefault objectForKey:@"selectedDic2"];
+//
+//        //UserDefaultの個別データ表示(ホームの一覧リストから）
+//        NSString *title;
+//        NSString *detail;
+//        NSData *pictData;
+//        UIImage *picture;
+//        NSString *finDate;
+//
+//        if (self.fromListView) {
+//            title = [dic valueForKeyPath:@"title"];
+//            
+//            detail = [dic valueForKeyPath:@"detail"];
+//            
+//            pictData = [dic valueForKeyPath:@"picture"];
+//            
+//            // NSData→UIImage変換
+//            picture = [UIImage imageWithData:pictData];
+//            
+//            finDate = [dic valueForKey:@"finDate"];
+//            
+//            self.
+//            
+//        }
 
         // Table ViewのデータソースにView Controller自身を設定する
         self.myEventsTable.delegate = self;
         self.myEventsTable.dataSource = self;
         self.myEventsTable.allowsSelection = YES;
     
+    //デザイン
+    [self objectsDesign];
     
 }
 
@@ -86,7 +90,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     //セルの名前をつける。StorybordのprototypeのセルのIdentifierで設定しないとエラーになる。
-    static NSString *CellIdentifier = @"MyCell";
+    static NSString *CellIdentifier = @"myCell";
     MyEventsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[MyEventsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -188,71 +192,26 @@
 }
 
 
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 - (IBAction)shareButton:(id)sender {
     
-    NSString *text = @"Vizov/Before and Afters";
-    NSURL *url = [NSURL URLWithString:@"http://google.com"];
+    NSString *text = @"LIKE!! iPhone App 'Vizov/Before and Afters'";
+//    NSURL *url = [NSURL URLWithString:@"http://mmmm"];
     NSArray *activityItems = @[text];
-    
     UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     
     //セグエ線を使用しない場合のモーダル表示
     [self presentViewController:activityView animated:YES completion:nil];
 
+}
+
+-(void)objectsDesign {
+    
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor whiteColor];
+  
+    // NavBarデザイン
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor turquoiseColor]];
+    
+
+    
 }
 @end
