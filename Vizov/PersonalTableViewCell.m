@@ -38,9 +38,6 @@
     NSString *day = [eventDaysArySet valueForKey:@"days"];
     NSNumber *setId  = [eventDaysArySet valueForKey:@"id"];
     
-
-    NSLog(@"aa%@",eventDaysArySet);
-
     //カメラで撮影したイメージ（セルの日付とマッチしたもの）を取り出す
     NSMutableArray *setAry = [NSMutableArray array];
     for (NSDictionary *dic in cameraAry) {
@@ -50,14 +47,14 @@
     }
     
 
-    NSLog(@"おねがいいい%lu",[setAry count]);
     UIImage *setPic;
     NSString *setMemo;
+    
     if ([setAry count] > 0) {
         
         // NSData→UIImage変換
         setPic = [UIImage imageWithData:[[setAry valueForKey:@"picture"]lastObject]];
-        NSLog(@"%@",setPic);
+
         //Memo
         setMemo = [[setAry valueForKey:@"memo"]lastObject];
         
@@ -71,6 +68,13 @@
  
     //画面上にセット日付を取得
     self.DailyNumber.text =  [NSString stringWithFormat:@"%@",[eventDaysArySet valueForKey:@"days"]];
+    
+    if ([self.DailyNumber.text  isEqual: @"(null)"]){
+        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+        NSDictionary *dict = [userDefault objectForKey:@"selectedDic"];
+        NSString *date = [dict valueForKey:@"startDate"];
+        self.DailyNumber.text = date;
+    }
 
 
 

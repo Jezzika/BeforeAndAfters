@@ -10,26 +10,20 @@
 #import "PersonalPageViewController.h"
 #import "CLImageEditor.h"
 
-@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITableViewDelegate, UITableViewDataSource,UIActionSheetDelegate,CLImageEditorDelegate,UITextFieldDelegate,FUIAlertViewDelegate>
+@interface NewPageViewController ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,CLImageEditorDelegate,UITextFieldDelegate,FUIAlertViewDelegate>
 {
     UIButton *_myButton;
-    UIButton *_myButton2;
     UIView *_myView;
-    UIView *_myView2;
     UIDatePicker *_myDatePicker;
-    UIDatePicker *_myDatePicker2;
-    
+
     //Viewの表示フラグ YES = 表示 NO = 非表示
     BOOL _isVisible;
-    
 
 }
 
 @property (nonatomic) NSString *setFinalDate;
 @property (nonatomic) NSDate *notificationDate;
 @property (nonatomic) NSDate *finaldate;
-@property (nonatomic) UILabel *tag1;
-@property (nonatomic) UILabel *tag2;
 
 
 
@@ -54,10 +48,6 @@
         self.makeNewTitle.text = str;
     }
     
-    self.setTableView.delegate = self;
-    self.setTableView.dataSource = self;
-    self.CellNames = [NSArray arrayWithObjects:@"CellFirst", @"CellSecond", @"CellThird", nil];
-    
     //デザイン用のメソッドを作成
     [self objectsDesign];
     
@@ -73,15 +63,12 @@
     
     //オレンジ色のビューオブジェクトを生成
     [self createdView];
-    [self createdView2];
     
     //オレンジ色のビューオブジェクトに紐付いたDatePickerを生成
     [self createdDatePicker];
-    [self createdDatePicker2];
     
     //btnオブジェクトの生成
     [self createdBtn];
-    [self createdBtn2];
     
     //最初は非表示なのでNO
     _isVisible = NO;
@@ -112,18 +99,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
 
 - (IBAction)returnNewTitle:(id)sender {
     //キーボードがreturn押して落ちるように、このメソッドの存在は消さない！
@@ -166,12 +141,15 @@
         return NO;
     }
     
-    NSString *strNgWord = @"\"\\#$%&'()@[]{}|^~=;:?<>,/-*.";	// チェック対象の文字を複数定義
+    // チェック対象の文字を複数定義
+    NSString *strNgWord = @"\"\\#$%&'()@[]{}|^~=;:?<>,/-*.";
     
     // 無効な文字列が含まれていないかどうかチェック
     for (int i=0; i<[strNgWord length]; i++) {
+        
     // チェック対象の文字を設定
     NSString *strCk = [strNgWord substringWithRange:NSMakeRange(i, 1)];
+        
     // 入力値がNGワードと一致する場合
         if ([string isEqual:strCk]) {
         // 入力取り消し
@@ -227,12 +205,11 @@
         NSString *strNow = [df stringFromDate:today];
     
     
-    
-    if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@"<>"] || [self.setFinalDate isEqualToString:strNow]){
+    if ([self.makeNewTitle.text  isEqual:@""] || [self.makeNewDetail.text isEqual:@""] || [self.beforeImageView.image isEqual:@"<>"] || [self.setFinalDate isEqualToString:strNow] || self.setFinalDate == nil){
             
             FUIAlertView *alert = [[FUIAlertView alloc]
-                                  initWithTitle:@"エラー"
-                                  message:@"空欄を入力して下さい"
+                                  initWithTitle:@"Error"
+                                  message:@"Fill in the blanks"
                                   delegate:self
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil];
@@ -250,10 +227,8 @@
         [alert show];
             
             
-        } else {
+    } else {
             
-    
-
         NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
         
         // 入力したいデータを取り出し
@@ -263,6 +238,7 @@
         
         //入力したいデータ　（データ番号）
         int num = (int)[userDefault integerForKey:@"maxId"];
+            
         if (num == nil){
             num = 1;
             [userDefault setInteger:num forKey:@"maxId"];
@@ -278,20 +254,15 @@
         NSString *type = @"now"; //now,success,failure のどれか（ここではnow)
         
         //カウントダウン日数のデータ
-        NSString *countDown = self.tag1.text;
+        NSString *countDown = self.finishSetLabel.text;
         
         //終了日
         NSString *finDate = self.setFinalDate;
     
-        
-        //通知タイム
-        NSString *notification = self.tag2.text;
-        
         // 入力したいデータを辞書型にまとめる
-        NSMutableDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"startDate":strNow, @"notification": notification}.mutableCopy;
+        NSMutableDictionary *dic = @{@"id": [NSNumber numberWithInt:num], @"title": title, @"detail": detail, @"picture": picture, @"type": type, @"timer":countDown, @"finDate":finDate, @"startDate":strNow}.mutableCopy;
         
         // 現状で保存されているデータ一覧を取得
-        
         NSMutableArray *array = [[userDefault objectForKey:@"challenges"] mutableCopy];
         if ([array count] > 0) {
             [array addObject:dic];
@@ -301,73 +272,28 @@
             [userDefault setObject:array forKey:@"challenges"];
         }
         [userDefault synchronize];
-    
-    
-        //通知アラート設定-------------------------------------
-        //現在日付
-        NSDate *now = [NSDate date];
-        
-        NSCalendar *cal = [NSCalendar currentCalendar];
-        NSDateComponents *comp = [[NSDateComponents alloc] init];
-        [comp setDay:0];
-        
-        // 現在から指定した日付との差分を、日を基準にして取得する。
-        NSDateComponents *def1 = [cal components:NSCalendarUnitDay fromDate:now toDate:self.finaldate options:0];
-        
-        int countdownDayNumber = (int)[def1 day];
-        
-        
-        //インスタンス化(ローカル通知を作成）
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        if (localNotification == nil){
-            return;
-        }
-        
-        // NSDateFormatter を用意します。
-        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-        // 変換用の書式を設定
-        [formatter setDateFormat:@"HH:mm"];
-        
-        
-        //-------- localNotificationの設定 -------------------
-        countdownDayNumber = countdownDayNumber + 1;
-        
-        //通知を受ける時刻を指定
-        localNotification.fireDate = self.notificationDate;
-        
-        //通知メッセージの本文(チャレンジのタイトル)
-        localNotification.alertBody = [NSString stringWithFormat:@"%@:あと%d日です",title,countdownDayNumber];
-        
-        //アイコンバッチの数字
-        localNotification.applicationIconBadgeNumber = 1;
-        
-        //通知メッセージアラートのボタンに表示される文字を指定
-        localNotification.alertAction = @"Open";
-            
-        // 効果音は標準の効果音を利用する(バイブも）
-        localNotification.soundName = UILocalNotificationDefaultSoundName;
-        
-        // タイムゾーンを指定する
-        localNotification.timeZone = [NSTimeZone defaultTimeZone];
-        
-        // 毎日繰り返す
-        localNotification.repeatInterval = NSCalendarUnitDay;
-        
-        //作成した通知イベント情報をアプリケーションに登録
-        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-        
-        
-        
-        //-------- localNotification End ----------------------
-    
 
     
         //一つ前の画面に戻す
         [self.navigationController popViewControllerAnimated:YES];
         
-        }
+    }
 
 
+}
+
+- (IBAction)finishDateBtn:(id)sender {
+    [UIView beginAnimations:@"animateViewrOn" context:nil];
+    [UIView setAnimationDuration:0.3];
+    
+    if(_isVisible == NO){
+        _myButton.frame = CGRectMake(150, 200, 40, 20);
+        _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
+        _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
+        _isVisible = YES;
+    }
+    
+    [UIView commitAnimations];
 }
 
 
@@ -473,103 +399,29 @@
     
     editor.delegate = self;
     
-    [picker pushViewController:editor animated:YES];
+    //モーダルで呼び出す
+    [picker presentViewController:editor animated:YES completion: nil];
+
 }
 
 - (void)imageEditor:(CLImageEditor *)editor didFinishEdittingWithImage:(UIImage *)image
 {
     self.beforeImageView.image = image;
-    
-    [editor dismissViewControllerAnimated:YES completion:nil];
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 
 - (void) imageEditorDidCancel:(CLImageEditor *)editor{
     // Editorを隠す
     [self dismissViewControllerAnimated:YES completion:nil];
-    
-    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
-        // イメージピッカーを隠す
-        [self dismissViewControllerAnimated:YES completion:nil];
+    // イメージピッカーを隠す
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
-//〜ここから、TableView部分の設定画面に〜
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-        // セクション数を返す
-        return 3;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-        if ([indexPath isEqual:[NSIndexPath indexPathForRow:2 inSection:0]]) {
-            return nil;
-        } else {
-            return indexPath;
-        }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        NSString *cellName = [self.CellNames objectAtIndex:indexPath.row];
-        UITableViewCell *cell = [self.setTableView dequeueReusableCellWithIdentifier:cellName];
-    
-        //表示タグ
-        self.tag1 = (UILabel *)[self.setTableView viewWithTag:1];
-        self.tag2 = (UILabel *)[self.setTableView viewWithTag:2];
-
-    
-        return cell;
-
-}
-
--(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-        return 44;
-}
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-        if (indexPath.row == 0){
-            
-            [UIView beginAnimations:@"animateViewrOn" context:nil];
-            [UIView setAnimationDuration:0.3];
-            
-            if(_isVisible == NO){
-                _myButton.frame = CGRectMake(150, 200, 40, 20);
-                _myView.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-                _myDatePicker.frame = CGRectMake(0, 0, 400, 20);
-                _isVisible = YES;
-            }
-            
-            [UIView commitAnimations];
-            
-        }
-    
-        if (indexPath.row == 1) {
-            [UIView beginAnimations:@"animateViewrOn" context:nil];
-            [UIView setAnimationDuration:0.3];
-            
-            if(_isVisible == NO){
-                _myButton2.frame = CGRectMake(150, 200, 40, 20);
-                _myView2.frame = CGRectMake(0, self.view.bounds.size.height-290, self.view.bounds.size.width, 290);
-                 _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
-                _isVisible = YES;
-            }
-            
-            [UIView commitAnimations];
-
-        }
-}
-
 
 //〜ここから時間設定〜
 
@@ -577,43 +429,20 @@
 -(void)createdBtn{
     
     //ボタンオブジェクトを生成
-    
     _myButton = [[UIButton alloc] initWithFrame:CGRectMake(150, 200, 40, 20)];
-    
     [_myButton setTitle:@"SET" forState:UIControlStateNormal];
     
     //ボタンの文字色指定
     [_myButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-
     
     //メソッドとの紐付け
     [_myButton addTarget:self action:@selector(tapBtn:) forControlEvents:UIControlEventTouchUpInside];
-    
     [_myView addSubview:_myButton];
     
 }
-//ボタンオブジェクト(Notification用）
--(void)createdBtn2{
-    
-    //ボタンオブジェクトを生成
-    
-    _myButton2 = [[UIButton alloc] initWithFrame:CGRectMake(150, 200, 40, 20)];
-    
-    [_myButton2 setTitle:@"SET" forState:UIControlStateNormal];
-    
-    //ボタンの文字色指定
-    [_myButton2 setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    
-    
-    //メソッドとの紐付け
-    [_myButton2 addTarget:self action:@selector(tapBtn2:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_myView2 addSubview:_myButton2];
-    
-}
 
 
-//オレンジ色のビューオブジェクトを生成するメソッド(Timer用）
+//ビューオブジェクトを生成するメソッド(Timer用）
 -(void)createdView{
     
     _myView = [[UIView alloc] init];
@@ -629,23 +458,6 @@
     
 }
 
-//オレンジ色のビューオブジェクトを生成するメソッド(Notification用）
--(void)createdView2{
-    
-    _myView2 = [[UIView alloc] init];
-    
-    //場所を決定
-    _myView2.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    _myView2.alpha = 1.0;
-    
-    //ビューの色を設定
-    [_myView2 setBackgroundColor:[UIColor turquoiseColor]];
-    
-    [self.view addSubview:_myView2];
-    
-}
-
-
 //ビューに紐付いたデートピッカーオブジェクト(Timer用）
 -(void)createdDatePicker{
 
@@ -659,75 +471,28 @@
     //datepickerの値で今日より前の日を選択できないようにする。
     _myDatePicker.minimumDate = [NSDate date];
     
-    
     //_myDatePickerのサイズを選択
-    CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
-    _myDatePicker2.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
+    CGSize size = [_myDatePicker sizeThatFits:CGSizeZero];
+    _myDatePicker.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
 
     
     //_myViewに追加してあげる
     [_myView addSubview:_myDatePicker];
     
-    
 }
-
-//ビューに紐付いたデートピッカーオブジェクト(Notification)
--(void)createdDatePicker2{
-    
-    
-    //場所を決定
-    _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
-    _myDatePicker2.alpha = 1.0;
-    
-    //_myDatePickerオブジェクトを作成
-    UIDatePicker *picker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
-    _myDatePicker2 = picker;
-    
-    _myDatePicker2.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _myDatePicker2.datePickerMode = UIDatePickerModeTime;
-    
-    //_myDatePickerのサイズを選択
-    CGSize size = [_myDatePicker2 sizeThatFits:CGSizeZero];
-    _myDatePicker2.frame = CGRectMake(0.0f, 150.0f, size.width, size.height);
-    
-    //_myViewに追加してあげる
-    [_myView2 addSubview:_myDatePicker2];
-
-    
-}
-
-
 
 //tapされた時に反応するメソッド(Timer)
 -(void)tapBtn:(UIButton *)myButton{
     
-    
     [UIView beginAnimations:@"animateViewrOn" context:nil];
     [UIView setAnimationDuration:0.3];
-    
     
     //自作メソッドの使用
     [self downObjectsTimer];
-
-    
     [UIView commitAnimations];
     
 }
 
-//tapされた時に反応するメソッド(Notification)
--(void)tapBtn2:(UIButton *)myButton{
-    
-    
-    [UIView beginAnimations:@"animateViewrOn" context:nil];
-    [UIView setAnimationDuration:0.3];
-
-    //自作メソッドの使用
-    [self downObjectsNotification];
-        
-    
-    [UIView commitAnimations];
-    
-}
 
 //オブジェクトを下げるメソッド
 //タイマーの設定
@@ -752,13 +517,8 @@
     
     //ラベルに日付を表示
     NSString *settedDate = [df stringFromDate:_myDatePicker.date];
- 
-    
     NSDate *setDate = [df dateFromString:settedDate];
-    
-    
     self.finaldate = setDate;
-
     NSDate *currentDate= [df dateFromString:strNow];
     
     // dateBとdateAの時間の間隔を取得(dateA - dateBなイメージ)
@@ -766,48 +526,17 @@
     int mySince = (int) since/(24*60*60);
     if (mySince > 0){
     
-    self.tag1.text = [NSString stringWithFormat: @"%d", mySince];
+    self.finishSetLabel.text = [NSString stringWithFormat: @"%d days", mySince];
+    
     } else {
+        
     }
     
     //セットされた日付を取得
     self.setFinalDate = settedDate;
     
-    
 }
 
-//オブジェクトを下げるメソッド
-// 通知設定
--(void)downObjectsNotification{
-    
-    _myButton2.frame = CGRectMake(150, 200, 40, 20);
-    _myView2.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 0);
-    _myDatePicker2.frame = CGRectMake(0, 0, 400, 20);
-    _isVisible = NO;
-    
-    //モードを指定
-    _myDatePicker2.datePickerMode = UIDatePickerModeTime;
-    
-    //初期化
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"HH:mm"];
-    
-    NSString *time = [df stringFromDate:_myDatePicker2.date];
- 
-    
-    //NSStringから Date型に変更
-    NSDate *date = [df dateFromString:time];
-    
-    self.notificationDate = date;
-    
-    
-    self.tag2.text = time;
-    
-
-    
-    
-    
-}
 
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
@@ -825,7 +554,7 @@
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
     [self.NowBtnDesign setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 
-    
+    //NavigationItemの色
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor turquoiseColor];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
 
@@ -842,16 +571,20 @@
     self.beforeLabel.layer.borderColor = (__bridge CGColorRef)([UIColor sunflowerColor]);
     self.beforeLabel.clipsToBounds = true;
     
-    //beforeImageに枠線をつける
+    //goalImageに枠線をつける
     self.goalLabel.layer.borderWidth = 3;
     self.goalLabel.backgroundColor = [UIColor turquoiseColor];
     self.goalLabel.layer.cornerRadius = 3;
     self.goalLabel.layer.borderColor = (__bridge CGColorRef)([UIColor sunflowerColor]);
     self.goalLabel.clipsToBounds = true;
     
+    //finishImageに枠線をつける
+    self.finishDateLabel.layer.borderWidth = 3;
+    self.finishDateLabel.backgroundColor = [UIColor turquoiseColor];
+    self.finishDateLabel.layer.cornerRadius = 3;
+    self.finishDateLabel.layer.borderColor = (__bridge CGColorRef)([UIColor sunflowerColor]);
+    self.finishDateLabel.clipsToBounds = true;
     
-    // tableviewの境界線の色
-    self.setTableView.separatorColor = [UIColor turquoiseColor];
     
     //textFieldの線の色変更
     self.makeNewTitle.borderColor = [UIColor turquoiseColor];

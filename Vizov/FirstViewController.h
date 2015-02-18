@@ -21,12 +21,13 @@
 
 
 @interface FirstViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITableView *listTableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *barBtnItem;
 @property (weak, nonatomic) IBOutlet UINavigationItem *naviItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteItem;
 @property (nonatomic) NSMutableArray *challengesNow;
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteItem;
 - (IBAction)deleteItemBtn:(id)sender;
 
 

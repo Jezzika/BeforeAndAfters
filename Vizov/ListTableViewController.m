@@ -22,11 +22,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [usrDefault objectForKey:@"selectedSuccessAry"];
     
@@ -39,7 +34,6 @@
     NSArray *detail;
     NSData *pictData;
     UIImage *picture;
-//    NSString *timer;
     
     
     
@@ -52,8 +46,6 @@
         
         // NSData→UIImage変換
         picture = [UIImage imageWithData:pictData];
-        
-//        timer = [[usrDefault objectForKey:@"selectedSuccessAry"] valueForKey:@"timer"];
         
     }
     
@@ -70,8 +62,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
@@ -142,16 +132,12 @@
     
     cell.cornerRadius = 5.0f; // optional
     cell.separatorHeight = 2.0f; // optional
-    
+
+    cell.layer.borderWidth =4;
+    cell.layer.borderColor = [UIColor cloudsColor].CGColor;
+
     return cell;
 }
-
-
-
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    [self performSegueWithIdentifier:@"toMyEvents" sender:indexPath];
-//}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([[segue identifier] isEqualToString:@"toMyEvents"]){
@@ -179,11 +165,40 @@
     self.listTableView.separatorColor = [UIColor cloudsColor];
     
     // NavBarデザイン
-    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor whiteColor]];
-    
-
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor turquoiseColor]];
     
     
 }
+
+- (IBAction)deleteItemBtn:(id)sender {
+    
+     [self.listTableView setEditing:!self.listTableView.editing animated:YES];
+    
+}
+
+//削除ボタンの実装メソッド
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        //該当するデータを削除する
+        [ary removeObject:self.doneChallenges[indexPath.row]];
+        [usr setObject:ary forKey:@"challenges"];
+        [usr synchronize];
+        
+        //テーブルから行を削除
+        [self.listTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } else {
+        
+    }
+
+}
+
 
 @end

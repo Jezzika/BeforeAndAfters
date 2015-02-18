@@ -100,9 +100,7 @@
     NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
     NSMutableArray *ary = [usrDefault objectForKey:@"challenges"];
     NSMutableDictionary *selectedPic = [usrDefault objectForKey:@"selectedPic"];
-    NSLog(@"いっこだけでね！%lu",[selectedPic count]);
-    NSLog(@"%@",selectedPic);
-    
+
     if ([selectedPic count] > 0) {
         
         
@@ -287,7 +285,9 @@
     
     NSMutableDictionary *eventDaysArySet =[[NSMutableDictionary dictionary]mutableCopy];
 
-    eventDaysArySet = setDataAry[indexPath.row];
+    if ([setDataAry count] > 0) {
+        eventDaysArySet = setDataAry[indexPath.row];
+    } 
     
     //カスタムセルにデータを渡して表示処理を委譲
     [cell setData:eventDaysArySet];
@@ -314,15 +314,6 @@
     
     //timerの背景
     self.timerView.backgroundColor = [UIColor turquoiseColor];
-    
-    
-//    //BarButtonの色変更
-//    self.navigationItem.rightBarButtonItem.tintColor = [UIColor turquoiseColor];
-    
-//    [UIBarButtonItem configureFlatButtonsWithColor:[UIColor cloudsColor]
-//                                  highlightedColor:[UIColor greenSeaColor]
-//                                      cornerRadius:3];
-//    
     
     //TextView目標に枠線をつける
     self.settedDetail.layer.borderWidth = 3;

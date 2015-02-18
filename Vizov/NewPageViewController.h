@@ -20,24 +20,21 @@
 
 
 @property (weak, nonatomic) IBOutlet FUITextField *makeNewTitle;
-
 @property (weak, nonatomic) IBOutlet UIImageView *beforeImageView;
 @property (weak, nonatomic) IBOutlet UITextView *makeNewDetail;
-
 @property (assign, nonatomic) NSArray *CellNames;
-
-@property (strong, nonatomic) IBOutlet UITableView *setTableView;
-
-
 
 
 - (IBAction)returnNewTitle:(id)sender;
 - (IBAction)showCameraSheet:(id)sender;
 - (IBAction)tapNowButton:(id)sender;
+- (IBAction)finishDateBtn:(id)sender;
 
 @property (weak, nonatomic) IBOutlet FUIButton *NowBtnDesign;
 @property (weak, nonatomic) IBOutlet UILabel *beforeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *goalLabel;
+@property (weak, nonatomic) IBOutlet UILabel *finishSetLabel;
+@property (weak, nonatomic) IBOutlet UILabel *finishDateLabel;
 
 
 @end

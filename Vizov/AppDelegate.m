@@ -18,8 +18,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
     
+    //イベントの全データを取得
+    NSUserDefaults *usr = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
+    
+    //プッシュ許可の確認を表示
     UIUserNotificationType types =  UIUserNotificationTypeBadge|
     UIUserNotificationTypeSound|
     UIUserNotificationTypeAlert;
@@ -27,24 +31,7 @@
     UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
     
     [application registerUserNotificationSettings:mySettings];
-    
-    //launchOptions から UILocalNotifiation 情報を取得
-    UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
-    NSLog(@"%@",localNotification);
-    if (localNotification) {
-        
-        /*--ローカル通知を削除するよ--*/
-        if ([[[usr objectForKey:@"challenges"]valueForKey:@"type"]isEqualToString:@"success"]){
-        
-            //バッチを0にするよ
-            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-            
-            //このアプリ名義で登録しているローカル通知を削除するよ
-            [[UIApplication sharedApplication] cancelAllLocalNotifications];
-            
-        }
-        
-    }
+
     
         //--------UserDefaultのデータを消したい時に使う------------------------
     
@@ -57,11 +44,8 @@
 //        //イベントごとに紐づく日付たち
 //        [userDef removeObjectForKey:@"daysArray"];
     
-    
 
-    //-------終了日のものはsuccessに変わる処理----------
-    //イベントの全データを取得
-    NSMutableArray *ary = [[usr objectForKey:@"challenges"]mutableCopy];
+    //-------終了日のものはsuccessに変わる処理---------
 
     //初期化
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
@@ -104,8 +88,8 @@
 {
     if(notification) {
         FUIAlertView *alert = [[FUIAlertView alloc]
-                              initWithTitle:@"通知"
-                              message:@"頑張って続けましょう〜！"
+                              initWithTitle:@""
+                              message:@"KEEP CHALLENGING!!"
                               delegate:self
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil];

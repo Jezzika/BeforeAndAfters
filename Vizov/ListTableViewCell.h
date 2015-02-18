@@ -27,6 +27,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *totalDays;
 @property (weak, nonatomic) IBOutlet UILabel *beforeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *afterLabel;
+@property (weak, nonatomic) IBOutlet UIView *afterView;
+@property (weak, nonatomic) IBOutlet UIView *beforeView;
 
 @end
 

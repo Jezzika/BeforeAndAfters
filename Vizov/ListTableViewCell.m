@@ -23,7 +23,7 @@
 - (void)setData:(NSDictionary *)doneItems{
 
     //タイトル
-    self.titleLabel.text = [NSString stringWithFormat:@"%@DAYS %@",[doneItems valueForKey:@"timer"],[doneItems valueForKeyPath:@"title"]];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@ : %@",[doneItems valueForKey:@"timer"],[doneItems valueForKeyPath:@"title"]];
     
     //Before写真のイメージ
     NSData *pictData = [doneItems valueForKeyPath:@"picture"];
@@ -52,30 +52,35 @@
     //データのセット
     self.afterImage.image = setPic;
     
-        
+    //-----------------デザイン----------------------
+    //BEFOREラベル
+    self.beforeLabel.textColor = [UIColor midnightBlueColor];
+    self.beforeImage.layer.borderColor = [UIColor turquoiseColor].CGColor;
+    self.beforeImage.layer.borderWidth = 3;
+    
+    //BeforeView
+    self.beforeView.backgroundColor = [UIColor whiteColor];
+    self.beforeView.layer.borderColor = [UIColor cloudsColor].CGColor;
+    self.beforeView.layer.borderWidth = 3;
     
     
     
-    //デザイン
-    //BEFOREラベル/Image
-    self.beforeLabel.backgroundColor = [UIColor peterRiverColor];
-    self.beforeLabel.layer.cornerRadius = 3;
-    self.beforeLabel.clipsToBounds = true;
+    //AFTERラベル
+    self.afterLabel.textColor = [UIColor midnightBlueColor];
+    self.afterImage.layer.borderColor = [UIColor turquoiseColor].CGColor;
+    self.afterImage.layer.borderWidth = 3;
+    
+    //AfterView
+    self.afterView.backgroundColor = [UIColor whiteColor];
+    self.afterView.layer.borderColor = [UIColor cloudsColor].CGColor;
+    self.afterView.layer.borderWidth = 3;
 
-    self.beforeImage.layer.cornerRadius = 3;
-    self.beforeImage.clipsToBounds = true;
-    
-    //AFTERラベル/Image
-    self.afterLabel.backgroundColor = [UIColor alizarinColor];
-    self.afterLabel.layer.cornerRadius = 3;
-    self.afterLabel.clipsToBounds = true;
-    
-    self.afterImage.layer.cornerRadius = 3;
-    self.afterImage.clipsToBounds = true;
     
     //Title
-    self.titleLabel.backgroundColor = [UIColor cloudsColor];
-    self.titleLabel.textColor = [UIColor midnightBlueColor];
+    self.titleLabel.backgroundColor = [UIColor whiteColor];
+    self.titleLabel.textColor = [UIColor turquoiseColor];
+    self.titleLabel.layer.borderWidth = 2;
+    self.titleLabel.layer.borderColor = [UIColor cloudsColor].CGColor;
     
     //totalDays
     self.totalDays.backgroundColor = [UIColor cloudsColor];

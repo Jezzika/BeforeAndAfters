@@ -300,7 +300,8 @@
     
     editor.delegate = self;
     
-    [picker pushViewController:editor animated:YES];
+    //モーダルで呼び出す
+    [picker presentViewController:editor animated:YES completion: nil];
 }
 
 
@@ -317,7 +318,7 @@
 {
     self.cameraPic.image = image;
     
-    [editor dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textViewShouldReturn:(UITextView *)targetTextView {

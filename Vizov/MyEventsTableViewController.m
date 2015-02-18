@@ -17,43 +17,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-        // Uncomment the following line to preserve selection between presentations.
-        // self.clearsSelectionOnViewWillAppear = NO;
-
-    
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-//        NSUserDefaults *usrDefault = [NSUserDefaults standardUserDefaults];
-//        NSDictionary *dic        = [usrDefault objectForKey:@"selectedDic2"];
-//
-//        //UserDefaultの個別データ表示(ホームの一覧リストから）
-//        NSString *title;
-//        NSString *detail;
-//        NSData *pictData;
-//        UIImage *picture;
-//        NSString *finDate;
-//
-//        if (self.fromListView) {
-//            title = [dic valueForKeyPath:@"title"];
-//            
-//            detail = [dic valueForKeyPath:@"detail"];
-//            
-//            pictData = [dic valueForKeyPath:@"picture"];
-//            
-//            // NSData→UIImage変換
-//            picture = [UIImage imageWithData:pictData];
-//            
-//            finDate = [dic valueForKey:@"finDate"];
-//            
-//            self.
-//            
-//        }
-
-        // Table ViewのデータソースにView Controller自身を設定する
-        self.myEventsTable.delegate = self;
-        self.myEventsTable.dataSource = self;
-        self.myEventsTable.allowsSelection = YES;
+    // Table ViewのデータソースにView Controller自身を設定する
+    self.myEventsTable.delegate = self;
+    self.myEventsTable.dataSource = self;
+    self.myEventsTable.allowsSelection = YES;
     
     //デザイン
     [self objectsDesign];
@@ -64,8 +31,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
@@ -195,7 +160,6 @@
 - (IBAction)shareButton:(id)sender {
     
     NSString *text = @"LIKE!! iPhone App 'Vizov/Before and Afters'";
-//    NSURL *url = [NSURL URLWithString:@"http://mmmm"];
     NSArray *activityItems = @[text];
     UIActivityViewController *activityView = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
     

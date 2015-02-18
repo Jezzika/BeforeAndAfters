@@ -55,13 +55,10 @@
         self.pic.image = setPic;
         self.date.text =  [eventDaysArySet valueForKey:@"days"];
         
-        
     }
-    
     
     //TextViewを編集不可にする処理
     self.setMemo.editable = NO;
-    
     
     //TextViewに枠線をつける
     self.setMemo.layer.borderWidth = 2;
@@ -73,8 +70,6 @@
     self.date.textColor = [UIColor whiteColor];
     self.date.layer.cornerRadius = 3;
     self.date.clipsToBounds = true;
-    
-
     
 }
 @end

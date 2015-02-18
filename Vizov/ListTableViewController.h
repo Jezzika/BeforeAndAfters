@@ -21,9 +21,8 @@
 @interface ListTableViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate>
 
 @property (nonatomic) BOOL fromFirstView;
-
-
 @property (strong, nonatomic) IBOutlet UITableView *listTableView;
 
+- (IBAction)deleteItemBtn:(id)sender;
 
 @end
